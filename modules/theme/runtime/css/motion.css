@@ -87,7 +87,6 @@
     --duration-extra-long3: var(--duration-extra-long3, 900ms);
     --duration-extra-long4: var(--duration-extra-long4, 1000ms);
 
-
     /* Standard easing (in and out) */
     --easing-standard-x0: 0.20000000298023224;
     --easing-standard-y0: 0;
@@ -141,26 +140,4 @@
             var(--easing-standard-accelerate-y1)
     );
 
-}
-
-@layer utilities {
-    .easing-standard {
-        transition-timing-function: var(--easing-standard);
-    }
-
-    .easing-linear {
-        transition-timing-function: var(--easing-linear);
-    }
-
-    .easing-standard-accelerate {
-        transition-timing-function: var(--easing-standard-accelerate);
-    }
-
-    .easing-standard-decelerate {
-        transition-timing-function: var(--easing-standard-decelerate);
-    }
-
-    .easing-emphasized {
-        transition-timing-function: var(--easing-emphasized);
-    }
 }

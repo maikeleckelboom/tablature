@@ -1,10 +1,10 @@
-type MotionPreset = {
-  duration: number;
-  action: string;
-  timing: string;
-};
+type EasingPreset = {
+  duration: number
+  action: string
+  timing: string
+}
 
-const easings: Record<string, MotionPreset> = {
+const easings: Record<string, EasingPreset> = {
   emphasized: {
     duration: 500,
     action: 'Begin and end on screen',
@@ -35,14 +35,14 @@ const easings: Record<string, MotionPreset> = {
     action: 'Exit the screen',
     timing: 'Standard accelerate'
   }
-} as const;
+} as const
 
 type CubicBezierValues = {
-  x0: number;
-  y0: number;
-  x1: number;
-  y1: number;
-};
+  x0: number
+  y0: number
+  x1: number
+  y1: number
+}
 
 const timingFunctions: Record<keyof typeof easings, CubicBezierValues> = {
   standard: {
@@ -99,6 +99,6 @@ const timingFunctions: Record<keyof typeof easings, CubicBezierValues> = {
     x1: 1,
     y1: 1
   }
-} as const;
+} as const
 
-export { easings, timingFunctions, type MotionPreset, type CubicBezierValues };
+export { easings, timingFunctions, type EasingPreset, type CubicBezierValues }

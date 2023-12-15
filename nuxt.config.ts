@@ -1,15 +1,24 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  experimental: {
+    viewTransition: true,
+    typedPages: true,
+    reactivityTransform: true
+  },
+  typescript: {
+    typeCheck: true,
+    strict: true
+  },
   modules: [
-    "@nuxtjs/tailwindcss",
-    "@pinia/nuxt",
-    "@vueuse/nuxt",
-    "nuxt-icon",
-    "~/modules/theme/module.ts",
-    "@nuxtjs/stylelint-module",
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
+    '@vueuse/nuxt',
+    'nuxt-icon',
+    '~/modules/theme/module.ts',
+    '@nuxtjs/stylelint-module',
     'nuxt-viewport',
-    '@nuxt/image',
+    '@nuxt/image'
   ],
   tailwindcss: {
     viewer: true,
@@ -50,6 +59,5 @@ export default defineNuxtConfig({
     nuxtIcon: {
       size: '24px'
     }
-  },
-
+  }
 })

@@ -11,7 +11,13 @@ interface ThemeModuleOptions {
   staticColors?: StaticColor[]
 }
 
-export type { StaticColor, ThemeModuleOptions }
+type ColorModeOption = {
+  label: string
+  value: string
+  selected: boolean
+}
+
+export type { StaticColor, ThemeModuleOptions, ColorModeOption }
 
 type ButtonProps = {
   label?: string

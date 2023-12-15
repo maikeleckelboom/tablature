@@ -1,55 +1,54 @@
-<!--suppress ALL -->
 <script lang="ts" setup>
-const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max)
 
-type SliderModelValue = number | number[];
+type SliderModelValue = number | number[]
 
-type SliderTypes = 'continuous' | 'discrete';
+type SliderTypes = 'continuous' | 'discrete'
 
 type TickMark = {
-  value: number;
-  label: string;
-};
+  value: number
+  label: string
+}
 
-type SliderTickMarks = TickMark[] | boolean;
+type SliderTickMarks = TickMark[] | boolean
 
 interface InputSliderProps {
-  type?: SliderTypes;
-  label?: string;
-  labelText?: string;
-  supportingText?: string;
-  leadingIcon?: string;
-  trailingIcon?: string;
-  modelValue: SliderModelValue;
-  tickMarks?: SliderTickMarks;
-  min?: number | string;
-  max?: number | string;
-  step?: number | string;
-  invalid?: boolean;
-  valid?: boolean;
-  readonly?: boolean;
-  disabled?: boolean;
-  fillBackground?: string;
-  background?: string;
+  type?: SliderTypes
+  label?: string
+  labelText?: string
+  supportingText?: string
+  leadingIcon?: string
+  trailingIcon?: string
+  modelValue: SliderModelValue
+  tickMarks?: SliderTickMarks
+  min?: number | string
+  max?: number | string
+  step?: number | string
+  invalid?: boolean
+  valid?: boolean
+  readonly?: boolean
+  disabled?: boolean
+  fillBackground?: string
+  background?: string
 }
 
 /** Utils **/
-const rect = (el: HTMLElement) => el.getBoundingClientRect();
+const rect = (el: HTMLElement) => el.getBoundingClientRect()
 
 /** Default Props **/
-const props = defineProps<InputSliderProps>();
+const props = defineProps<InputSliderProps>()
 
-const {modelValue, labelText, leadingIcon, trailingIcon} = toRefs(props);
+const { modelValue, labelText, leadingIcon, trailingIcon } = toRefs(props)
 
 const background = computed(() => {
-  if (props.background) return props.background;
-  return `rgb(var(--surface-variant-rgb) / 3)`;
-});
+  if (props.background) return props.background
+  return `rgb(var(--surface-variant-rgb) / 3)`
+})
 
 const fillBackground = computed(() => {
-  if (props.fillBackground) return props.fillBackground;
-  return `rgb(var(--primary-rgb) / 20)`;
-});
+  if (props.fillBackground) return props.fillBackground
+  return `rgb(var(--primary-rgb) / 20)`
+})
 
 const {
   label,
@@ -58,285 +57,285 @@ const {
   step = 1,
   tickMarks,
   disabled = false,
-  type = 'continuous',
-} = props;
+  type = 'continuous'
+} = props
 
-const isContinuous = computed(() => type === 'continuous');
+const isContinuous = computed(() => type === 'continuous')
 const isLabeledTickMarks = computed(
-    () => Array.isArray(tickMarks) && tickMarks.every((obj) => obj.value && obj.label),
-);
+  () => Array.isArray(tickMarks) && tickMarks.every((obj) => obj.value && obj.label)
+)
 
 /** Emits **/
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: SliderModelValue): void;
-}>();
+  (e: 'update:modelValue', value: SliderModelValue): void
+}>()
 
 /** Refs **/
-const slider = ref<HTMLElement>();
-const track = ref<HTMLElement>();
-const handle = ref<HTMLElement>();
-const percent = ref<number>(0);
-const percentEnd = ref<number>(0);
+const slider = ref<HTMLElement>()
+const track = ref<HTMLElement>()
+const handle = ref<HTMLElement>()
+const percent = ref<number>(0)
+const percentEnd = ref<number>(0)
 
 const updatePercent = () => {
-  const minimum = Number(min);
-  const maximum = Number(max);
+  const minimum = Number(min)
+  const maximum = Number(max)
   if (Array.isArray(modelValue.value)) {
-    percent.value = (modelValue.value[0] - minimum) / (maximum - minimum);
-    percentEnd.value = (modelValue.value[1] - minimum) / (maximum - minimum);
+    percent.value = (modelValue.value[0] - minimum) / (maximum - minimum)
+    percentEnd.value = (modelValue.value[1] - minimum) / (maximum - minimum)
   } else {
-    percent.value = (modelValue.value - minimum) / (maximum - minimum);
+    percent.value = (modelValue.value - minimum) / (maximum - minimum)
   }
-};
+}
 
 /** State **/
-const isHovering = useElementHover(slider);
-const isDragging = ref<boolean>(false);
+const isHovering = useElementHover(slider)
+const isDragging = ref<boolean>(false)
 
 /** Sync the percent value with the modelValue */
-watchEffect(updatePercent);
+watchEffect(updatePercent)
 
 /** Sync the modelValue with the percent value */
 watch([percent, percentEnd], () => {
-  const minimum = Number(min);
-  const maximum = Number(max);
-  const range = maximum - minimum;
-  const value = clamp(percent.value * range + minimum, minimum, maximum);
-  const valueEnd = clamp(percentEnd.value * range + minimum, minimum, maximum);
+  const minimum = Number(min)
+  const maximum = Number(max)
+  const range = maximum - minimum
+  const value = clamp(percent.value * range + minimum, minimum, maximum)
+  const valueEnd = clamp(percentEnd.value * range + minimum, minimum, maximum)
   Array.isArray(modelValue.value)
-      ? emit('update:modelValue', [value, valueEnd])
-      : emit('update:modelValue', value);
-});
+    ? emit('update:modelValue', [value, valueEnd])
+    : emit('update:modelValue', value)
+})
 
 const checkPointerTarget = (target: HTMLElement) => {
-  const isLeftHandle = target.dataset?.ref === 'handle';
-  const isRightHandle = target.dataset?.ref === 'handle-end';
-  const isTrack = target === track.value;
-  const isTrackFill = target.dataset?.ref === 'track-fill';
-  return {isLeftHandle, isRightHandle, isTrack, isTrackFill};
-};
+  const isLeftHandle = target.dataset?.ref === 'handle'
+  const isRightHandle = target.dataset?.ref === 'handle-end'
+  const isTrack = target === track.value
+  const isTrackFill = target.dataset?.ref === 'track-fill'
+  return { isLeftHandle, isRightHandle, isTrack, isTrackFill }
+}
 
 /** Set the percent value to where the user clicks on the track */
-const setPercentToClickPosition = ({clientX, target}: PointerEvent) => {
-  const {left, width} = rect(target as HTMLElement);
-  const x = clientX - left;
-  percent.value = clamp(x / width, 0, 1);
-};
+const setPercentToClickPosition = ({ clientX, target }: PointerEvent) => {
+  const { left, width } = rect(target as HTMLElement)
+  const x = clientX - left
+  percent.value = clamp(x / width, 0, 1)
+}
 
 /** Computed ticks count, so we can limit the number of ticks to 10% of total range */
 const ticksCount = computed(() => {
-  if (!tickMarks) return 0;
-  const range = Number(max) - Number(min);
-  return Math.floor(range / Math.max(Number(step), range * 0.1)) - 2;
-});
+  if (!tickMarks) return 0
+  const range = Number(max) - Number(min)
+  return Math.floor(range / Math.max(Number(step), range * 0.1)) - 2
+})
 
 /** Set the percent value to the closest tick mark */
 const snapToClosestTickMark = (ev: PointerEvent) => {
-  if (!track.value) return;
-  const target = ev.target as HTMLElement;
-  const {left, width} = rect(track.value);
-  const x = ev.clientX - left;
-  const tickWidth = width / ticksCount.value;
-  const tickIndex = Math.round(x / tickWidth);
-  const tickX = tickIndex * tickWidth;
-  const tickPercent = clamp(tickX / width, 0, 1);
-  const {isRightHandle} = checkPointerTarget(target);
+  if (!track.value) return
+  const target = ev.target as HTMLElement
+  const { left, width } = rect(track.value)
+  const x = ev.clientX - left
+  const tickWidth = width / ticksCount.value
+  const tickIndex = Math.round(x / tickWidth)
+  const tickX = tickIndex * tickWidth
+  const tickPercent = clamp(tickX / width, 0, 1)
+  const { isRightHandle } = checkPointerTarget(target)
   if (isRightHandle) {
-    percentEnd.value = tickPercent;
-    return;
+    percentEnd.value = tickPercent
+    return
   }
-  percent.value = tickPercent;
-};
+  percent.value = tickPercent
+}
 
 const offsetHandlesAsWhole = (ev: PointerEvent) => {
-  if (!track.value) return;
-  const {left, width} = rect(track.value);
-  const x = ev.clientX - left;
-  const handleWidth = width * (percentEnd.value - percent.value);
-  const handleX = x - handleWidth / 2;
-  const handlePercent = handleX / width;
-  const distance = percentEnd.value - percent.value;
+  if (!track.value) return
+  const { left, width } = rect(track.value)
+  const x = ev.clientX - left
+  const handleWidth = width * (percentEnd.value - percent.value)
+  const handleX = x - handleWidth / 2
+  const handlePercent = handleX / width
+  const distance = percentEnd.value - percent.value
   if (handlePercent < 0) {
-    percent.value = 0;
-    percentEnd.value = distance;
-    return;
+    percent.value = 0
+    percentEnd.value = distance
+    return
   }
   if (handlePercent + distance > 1) {
-    percent.value = 1 - distance;
-    percentEnd.value = 1;
-    return;
+    percent.value = 1 - distance
+    percentEnd.value = 1
+    return
   }
-  percent.value = handlePercent;
-  percentEnd.value = handlePercent + distance;
-};
+  percent.value = handlePercent
+  percentEnd.value = handlePercent + distance
+}
 
 const onPointerdown = (ev: PointerEvent) => {
   if (disabled) {
-    return;
+    return
   }
 
-  isDragging.value = true;
+  isDragging.value = true
 
-  const target = ev.target as HTMLElement;
+  const target = ev.target as HTMLElement
 
-  const {isRightHandle, isTrack, isTrackFill} = checkPointerTarget(target);
+  const { isRightHandle, isTrack, isTrackFill } = checkPointerTarget(target)
 
-  target.setPointerCapture(ev.pointerId);
+  target.setPointerCapture(ev.pointerId)
 
   if (isTrack && !Array.isArray(modelValue.value)) {
-    setPercentToClickPosition(ev);
+    setPercentToClickPosition(ev)
   }
-  const {left, width} = rect(track.value as HTMLElement);
+  const { left, width } = rect(track.value as HTMLElement)
 
   const onPointermove = (ev: PointerEvent) => {
     if (isTrackFill && Array.isArray(modelValue.value)) {
-      offsetHandlesAsWhole(ev);
-      return;
+      offsetHandlesAsWhole(ev)
+      return
     }
     isRightHandle
-        ? (percentEnd.value = clamp((ev.clientX - left) / width, 0, 1))
-        : (percent.value = clamp((ev.clientX - left) / width, 0, 1));
-  };
+      ? (percentEnd.value = clamp((ev.clientX - left) / width, 0, 1))
+      : (percent.value = clamp((ev.clientX - left) / width, 0, 1))
+  }
 
   const onPointerup = (ev: PointerEvent) => {
-    target.releasePointerCapture(ev.pointerId);
+    target.releasePointerCapture(ev.pointerId)
     if (!isTrackFill && tickMarks) {
-      snapToClosestTickMark(ev);
+      snapToClosestTickMark(ev)
     }
-    cleanupPointermove();
-    cleanupPointerup();
-    cleanupPointercancel();
-    isDragging.value = false;
-  };
+    cleanupPointermove()
+    cleanupPointerup()
+    cleanupPointercancel()
+    isDragging.value = false
+  }
 
-  const cleanupPointercancel = useEventListener('pointercancel', onPointerup, {passive: true});
+  const cleanupPointercancel = useEventListener('pointercancel', onPointerup, { passive: true })
 
-  const cleanupPointermove = useEventListener('pointermove', onPointermove, {passive: false});
-  const cleanupPointerup = useEventListener('pointerup', onPointerup, {passive: true});
-};
+  const cleanupPointermove = useEventListener('pointermove', onPointermove, { passive: false })
+  const cleanupPointerup = useEventListener('pointerup', onPointerup, { passive: true })
+}
 
 /** Attach pointerdown event listener to the track element */
-useEventListener(track, 'pointerdown', onPointerdown, {passive: true});
+useEventListener(track, 'pointerdown', onPointerdown, { passive: true })
 
-function roundValue(value: number | number[]) :string{
+function roundValue(value: number | number[]): string {
   if (Array.isArray(value)) {
-    return `${roundValue(value[0])} - ${roundValue(value[1])}`;
+    return `${roundValue(value[0])} - ${roundValue(value[1])}`
   }
-  const inv = 1.0 / Number(step);
-  return `${Math.round(value * inv) / inv}`;
+  const inv = 1.0 / Number(step)
+  return `${Math.round(value * inv) / inv}`
 }
 
 /** Computed rounded value **/
 const roundedValue = computed(() => {
   return (
-      Math.round(
-          Array.isArray(modelValue.value)
-              ? Number(modelValue.value[0])
-              : Number(modelValue.value) / Number(step),
-      ) * Number(step)
-  );
-});
+    Math.round(
+      Array.isArray(modelValue.value)
+        ? Number(modelValue.value[0])
+        : Number(modelValue.value) / Number(step)
+    ) * Number(step)
+  )
+})
 
 /** Computed rounded value **/
 const roundedValueEnd = computed(
-    () =>
-        Math.round(
-            Array.isArray(modelValue.value)
-                ? Number(modelValue.value[1])
-                : Number(modelValue.value) / Number(step),
-        ) * Number(step),
-);
+  () =>
+    Math.round(
+      Array.isArray(modelValue.value)
+        ? Number(modelValue.value[1])
+        : Number(modelValue.value) / Number(step)
+    ) * Number(step)
+)
 
 /** Computed handle position **/
 const handleStyle = computed(() => ({
   left: `${percent.value * 100}%`,
-  transform: `translateX(-${percent.value * 100}%)`,
-}));
+  transform: `translateX(-${percent.value * 100}%)`
+}))
 
 /** Computed handle position **/
 const handleEndStyle = computed(() => ({
   left: `${percentEnd.value * 100}%`,
-  transform: `translateX(-${percentEnd.value * 100}%)`,
-}));
+  transform: `translateX(-${percentEnd.value * 100}%)`
+}))
 
 /** Computed track fill style **/
 const trackFillStyle = computed(() =>
-    Array.isArray(modelValue.value)
-        ? {
-          transform: `scaleX(${percentEnd.value - percent.value})`,
-          left: `${percent.value * 100}%`,
-        }
-        : {
-          transform: `scaleX(${percent.value})`,
-        },
-);
+  Array.isArray(modelValue.value)
+    ? {
+        transform: `scaleX(${percentEnd.value - percent.value})`,
+        left: `${percent.value * 100}%`
+      }
+    : {
+        transform: `scaleX(${percent.value})`
+      }
+)
 
 /** Computed label value container style **/
 const labelValueContainerStyle = computed(() => {
-  const isActive = !disabled && (isDragging.value || isHovering.value);
-  const translateX = `${percent.value * 100 * -1 + (isActive ? -20 : -10)}%`;
-  const translateY = `-${isActive ? 10 : 0}px`;
+  const isActive = !disabled && (isDragging.value || isHovering.value)
+  const translateX = `${percent.value * 100 * -1 + (isActive ? -20 : -10)}%`
+  const translateY = `-${isActive ? 10 : 0}px`
   return {
     left: `${percent.value * 100}%`,
     transform: `translate(${translateX}, ${translateY}) scale(${isActive ? 1 : 0.5})`,
-    opacity: isActive ? 1 : 0,
-  };
-});
+    opacity: isActive ? 1 : 0
+  }
+})
 
 /** Computed label value container style **/
 const labelValueContainerEndStyle = computed(() => {
-  const isActive = !disabled && (isDragging.value || isHovering.value);
-  const translateX = `${percentEnd.value * 100 * -1 + (isActive ? -20 : -10)}%`;
-  const translateY = `-${isActive ? 10 : 0}px`;
+  const isActive = !disabled && (isDragging.value || isHovering.value)
+  const translateX = `${percentEnd.value * 100 * -1 + (isActive ? -20 : -10)}%`
+  const translateY = `-${isActive ? 10 : 0}px`
   return {
     left: `${percentEnd.value * 100}%`,
     transform: `translate(${translateX}, ${translateY}) scale(${isActive ? 1 : 0.5})`,
-    opacity: isActive ? 1 : 0,
-  };
-});
+    opacity: isActive ? 1 : 0
+  }
+})
 const isActiveTickMark = (index: number) => {
   const isBetween =
-      index / ticksCount.value >= Math.min(percent.value, percentEnd.value) &&
-      index / ticksCount.value <= Math.max(percent.value, percentEnd.value);
-  const hasPassed = index / ticksCount.value <= Math.max(percent.value, percentEnd.value);
-  return Array.isArray(modelValue.value) ? isBetween : hasPassed;
-};
+    index / ticksCount.value >= Math.min(percent.value, percentEnd.value) &&
+    index / ticksCount.value <= Math.max(percent.value, percentEnd.value)
+  const hasPassed = index / ticksCount.value <= Math.max(percent.value, percentEnd.value)
+  return Array.isArray(modelValue.value) ? isBetween : hasPassed
+}
 
 /** Computed tick marks style **/
 const tickMarksStyle = computed(() =>
-    Array.from({length: ticksCount.value + 1}, (_, tick) => tick).map((tick, index) => ({
-      left: `${(tick / ticksCount.value) * 100}%`,
-      transform: `translateX(-${(tick / ticksCount.value) * 100}%)`,
-      backgroundColor: isActiveTickMark(index) ? 'var(--tick-mark-active)' : 'var(--tick-mark-color)',
-    })),
-);
+  Array.from({ length: ticksCount.value + 1 }, (_, tick) => tick).map((tick, index) => ({
+    left: `${(tick / ticksCount.value) * 100}%`,
+    transform: `translateX(-${(tick / ticksCount.value) * 100}%)`,
+    backgroundColor: isActiveTickMark(index) ? 'var(--tick-mark-active)' : 'var(--tick-mark-color)'
+  }))
+)
 
-const slots = useSlots();
+const slots = useSlots()
 
-const hasLeadingIcon = computed(() => !!leadingIcon.value || slots.leadingIcon?.()?.length);
-const hasTrailingIcon = computed(() => !!trailingIcon.value || slots.trailingIcon?.()?.length);
-const hasLabel = computed(() => !!label || slots.label?.()?.length);
+const hasLeadingIcon = computed(() => !!leadingIcon.value || slots.leadingIcon?.()?.length)
+const hasTrailingIcon = computed(() => !!trailingIcon.value || slots.trailingIcon?.()?.length)
+const hasLabel = computed(() => !!label || slots.label?.()?.length)
 
 const dataAttributes = computed(() => ({
   'data-tick-marks': !!tickMarks,
   'data-leading-icon': hasLeadingIcon.value,
   'data-trailing-icon': hasTrailingIcon.value,
   'data-label': hasLabel.value,
-  'data-double-handle': Array.isArray(modelValue.value),
-}));
+  'data-double-handle': Array.isArray(modelValue.value)
+}))
 
 const classes = computed(() => ({
   'is-disabled': disabled,
-  'is-dragging': isDragging.value,
-}));
+  'is-dragging': isDragging.value
+}))
 </script>
 
 <template>
   <div
-      ref="slider"
-      :class="[classes, { 'touch-none': isDragging }]"
-      class="input-slider"
-      v-bind="dataAttributes"
+    ref="slider"
+    :class="[classes, { 'touch-none': isDragging }]"
+    class="input-slider"
+    v-bind="dataAttributes"
   >
     <div class="text-label-lg">
       <slot name="label" v-bind="{ label, labelText }">
@@ -346,7 +345,7 @@ const classes = computed(() => ({
       </slot>
     </div>
     <div v-if="hasLeadingIcon" class="input-slider--leading-icon">
-      <Icon :name="leadingIcon" class="leading-icon"/>
+      <Icon :name="leadingIcon!" class="leading-icon" />
     </div>
     <div class="input-slider--container" tabindex="0">
       <div :style="labelValueContainerStyle" class="input-slider--balloon">
@@ -359,61 +358,61 @@ const classes = computed(() => ({
         </ShapeBalloon>
       </div>
       <div
-          v-if="Array.isArray(modelValue)"
-          :style="labelValueContainerEndStyle"
-          class="input-slider--balloon"
+        v-if="Array.isArray(modelValue)"
+        :style="labelValueContainerEndStyle"
+        class="input-slider--balloon"
       >
         <ShapeBalloon>
           <span class="label-text">
-            <slot name="value-label" v-bind="{ value: roundValue(modelValue.at(-1)) }">
-              {{ roundValue(modelValue.at(-1)) }}
+            <slot name="value-label" v-bind="{ value: roundValue(modelValue.at(-1)!) }">
+              {{ roundValue(modelValue.at(-1)!) }}
             </slot>
           </span>
         </ShapeBalloon>
       </div>
       <div ref="track" class="input-slider--track">
-        <span :style="trackFillStyle" class="input-slider-track--fill" data-ref="track-fill"/>
+        <span :style="trackFillStyle" class="input-slider-track--fill" data-ref="track-fill" />
         <div
-            ref="handle"
-            :style="handleStyle"
-            class="input-slider--handle handle--left"
-            data-ref="handle"
+          ref="handle"
+          :style="handleStyle"
+          class="input-slider--handle handle--left"
+          data-ref="handle"
         />
         <div
-            v-if="Array.isArray(modelValue)"
-            ref="handleEnd"
-            :style="handleEndStyle"
-            class="input-slider--handle handle--right"
-            data-ref="handle-end"
+          v-if="Array.isArray(modelValue)"
+          ref="handleEnd"
+          :style="handleEndStyle"
+          class="input-slider--handle handle--right"
+          data-ref="handle-end"
         />
       </div>
       <template v-if="!isLabeledTickMarks">
         <div class="input-slider--tick-marks">
           <div
-              v-for="(style, i) in tickMarksStyle"
-              :key="i"
-              :class="{ invisible: i === 0 || i === tickMarksStyle.length - 1 }"
-              :style="style"
-              class="input-slider--tick-mark"
+            v-for="(style, i) in tickMarksStyle"
+            :key="i"
+            :class="{ invisible: i === 0 || i === tickMarksStyle.length - 1 }"
+            :style="style"
+            class="input-slider--tick-mark"
           />
         </div>
       </template>
     </div>
     <template v-if="Array.isArray(tickMarks) && tickMarks?.every((obj) => obj.label)">
-      <div class="relative w-full grid grid-rows-1 grid-flow-col">
+      <div class="relative grid w-full grid-flow-col grid-rows-1">
         <div
-            v-for="(tick, i) in tickMarks"
-            :key="i"
-            :class="i === tickMarks.length - 1 ? 'transform -translate-x-10' : ''"
-            :style="{ left: `${tick.value * 100}%` }"
-            class="relative mt-2 w-fit"
+          v-for="(tick, i) in tickMarks"
+          :key="i"
+          :class="i === tickMarks.length - 1 ? '-translate-x-10 transform' : ''"
+          :style="{ left: `${tick.value * 100}%` }"
+          class="relative mt-2 w-fit"
         >
           <span class="text-label-md">{{ tick.label }}</span>
         </div>
       </div>
     </template>
     <div v-if="hasTrailingIcon" class="input-slider--trailing-icon">
-      <Icon :name="trailingIcon" class="trailing-icon"/>
+      <Icon :name="trailingIcon!" class="trailing-icon" />
     </div>
   </div>
 </template>
@@ -543,9 +542,6 @@ const classes = computed(() => ({
     z-index: 2;
     cursor: ew-resize;
     transition: cubic-bezier(0.4, 0, 0.2, 1) all 0.2s;
-
-    :not(.is-dragging) & {
-    }
   }
 
   .input-slider--balloon {
@@ -553,9 +549,6 @@ const classes = computed(() => ({
     position: absolute;
     top: 0;
     transition: cubic-bezier(0.4, 0, 0.2, 1) all 0.2s;
-
-    :not(.is-dragging) & {
-    }
 
     .shape-balloon {
       position: absolute;
@@ -612,11 +605,6 @@ const classes = computed(() => ({
   }
 
   &:is(:hover, :focus, :focus-visible, .is-dragging):not(.is-disabled) {
-    //--track-color: rgb(var(--primary-rgb) / 0.12);
-
-    &:not([data-double-handle='true']) {
-    }
-
     .input-slider--handle {
       outline-width: 4px;
 
@@ -652,12 +640,6 @@ const classes = computed(() => ({
   }
 
   &[data-double-handle='true'] {
-    &:hover {
-      /*
-        Custom hover styles
-      */
-    }
-
     .input-slider--track {
       cursor: default;
       pointer-events: none;

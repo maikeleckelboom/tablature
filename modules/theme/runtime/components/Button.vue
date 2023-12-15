@@ -77,26 +77,26 @@ const button = tv({
         'px-5',
         'label-text:text-label-sm',
         'h-[38px]',
+        'rounded-[24px]',
         'icon:w-[24px]',
-        'icon:h-[24px]',
-        'rounded-[24px]'
+        'icon:h-[24px]'
       ],
       md: [
         'label-text:text-label-lg font-normal',
         'py-5',
         'px-5',
-        'icon:w-[24px]',
-        'icon:h-[24px]',
         'h-[42px]',
-        'rounded-[24px]'
+        'rounded-[24px]',
+        'icon:w-[24px]',
+        'icon:h-[24px]'
       ],
       lg: [
         'label-text:text-label-lg',
         'p-5',
-        'icon:w-[24px]',
-        'icon:h-[24px]',
         'h-[56px]',
-        'rounded-[28px]'
+        'rounded-[28px]',
+        'icon:w-[24px]',
+        'icon:h-[24px]'
       ]
     }
   },

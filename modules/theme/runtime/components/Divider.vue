@@ -1,25 +1,25 @@
 <script lang="ts" setup>
-import { cva } from 'cva';
+import { tv } from 'tailwind-variants'
 
 const { type = 'standard' } = defineProps<{
-  type?: 'standard' | 'inset';
-}>();
+  type?: 'standard' | 'inset'
+}>()
 
-const divider = cva({
+const divider = tv({
   base: ['border-t', 'border-outline-variant', 'my-[8px]'],
   variants: {
     type: {
       standard: 'w-full',
-      inset: 'w-[calc(100%_-_32px)] ml-[16px]',
+      inset: 'w-[calc(100%_-_32px)] ml-[16px]'
     },
     rounded: {
-      true: 'rounded',
-    },
+      true: 'rounded'
+    }
   },
   defaultVariants: {
-    rounded: true,
-  },
-});
+    rounded: true
+  }
+})
 </script>
 
 <template>
