@@ -1,0 +1,18 @@
+{
+  "extends": [
+    "stylelint-config-tailwindcss",
+    "stylelint-config-recommended-vue"
+  ],
+  "rules": {
+    "number-max-precision": 17,
+    "block-no-empty": [
+      false,
+      {
+        "ignore": [
+          "comments",
+          "pseudo-classes"
+        ]
+      }
+    ]
+  }
+}
