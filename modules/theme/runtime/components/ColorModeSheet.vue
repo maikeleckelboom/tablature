@@ -2,7 +2,7 @@
 import type { ColorModeOption } from '~/modules/theme/types'
 
 const { mode } = defineProps<{
-  mode: ColorModeOption | undefined
+  mode?: ColorModeOption
 }>()
 </script>
 

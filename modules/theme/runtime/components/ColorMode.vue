@@ -26,7 +26,7 @@ const isActiveBoxStyles = (mode: ColorModeOption) => ({
 </script>
 
 <template>
-  <div class="grid grid-cols-3 gap-4 p-4 sm:grid-cols-4 md:p-2">
+  <div class="grid grid-cols-3 gap-6 sm:grid-cols-4">
     <div class="col-span-full">
       <label class="text-label-lg">Color Mode</label>
     </div>

@@ -347,7 +347,7 @@ const classes = computed(() => ({
     <div v-if="hasLeadingIcon" class="input-slider--leading-icon">
       <Icon :name="leadingIcon!" class="leading-icon" />
     </div>
-    <div class="input-slider--container" tabindex="0">
+    <div class="input-slider--container">
       <div :style="labelValueContainerStyle" class="input-slider--balloon">
         <ShapeBalloon>
           <span class="label-text">
@@ -538,7 +538,7 @@ const classes = computed(() => ({
     height: var(--handle-size);
     border-radius: var(--handle-radius);
     background-color: var(--handle-color);
-    outline: rgb(var(--primary-rgb) / 0.18) solid 0px;
+    outline: rgb(var(--primary-rgb) / 0.18) solid 0;
     z-index: 2;
     cursor: ew-resize;
     transition: cubic-bezier(0.4, 0, 0.2, 1) all 0.2s;
@@ -577,6 +577,7 @@ const classes = computed(() => ({
     width: 100%;
     height: 100%;
     pointer-events: none;
+    touch-action: none;
 
     .input-slider--tick-mark {
       position: absolute;

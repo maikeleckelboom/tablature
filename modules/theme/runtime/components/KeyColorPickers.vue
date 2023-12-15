@@ -181,120 +181,108 @@ const onInput = (ev: Event, key: keyof FormModel) => {
 </script>
 
 <template>
-  <div class="mx-auto grid w-full max-w-compact p-4 md:p-2">
-    <div class="mb-8 flex flex-col gap-4">
-      <fieldset>
-        <InputSlider
-          v-model="contrastLevel"
-          :tick-marks="[
-            { value: 0, label: 'Low' },
-            { value: 1, label: 'High' }
-          ]"
-          max="1"
-          label="Contrast level"
-          min="0"
-          step="0.1"
-        >
-        </InputSlider>
-      </fieldset>
-      <fieldset>
-        <InputSlider
-          v-model="formModel.hue"
-          :max="formModelBounds.hue.max"
-          :min="formModelBounds.hue.min"
-          :step="1"
-          class="h-fit"
-          label="Hue"
-          label-text="The type of color, such as red, blue, or green"
-        >
-          <template #label="{ label, labelText }">
-            <div class="grid grid-cols-[1fr,auto] items-start justify-center">
-              <div class="grid grid-cols-[1fr,auto] items-start justify-center">
-                <div class="flex flex-col">
-                  <label class="">
-                    {{ label }}
-                  </label>
-                  <span class="hidden text-body-sm text-on-surface-variant">
-                    {{ labelText }}
-                  </span>
-                </div>
-              </div>
-              <input
-                :max="formModelBounds.hue.max"
-                :min="formModelBounds.hue.min"
-                :value="roundValue(formModel.hue, 1)"
-                class="hide-number-input-arrows flex h-10 w-14 items-center justify-center rounded-lg border-outline-variant bg-surface-container text-center tabular-nums"
-                type="number"
-                @input="onInput($event, 'hue')"
-              />
-            </div>
-          </template>
-        </InputSlider>
-        <div class="mb-4 mt-2.5 h-2.5 w-full rounded-lg" :style="hueSpectra" />
-      </fieldset>
-      <fieldset>
-        <InputSlider
-          v-model="formModel.chroma"
-          :max="formModelBounds.chroma.max"
-          :min="formModelBounds.chroma.min"
-          :step="1"
-          label="Chroma"
-          label-text="How colorful or neutral a color appears"
-        >
-          <template #label="{ label, labelText }">
-            <div class="grid grid-cols-[1fr,auto] items-start justify-center">
-              <div class="grid grid-cols-[1fr,auto] items-start justify-center">
-                <div class="flex flex-col">
-                  <label class="">
-                    {{ label }}
-                  </label>
-                  <span class="hidden text-body-sm text-on-surface-variant">
-                    {{ labelText }}
-                  </span>
-                </div>
-              </div>
-              <input
-                :value="roundValue(formModel.chroma, 1)"
-                class="hide-number-input-arrows flex h-10 w-14 items-center justify-center rounded-lg border-outline-variant bg-surface-container text-center tabular-nums"
-                type="number"
-                @input="onInput($event, 'chroma')"
-              />
-            </div>
-          </template>
-        </InputSlider>
-        <div class="mb-4 mt-2.5 h-2.5 w-full rounded-lg" :style="chromaSpectra" />
-      </fieldset>
-      <fieldset>
-        <InputSlider
-          v-model="formModel.tone"
-          :max="formModelBounds.tone.max"
-          :min="formModelBounds.tone.min"
-          :step="1"
-          label="Tone"
-          label-text="The amount of white or black mixed with the color hidden "
-        >
-          <template #label="{ label, labelText }">
+  <div class="flex flex-col gap-4">
+    <fieldset>
+      <InputSlider
+        v-model="formModel.hue"
+        :max="formModelBounds.hue.max"
+        :min="formModelBounds.hue.min"
+        :step="1"
+        class="h-fit"
+        label="Hue"
+        label-text="The type of color, such as red, blue, or green"
+      >
+        <template #label="{ label, labelText }">
+          <div class="grid grid-cols-[1fr,auto] items-start justify-center">
             <div class="grid grid-cols-[1fr,auto] items-start justify-center">
               <div class="flex flex-col">
-                <label class="text-title-sm">
+                <label class="">
                   {{ label }}
                 </label>
-                <span class="text-body-xs hidden text-on-surface-variant">
+                <span class="hidden text-body-sm text-on-surface-variant">
                   {{ labelText }}
                 </span>
               </div>
-              <input
-                :value="roundValue(formModel.tone, 1)"
-                class="hide-number-input-arrows flex h-10 w-14 items-center justify-center rounded-lg border-outline-variant bg-surface-container text-center tabular-nums"
-                type="number"
-                @input="onInput($event, 'tone')"
-              />
             </div>
-          </template>
-        </InputSlider>
-        <div class="mb-4 mt-2.5 h-2.5 w-full rounded-lg" :style="tonalSpectra" />
-      </fieldset>
-    </div>
+            <input
+              :max="formModelBounds.hue.max"
+              :min="formModelBounds.hue.min"
+              :value="roundValue(formModel.hue, 1)"
+              class="hide-number-input-arrows flex h-10 w-14 items-center justify-center rounded-lg border-outline-variant bg-surface-container text-center tabular-nums"
+              type="number"
+              @input="onInput($event, 'hue')"
+            />
+          </div>
+        </template>
+      </InputSlider>
+      <div class="mb-4 mt-2.5 h-2.5 w-full rounded-lg" :style="hueSpectra" />
+    </fieldset>
+    <fieldset>
+      <InputSlider
+        v-model="formModel.chroma"
+        :max="formModelBounds.chroma.max"
+        :min="formModelBounds.chroma.min"
+        :step="1"
+        label="Chroma"
+        label-text="How colorful or neutral a color appears"
+      >
+        <template #label="{ label, labelText }">
+          <div class="grid grid-cols-[1fr,auto] items-start justify-center">
+            <div class="grid grid-cols-[1fr,auto] items-start justify-center">
+              <div class="flex flex-col">
+                <label class="">
+                  {{ label }}
+                </label>
+                <span class="hidden text-body-sm text-on-surface-variant">
+                  {{ labelText }}
+                </span>
+              </div>
+            </div>
+            <input
+              :value="roundValue(formModel.chroma, 1)"
+              class="hide-number-input-arrows flex h-10 w-14 items-center justify-center rounded-lg border-outline-variant bg-surface-container text-center tabular-nums"
+              type="number"
+              @input="onInput($event, 'chroma')"
+            />
+          </div>
+        </template>
+      </InputSlider>
+      <div class="mb-4 mt-2.5 h-2.5 w-full rounded-lg" :style="chromaSpectra" />
+    </fieldset>
+    <fieldset>
+      <InputSlider
+        v-model="formModel.tone"
+        :max="formModelBounds.tone.max"
+        :min="formModelBounds.tone.min"
+        :step="1"
+        label="Tone"
+        label-text="The amount of white or black mixed with the color hidden"
+      >
+        <template #label="{ label, labelText }">
+          <div class="grid grid-cols-[1fr,auto] items-start justify-center">
+            <div class="flex flex-col">
+              <label class="text-title-sm">
+                {{ label }}
+              </label>
+              <span class="text-body-xs hidden text-on-surface-variant">
+                {{ labelText }}
+              </span>
+            </div>
+            <input
+              :value="roundValue(formModel.tone, 1)"
+              class="hide-number-input-arrows flex h-10 w-14 items-center justify-center rounded-lg border-outline-variant bg-surface-container text-center tabular-nums"
+              type="number"
+              @input="onInput($event, 'tone')"
+            />
+          </div>
+        </template>
+      </InputSlider>
+      <div class="mb-4 mt-2.5 h-2.5 w-full rounded-lg" :style="tonalSpectra" />
+    </fieldset>
+    <fieldset>
+      <InputSlider v-model="contrastLevel" max="1" label="Contrast level" min="0" step="0.1">
+      </InputSlider>
+    </fieldset>
   </div>
 </template>
 
