@@ -218,12 +218,12 @@ const onPointerdown = (ev: PointerEvent) => {
 /** Attach pointerdown event listener to the track element */
 useEventListener(track, 'pointerdown', onPointerdown, {passive: true});
 
-function roundValue(value: number | number[]) {
+function roundValue(value: number | number[]) :string{
   if (Array.isArray(value)) {
     return `${roundValue(value[0])} - ${roundValue(value[1])}`;
   }
   const inv = 1.0 / Number(step);
-  return Math.round(value * inv) / inv;
+  return `${Math.round(value * inv) / inv}`;
 }
 
 /** Computed rounded value **/

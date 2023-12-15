@@ -9,9 +9,9 @@ export default defineNuxtModule<ThemeModuleOptions>({
     name: 'theme',
     configKey: 'theme',
     dependencies: {
-      '@material/material-color-utilities': '^0.2.7',
+      tailwindcss: '^6.9.4',
       '@tailwindcss/container-queries': '^0.1.1',
-      tailwindcss: '^6.9.4'
+      '@material/material-color-utilities': '^0.2.7'
     }
   },
   defaults: {
@@ -25,18 +25,11 @@ export default defineNuxtModule<ThemeModuleOptions>({
       dirs.push(resolve('./runtime/composables'), resolve('./runtime/utils'))
     },
     'pages:extend'(pages) {
-      pages.push(
-        {
-          name: 'schemes',
-          path: '/_app/scheme',
-          file: resolve('./runtime/pages/schemes.vue')
-        },
-        {
-          name: 'quantize',
-          path: '/_app/quantize',
-          file: resolve('./runtime/pages/quantize.vue')
-        }
-      )
+      pages.push({
+        name: 'schemes',
+        path: '/_app/schemes',
+        file: resolve('./runtime/pages/schemes.vue')
+      })
     }
   },
   setup: async (options: ThemeModuleOptions, nuxt) => {

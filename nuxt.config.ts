@@ -8,33 +8,35 @@ export default defineNuxtConfig({
     "nuxt-icon",
     "~/modules/theme/module.ts",
     "@nuxtjs/stylelint-module",
+    'nuxt-viewport',
+    '@nuxt/image',
   ],
   tailwindcss: {
     viewer: true,
     configPath: '~/tailwind.config',
     exposeConfig: true
   },
-  // image: {
-  //   provider: 'sirv',
-  //   sirv: {
-  //     baseURL: 'https://exclave.sirv.com'
-  //   }
-  // },
-  // viewport: {
-  //   breakpoints: {
-  //     sm: 640,
-  //     md: 768,
-  //     lg: 1024,
-  //     xl: 1280,
-  //     '2xl': 1536
-  //   },
-  //   defaultBreakpoints: {
-  //     mobile: 'sm',
-  //     tablet: 'md',
-  //     desktop: 'lg'
-  //   },
-  //   fallbackBreakpoint: 'lg'
-  // },
+  image: {
+    provider: 'sirv',
+    sirv: {
+      baseURL: 'https://exclave.sirv.com'
+    }
+  },
+  viewport: {
+    breakpoints: {
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      '2xl': 1536
+    },
+    defaultBreakpoints: {
+      mobile: 'sm',
+      tablet: 'md',
+      desktop: 'lg'
+    },
+    fallbackBreakpoint: 'lg'
+  },
   stylelint: {
     lintOnStart: false,
     fix: true

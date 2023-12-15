@@ -51,7 +51,7 @@ function colorsFromSchemeContent(
   }
   const schemeContentColors: Record<string, number> = {}
   for (const colorName of Object.getOwnPropertyNames(MaterialDynamicColors)) {
-    const color = MaterialDynamicColors[colorName]
+    const color = MaterialDynamicColors[colorName as keyof typeof MaterialDynamicColors]
     if (color instanceof DynamicColor) {
       const colorKey = suffix ? `${colorName}${suffix && suffix}` : colorName
       schemeContentColors[colorKey] = color.getArgb(schemeContent)

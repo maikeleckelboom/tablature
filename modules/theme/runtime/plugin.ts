@@ -29,7 +29,9 @@ export default defineNuxtPlugin((nuxt) => {
   })
 
   const schemeContentText = computed(() =>
-    textFromProperties(contentColorProperties.value, { lineBreak: false })
+    contentColorProperties.value
+      ? textFromProperties(contentColorProperties.value, { lineBreak: false })
+      : ''
   )
 
   useHead({
