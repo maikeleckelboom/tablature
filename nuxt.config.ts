@@ -8,27 +8,35 @@ export default defineNuxtConfig({
   },
   typescript: {
     typeCheck: true,
-    strict: true
+    strict: false
   },
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@pinia/nuxt',
-    '@vueuse/nuxt',
-    'nuxt-icon',
-    '~/modules/theme/module.ts',
-    '@nuxtjs/stylelint-module',
-    'nuxt-viewport',
-    '@nuxt/image'
-  ],
+  runtimeConfig: {
+    public: {
+      apiUrl: 'http://127.0.0.1:8000/api/v1'
+    }
+  },
   tailwindcss: {
     viewer: true,
     configPath: '~/tailwind.config',
     exposeConfig: true
   },
+  vueuse: {
+    autoImports: true
+  },
   image: {
     provider: 'sirv',
     sirv: {
       baseURL: 'https://exclave.sirv.com'
+    }
+  },
+  appConfig: {
+    theme: {
+      isDark: true,
+      contrastLevel: 0.3,
+      sourceColor: '#047fcc'
+    },
+    nuxtIcon: {
+      size: '24px'
     }
   },
   viewport: {
@@ -50,14 +58,18 @@ export default defineNuxtConfig({
     lintOnStart: false,
     fix: true
   },
-  appConfig: {
-    theme: {
-      isDark: true,
-      contrastLevel: 0.3,
-      sourceColor: '#047fcc'
-    },
-    nuxtIcon: {
-      size: '24px'
-    }
-  }
+  imports: {
+    dirs: ['~/components', '~/components/Kanban']
+  },
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/stylelint-module',
+    '@nuxt/image',
+    '@pinia/nuxt',
+    '@vueuse/nuxt',
+    'nuxt-icon',
+    'nuxt-viewport',
+    'nuxt-lodash',
+    '~/modules/theme/module.ts'
+  ]
 })

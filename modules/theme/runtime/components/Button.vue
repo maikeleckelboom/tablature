@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { tv } from 'tailwind-variants'
-import type { ButtonProps } from '../../types'
+import type { ButtonProps } from '../../../button/types'
 
 const props = defineProps<Partial<ButtonProps>>()
 
@@ -9,7 +9,6 @@ const button = tv({
     'flex',
     'items-center',
     'justify-center',
-    'gap-3',
     'shrink-0',
     'relative',
     'overflow-hidden',
@@ -17,6 +16,7 @@ const button = tv({
     'label-text:capitalize',
     'label-text:shrink-0',
     'icon:shrink-0',
+
     // Before
     'before:z-0',
     'before:opacity-0',
@@ -35,7 +35,7 @@ const button = tv({
     'focus-visible:before:opacity-[0.12]'
   ],
   variants: {
-    stretch: {
+    fullWidth: {
       true: 'w-full',
       false: 'w-fit'
     },
@@ -111,7 +111,7 @@ const button = tv({
     intent: 'filled',
     size: 'md',
     disabled: false,
-    stretch: false,
+    fullWidth: false,
     icon: undefined
   }
 })
@@ -119,9 +119,13 @@ const button = tv({
 
 <template>
   <button :class="button(props)" type="button">
-    <Icon v-if="icon" :name="icon" />
     <span :class="{ 'label-text': intent !== 'icon' }">
       <slot>{{ label }}</slot>
+    </span>
+    <span v-if="icon || $slots.icon?.()?.length" class="ml-2">
+      <slot name="icon">
+        <Icon :name="icon" />
+      </slot>
     </span>
   </button>
 </template>
