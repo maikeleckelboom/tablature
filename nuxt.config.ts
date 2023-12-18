@@ -54,22 +54,22 @@ export default defineNuxtConfig({
     },
     fallbackBreakpoint: 'lg'
   },
-  stylelint: {
-    lintOnStart: false,
-    fix: true
-  },
+  // stylelint: {
+  //   lintOnStart: false,
+  //   fix: true
+  // },
   imports: {
-    dirs: ['~/components', '~/components/Kanban']
+    dirs: ['~/components', '~/components/Kanban', '~/utils']
   },
   modules: [
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/stylelint-module',
     '@nuxt/image',
     '@pinia/nuxt',
     '@vueuse/nuxt',
     'nuxt-icon',
     'nuxt-viewport',
     'nuxt-lodash',
-    '~/modules/theme/module.ts'
+    '~/modules/theme/module.ts',
+    '~/modules/dialog/module.ts'
   ]
 })

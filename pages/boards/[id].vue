@@ -3,10 +3,8 @@ import type { Board as TBoard } from '~/types'
 
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
-const { apiUrl } = runtimeConfig.public
-
 const { data, pending, error } = await useAsyncData<TBoard>('board', () =>
-  $fetch(`${apiUrl}/kanban/boards/${route.params.id}`)
+  $fetch(`${runtimeConfig.public.apiUrl}/kanban/boards/${route.params.id}`)
 )
 
 const store = useBoardStore()
@@ -26,5 +24,12 @@ const { board } = storeToRefs(store)
     <span>Error ❌😱</span>
     <pre>{{ error }}</pre>
   </div>
-  <KanbanBoard v-else-if="board" :board="board" />
+  <div v-else class="grid grid-flow-col overflow-clip">
+    <Sidebar />
+    <div class="overflow-x-auto">
+      <KanbanBoard v-if="board" :board="board" />
+    </div>
+  </div>
 </template>
+
+<style scoped></style>

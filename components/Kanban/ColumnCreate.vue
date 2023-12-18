@@ -3,24 +3,26 @@ const store = useBoardStore()
 
 const { board } = storeToRefs(store)
 
-const formModel = reactive({
-  title: ''
-})
+const textarea = ref<HTMLTextAreaElement>()
 
-const commit = async () => {
-  if (!board.value || formModel.title?.length < 2) return
-  const column = await store.createColumn(board.value.id, {
-    title: formModel.title,
-    board_id: board.value.id
-  })
-  store.addColumn(column)
-}
+const input = ref<string>('')
 
-const onClick = () => {
-  commit()
+const onSubmit = async () => {
+  if (!board.value || input.value?.length < 2) return
+  await store.createColumn({ title: input.value, board_id: board.value.id })
 }
 </script>
 
 <template>
-  <Button @click="onClick"> Create new list </Button>
+  <form @submit.prevent.stop="onSubmit" class="p-2">
+    <textarea
+      ref="textarea"
+      v-model="input"
+      rows="1"
+      autocapitalize="on"
+      class="w-full resize-none overflow-clip rounded-md border border-outline-variant bg-surface p-3 text-on-surface"
+      placeholder="Enter list title..."
+    />
+    <Button intent="outlined" class="mt-2 w-full" type="submit"> Add a List</Button>
+  </form>
 </template>

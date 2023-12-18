@@ -10,7 +10,6 @@ export default defineNuxtModule<ThemeModuleOptions>({
     configKey: 'theme',
     dependencies: {
       tailwindcss: '^6.9.4',
-      '@tailwindcss/container-queries': '^0.1.1',
       '@material/material-color-utilities': '^0.2.7'
     }
   },
@@ -27,14 +26,13 @@ export default defineNuxtModule<ThemeModuleOptions>({
     'pages:extend'(pages) {
       pages.push({
         name: 'schemes',
-        path: '/_app/schemes',
+        path: '/app/schemes',
         file: resolve('./runtime/pages/schemes.vue')
       })
     }
   },
   setup: async (options: ThemeModuleOptions, nuxt) => {
     nuxt.options.appConfig.theme = defu(nuxt.options.appConfig?.theme || {}, options)
-    // nuxt.options.css.push(resolve('./runtime/css/motion.css'))
     await addComponentsDir({
       pathPrefix: false,
       path: resolve('./runtime/components')

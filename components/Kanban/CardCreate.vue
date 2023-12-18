@@ -5,12 +5,6 @@ const { columnId } = defineProps<{
 
 const store = useBoardStore()
 
-const isFormVisible = ref<boolean>(false)
-
-const isFormVisibleToggle = () => {
-  isFormVisible.value = !isFormVisible.value
-}
-
 const formModel = reactive({
   content: ''
 })
@@ -18,43 +12,55 @@ const formModel = reactive({
 const errorMessages = ref<string[]>([])
 
 const validate = () => {
-  return formModel.content !== '' && formModel.content?.length
+  return formModel.content.length >= 2
 }
 
-const onCreate = async () => {
-  if (!validate()) {
-    errorMessages.value = ['Content is required']
+const { shift, enter } = useMagicKeys()
+
+const onSubmit = async () => {
+  if (shift.value) {
+    formModel.content += '\n'
     return
   }
-  const card = await store.createCard(columnId, {
+  if (!validate()) {
+    errorMessages.value = ['Content is required', 'Content must be at least 2 characters long']
+    return
+  }
+  const card = await store.createCard({
     content: formModel.content,
-    board_column_id: columnId
+    column_id: columnId
   })
-  store.addCardToColumn(columnId, card)
-  isFormVisibleToggle()
+  console.log(card)
+  formModel.content = ''
+  errorMessages.value = []
 }
 </script>
 
 <template>
   <div>
-    <Button intent="filled" @click="isFormVisibleToggle" icon="ic:round-add">
-      <span>Add Card</span>
-    </Button>
     <div>
-      <div v-if="isFormVisible">
-        <div v-if="errorMessages.length" class="text-red-500">
-          <ul>
-            <li v-for="message in errorMessages" :key="message">
-              {{ message }}
-            </li>
-          </ul>
-        </div>
-        <form onsubmit="return false">
-          <textarea v-model="formModel.content" class="h-12 w-full border" placeholder="" />
-          <button @click="isFormVisibleToggle">Cancel</button>
-          <button @click.stop.prevent="onCreate">Add</button>
-        </form>
+      <div v-if="errorMessages.length" class="text-error">
+        <ul>
+          <li v-for="message in errorMessages" :key="message">
+            {{ message }}
+          </li>
+        </ul>
       </div>
+      <form
+        @submit.prevent="onSubmit"
+        :class="{
+          'border-error': errorMessages.length,
+          'border-outline-variant': !errorMessages.length,
+          'bg-surface-level-1': shift
+        }"
+      >
+        <textarea
+          v-model="formModel.content"
+          class="w-full resize-none rounded-md border border-outline-variant/20 bg-surface p-3 text-on-surface focus:border-outline-variant focus-visible:border-outline-variant"
+          placeholder="Enter card content..."
+          @keydown.enter.exact.prevent="onSubmit"
+        />
+      </form>
     </div>
   </div>
 </template>

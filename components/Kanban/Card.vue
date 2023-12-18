@@ -10,16 +10,6 @@ const { card } = defineProps<{
 }>()
 
 const cardRef = ref<HTMLElement>()
-
-const onDeleteCard = async () => {
-  if (!board.value) return
-  try {
-    await store.deleteCard(card.id)
-    store.removeCard(card)
-  } catch (exception) {
-    console.error(exception)
-  }
-}
 </script>
 
 <template>
@@ -30,7 +20,7 @@ const onDeleteCard = async () => {
     <div class="col-span-full p-3">
       <slot />
     </div>
-    <footer class="col-span-full h-[38px] border-outline-variant/30">
+    <footer class="col-span-full min-h-[38px] border-outline-variant/30">
       <slot name="footer" />
     </footer>
   </div>
