@@ -70,30 +70,30 @@ const onDeleteCard = async (card: TCard) => {
 </script>
 
 <template>
-  <div
-    ref="columnRef"
-    class="flex h-screen w-[260px] flex-col justify-start overflow-clip border-x border-outline-variant/50 bg-surface-container/50 px-2"
-  >
+  <div ref="columnRef" class="flex h-full w-[260px] flex-col justify-start overflow-clip px-2">
     <div
-      class="group grid h-[56px] grid-cols-[minmax(100px,280px),1fr] px-3 pb-2 pt-2"
+      class="group grid h-[56px] grid-cols-[minmax(100px,280px),1fr] pb-2 pl-3 pt-2"
       data-handle="column"
     >
       <h2 class="leading-tighter my-auto line-clamp-2 text-title-md">
         {{ column.title }}
       </h2>
       <div class="flex justify-end">
-        <Button
-          intent="icon"
-          size="sm"
-          @click="onDeleteColumn"
-          class="invisible group-hover:visible"
-        >
-          <Icon class="h-2 w-2" name="ic:outline-delete" />
+        <!--        <Button-->
+        <!--          intent="icon"-->
+        <!--          size="sm"-->
+        <!--          @click="onDeleteColumn"-->
+        <!--          class="invisible group-hover:visible"-->
+        <!--        >-->
+        <!--          <Icon class="h-2 w-2" name="ic:outline-delete" />-->
+        <!--        </Button>-->
+        <Button intent="icon" size="sm" @click="showMenu">
+          <Icon class="h-2 w-2" name="ic:outline-more-vert" />
         </Button>
       </div>
     </div>
     <div
-      class="scrollbar flex h-full flex-col overflow-y-auto overflow-x-clip px-1.5 [scrollbar-gutter:stable]"
+      class="scrollbar flex h-full w-full flex-col overflow-y-auto overflow-x-clip px-1.5 [scrollbar-gutter:stable]"
     >
       <div ref="containerRef" class="flex h-full flex-col gap-2">
         <KanbanCard
@@ -109,16 +109,15 @@ const onDeleteCard = async (card: TCard) => {
               intent="icon"
               size="sm"
               @click.stop.prevent="onDeleteCard(card)"
-              class="d-ignore m-2 ml-auto opacity-0 transition-opacity group-hover:opacity-100"
+              class="d-ignore absolute bottom-0 right-0 m-2 ml-auto opacity-0 transition-opacity group-hover:opacity-100"
             >
               <Icon class="h-2 w-2" name="ic:outline-delete" />
             </Button>
           </template>
         </KanbanCard>
       </div>
-      <KanbanCardCreate :column-id="column.id" />
+      <!--      <KanbanCardCreate :column-id="column.id" />-->
     </div>
-    <div class="h-[56px] flex-shrink-0"></div>
   </div>
 </template>
 

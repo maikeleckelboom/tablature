@@ -1,9 +1,9 @@
 import type {
   Board,
   Card,
-  CardsReorderPayload,
+  CardsReorderRequest,
   Column,
-  ColumnsReorderPayload,
+  ColumnsReorderRequest,
   CreateCard,
   CreateColumn
 } from '~/types'
@@ -39,7 +39,7 @@ const useBoardStore = defineStore('board', () => {
 
   const addColumn = (column: Column) => {
     board.value.columns = board.value.columns || []
-    nextTick().then(() => board.value.columns.push(column))
+    board.value.columns.push(column)
   }
 
   const addCard = (columnId: number, card: Card) => {
@@ -61,7 +61,7 @@ const useBoardStore = defineStore('board', () => {
     })
   }
 
-  const reorderColumns = async (payload: ColumnsReorderPayload) => {
+  const reorderColumns = async (payload: ColumnsReorderRequest) => {
     const runtimeConfig = useRuntimeConfig()
     await $fetch(`${runtimeConfig.public.apiUrl}/kanban/columns/reorder`, {
       method: 'PUT',
@@ -69,7 +69,7 @@ const useBoardStore = defineStore('board', () => {
     })
   }
 
-  const reorderCards = async (columns: CardsReorderPayload) => {
+  const reorderCards = async (columns: CardsReorderRequest) => {
     const runtimeConfig = useRuntimeConfig()
     await $fetch(`${runtimeConfig.public.apiUrl}/kanban/cards/reorder`, {
       method: 'PUT',
@@ -94,20 +94,11 @@ const useBoardStore = defineStore('board', () => {
     }
   }
   const createCard = async (payload: CreateCard) => {
-    try {
-      const runtimeConfig = useRuntimeConfig()
-      const card = await $fetch<Card>(
-        `${runtimeConfig.public.apiUrl}/kanban/${payload.column_id}/cards`,
-        {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        }
-      )
-      addCard(payload.column_id, card)
-      return card
-    } catch (exception) {
-      console.error('"create card" has thrown exception:', exception)
-    }
+    const runtimeConfig = useRuntimeConfig()
+    return await $fetch<Card>(`${runtimeConfig.public.apiUrl}/kanban/${payload.column_id}/cards`, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
   }
 
   const deleteCard = async (id: number) => {

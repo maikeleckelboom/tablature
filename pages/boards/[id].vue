@@ -24,12 +24,12 @@ const { board } = storeToRefs(store)
     <span>Error ❌😱</span>
     <pre>{{ error }}</pre>
   </div>
-  <div v-else class="grid grid-flow-col overflow-clip">
-    <Sidebar />
-    <div class="overflow-x-auto">
-      <KanbanBoard v-if="board" :board="board" />
-    </div>
-  </div>
+  <KanbanLayout v-else>
+    <template #aside>
+      <Sidebar />
+    </template>
+    <KanbanBoard v-if="board" :board="board" />
+  </KanbanLayout>
 </template>
 
 <style scoped></style>

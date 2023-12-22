@@ -50,15 +50,12 @@ const addList = () => {
 </script>
 
 <template>
-  <div class="flex h-screen flex-col overflow-clip">
-    <div class="flex w-full flex-nowrap">
-      <div ref="container" class="flex">
-        <KanbanColumn v-for="column in columns" :key="column.id" :column="column" />
-      </div>
-      <div class="p-3">
-        <Button intent="tonal" @click="addList"> Create a new list</Button>
-      </div>
-      <!--      <KanbanColumnCreate />-->
+  <div class="flex h-full justify-start">
+    <div ref="container" class="flex h-full">
+      <KanbanColumn v-for="column in columns" :key="column.id" :column="column" />
+    </div>
+    <div class="p-3 [min-inline-size:max-content;]">
+      <Button intent="tonal" @click="addList"> Create a new list</Button>
     </div>
   </div>
 </template>

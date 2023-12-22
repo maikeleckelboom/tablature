@@ -1,10 +1,6 @@
 <script lang="ts" setup>
 import type { Card } from '~/types'
 
-const store = useBoardStore()
-
-const { board } = storeToRefs(store)
-
 const { card } = defineProps<{
   card: Card
 }>()
@@ -15,12 +11,12 @@ const cardRef = ref<HTMLElement>()
 <template>
   <div
     ref="cardRef"
-    class="relative cursor-move grid-cols-[1fr,auto] overflow-hidden rounded-[8px] border-2 border-surface-variant bg-surface"
+    class="relative flex cursor-move flex-col overflow-hidden rounded-[8px] border-2 border-surface-variant bg-surface pb-4"
   >
-    <div class="col-span-full p-3">
+    <div class="size-full flex flex-col p-3">
       <slot />
     </div>
-    <footer class="col-span-full min-h-[38px] border-outline-variant/30">
+    <footer class="absolute inset-x-0 bottom-0">
       <slot name="footer" />
     </footer>
   </div>

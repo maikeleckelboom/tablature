@@ -3,10 +3,6 @@ type Timestamps = {
   updated_at: string
 }
 
-type SavedFlag = {
-  saved: boolean
-}
-
 type Board = {
   id: number
   user_id: number
@@ -29,12 +25,12 @@ type Card = {
   content: string
 } & Partial<Timestamps>
 
-type ColumnsReorderPayload = {
+type ColumnsReorderRequest = {
   id: number
   columns: Pick<Column, 'id' | 'position'>[]
 }
 
-type CardsReorderPayload = {
+type CardsReorderRequest = {
   id: number
   cards: Pick<Card, 'id' | 'position'>[]
 }[]
@@ -53,8 +49,36 @@ export type {
   Board,
   Column,
   Card,
-  ColumnsReorderPayload,
-  CardsReorderPayload,
+  ColumnsReorderRequest,
+  CardsReorderRequest,
   CreateCard,
   CreateColumn
 }
+
+type MenuItemBase = {
+  name: string
+  label?: string
+  icon?: string
+  iconPosition?: 'before' | 'after'
+}
+
+type MenuItemWithChildren = MenuItemBase & {
+  open: boolean
+  children: MenuItemBase[]
+}
+
+type MenuItemLink = MenuItemBase & {
+  href: string
+}
+
+type MenuItem = MenuItemBase | MenuItemWithChildren | MenuItemLink
+
+type HoverState = {
+  isHovered: boolean
+}
+
+type ActiveState = {
+  isActive: boolean
+}
+
+export type { MenuItem, MenuItemWithChildren, MenuItemLink }

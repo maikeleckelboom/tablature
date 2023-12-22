@@ -1,0 +1,73 @@
+<script lang="ts" setup></script>
+
+<template>
+  <div data-layout="TwoColumn" class="h-svh w-svw overflow-clip">
+    <header>
+      <slot name="header" />
+    </header>
+    <aside>
+      <slot name="aside" />
+    </aside>
+    <main>
+      <slot name="default" />
+    </main>
+    <footer>
+      <slot name="footer" />
+    </footer>
+  </div>
+</template>
+
+<style scoped>
+[data-layout='TwoColumn'] {
+  --h-footer: 100px;
+  --h-header: 64px;
+  --w-aside: 280px;
+  --h-aside: calc(100svh - var(--h-footer) - var(--h-header));
+
+  display: grid;
+
+  grid-template-columns: 1fr;
+  grid-template-rows: var(--h-header) var(--h-aside) 1fr var(--h-footer);
+
+  grid-template-areas:
+    'header header'
+    'aside aside'
+    'main main'
+    'footer footer';
+  inline-size: 100svw;
+  block-size: 100svh;
+
+  @screen md {
+    grid-template-columns: var(--w-aside) 1fr;
+    grid-template-rows: var(--h-header) 1fr var(--h-footer);
+    grid-template-areas:
+      'header header '
+      'aside main '
+      'footer footer ';
+  }
+
+  > * {
+    @apply p-3;
+  }
+
+  header {
+    grid-area: header;
+    @apply bg-surface-level-1;
+  }
+
+  aside {
+    grid-area: aside;
+    @apply overflow-y-auto overflow-x-clip bg-surface-level-2;
+  }
+
+  main {
+    grid-area: main;
+    @apply scrollbar h-full overflow-x-auto overflow-y-clip bg-surface-container;
+  }
+
+  footer {
+    grid-area: footer;
+    @apply bg-surface-container-high;
+  }
+}
+</style>

@@ -13,7 +13,7 @@ const boardsNavigation = computed(() => {
 </script>
 
 <template>
-  <aside class="hidden flex-col overflow-x-clip md:flex">
+  <aside class="hidden w-[280px] flex-col overflow-x-clip md:flex">
     <header class="flex items-center justify-between p-4">
       <h2 class="text-lg font-semibold">Boards</h2>
     </header>
