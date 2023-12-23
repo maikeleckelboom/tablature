@@ -61,12 +61,30 @@ export type {
   CardsReorderUpsert
 }
 
-type ListItemBaseProps = {
-  name: string
-  title?: string
-  prefixIcon?: string
-  suffixIcon?: string
+type IconContext = {
+  prefixIcon: string
+  suffixIcon: string
+  suffixText: string
 }
+type Name = {
+  name: string
+}
+
+type Title = {
+  title: string
+}
+
+type MaybeTitle = Partial<Title>
+
+type NameAndMaybeTitle = Name & MaybeTitle
+
+type IconProps = {
+  prefixIcon: string
+  suffixIcon: string
+  suffixText: string
+}
+
+type ListItemBaseProps = NameAndMaybeTitle & Partial<IconProps>
 
 type ListItemLink = ListItemBaseProps & {
   href: string

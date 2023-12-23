@@ -1,10 +1,14 @@
 <script lang="ts" setup>
-import type { Board, ListItem, ListItemWithChildren } from '~/types'
+import type { Board, ListItem } from '~/types'
 
-const menu = ref<ListItem[]>([
+const list = ref<ListItem[]>([
   {
     name: 'Home',
     href: '/'
+  },
+  {
+    name: 'Create Board',
+    href: '/boards/create'
   }
 ])
 
@@ -14,17 +18,14 @@ const { data } = await useAsyncData<Board[]>('boards', () =>
 const store = useBoardStore()
 
 if (data.value) {
-  const menuBoards = {
+  list.value.push({
     name: 'Boards',
     href: '/boards',
-    children: data.value.map((board) => {
-      return {
-        name: board.title,
-        href: `/boards/${board.id}`
-      }
-    })
-  }
-  menu.value.push(menuBoards)
+    children: data.value.map((board) => ({
+      name: board.title,
+      href: `/boards/${board.id}`
+    }))
+  })
   store.setBoards(data.value)
 }
 </script>
@@ -35,16 +36,7 @@ if (data.value) {
       <slot name="header" />
     </template>
     <template #aside>
-      <List
-        :list="menu"
-        active-class="bg-error/50 text-on-error-container"
-        exact-active-class="bg-primary text-on-error"
-      >
-        <template #name="{ item, level }">
-          <span v-if="level > 0" class="mx-2 h-1 w-4 self-center rounded bg-primary-container" />
-          <span>It tracks ! -> {{ item.name }}</span>
-        </template>
-      </List>
+      <List :list="list" />
     </template>
     <template #default>
       <slot name="default" />
