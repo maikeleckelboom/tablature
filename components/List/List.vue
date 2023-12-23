@@ -1,29 +1,26 @@
-<script generic="TItem extends ListItem" lang="ts" setup>
-import type { ListItem, ListItemLink, ListItemWithChildren } from '~/types'
-
-type ClassProps<TValue> = {
-  link: TValue
-  base: TValue
-  selected: TValue
-}
+<script generic="TItem extends TListItem" lang="ts" setup>
+import type { ListItem as TListItem, ListItemLink, ListItemWithChildren } from '~/types'
 
 interface Props {
   list: TItem[]
-  selected?: TItem
+  selected?: TItem[]
   level?: number
-  classes?: ClassProps<string>
+
+  selectedClass?: string
+  activeClass?: string
+  exactActiveClass?: string
 }
 
 const {
   list,
-  selected,
   level = 0,
-  classes = {
-    base: 'flex p-2',
-    link: '',
-    selected: 'bg-secondary-container text-on-secondary-container'
-  }
+  selectedClass,
+  activeClass,
+  exactActiveClass,
+  ...props
 } = defineProps<Props>()
+
+const selected = toRef(props, 'selected', [])
 
 interface SlotProps {
   item: TItem
@@ -41,90 +38,85 @@ function isMenuItemWithChildren(
   return (item as ListItemWithChildren).children !== undefined
 }
 
-function isMenuItem(item: TItem): item is TItem extends ListItem ? TItem : any {
-  return !isMenuItemWithChildren(item)
+const select = (item: TItem, level: number) => {
+  selected.value[level] = item
+  selected.value.splice(level + 1)
 }
 
-function isMenuLink(item: TItem): item is TItem extends ListItemLink ? TItem : any {
-  return (item as ListItemLink).href !== undefined
+const isSelected = (item: TItem, level: number) => {
+  return selected.value[level] === item
 }
 
-const router = useRouter()
 const route = useRoute()
 
-function selectedCheck(item: TItem) {
-  if (isMenuLink(item)) {
-    return router.resolve(item.href).href === route.fullPath
-  }
-
-  return false
+const isExactActive = (item: TItem) => {
+  return route.path === (<ListItemLink>item).href
 }
 
-function isSelected(item: TItem) {
-  return selectedCheck(item) || item === selected
+/**
+ * twMerge: {
+ *     [selectedClass]: isSelected(item, level),
+ *         [activeClass]: isMenuItemWithChildren(item) && isSelected(item, level),
+ *         [exactActiveClass]: isMenuItemWithChildren(item) && isExactActive(item)
+ * }
+ */
+
+const mergedClasses = (item: TItem) => {
+  if (!item) return {}
+  const classes = {
+    [selectedClass]: isSelected(item, level),
+    [activeClass]: isMenuItemWithChildren(item) && isSelected(item, level),
+    [exactActiveClass]: isMenuItemWithChildren(item) && isExactActive(item)
+  }
+  return classes
 }
 </script>
 
 <template>
   <menu>
-    <li v-for="(item, index) in list" :key="item.name">
+    <li v-for="item in list" :key="item.name">
       <slot name="item" v-bind="{ item, level }">
-        <ListItem :item="item" :level="level" :classes="classes">
+        <ListItem
+          :active-class="activeClass"
+          :exact-active-class="exactActiveClass"
+          :item="item"
+          :level="level"
+          :selected-class="selectedClass"
+        >
           <slot name="name" v-bind="{ item, level }">
             {{ item.name }}
           </slot>
         </ListItem>
-        <!--        <NuxtLink
-                  v-if="isMenuLink(item)"
-                  :class="[classes.base, classes.link, isSelected(item) && classes.selected]"
-                  :to="item.href"
-                >
-                  <slot name="name" v-bind="{ item, level }">
-                    {{ item.name }}
-                  </slot>
-                </NuxtLink>
-                <button
-                  v-else-if="isMenuItem(item)"
-                  :class="[classes.base, isSelected(item) && classes.selected]"
-                >
-                  <slot name="name" v-bind="{ item, level }">
-                    {{ item.name }}
-                  </slot>
-                </button>-->
       </slot>
       <List
         v-if="isMenuItemWithChildren(item)"
+        :active-class="activeClass"
+        :exact-active-class="exactActiveClass"
         :level="level + 1"
         :list="<TItem[]>item.children"
-        :class="[classes, 'pl-4']"
+        :selected="selected"
+        :selected-class="selectedClass"
       >
         <template #item="{ item, level }">
-          <ListItem :item="item" :level="level" :classes="classes">
+          <ListItem
+            :active-class="activeClass"
+            :exact-active-class="exactActiveClass"
+            :item="item"
+            :level="level"
+            :selected-class="selectedClass"
+          >
             <slot name="name" v-bind="{ item, level }">
               {{ item.name }}
             </slot>
           </ListItem>
-          <!--          <NuxtLink-->
-          <!--            v-if="isMenuLink(item)"-->
-          <!--            :class="[classes.item, classes.link, isSelected(item) && classes.selected]"-->
-          <!--            :to="item.href"-->
-          <!--          >-->
-          <!--            <slot name="name" v-bind="{ item, level }">-->
-          <!--              {{ item.name }}-->
-          <!--            </slot>-->
-          <!--          </NuxtLink>-->
-          <!--          <button-->
-          <!--            v-else-if="isMenuItem(item)"-->
-          <!--            :class="[classes.item, isSelected(item) && classes.selected]"-->
-          <!--          >-->
-          <!--            <slot name="name" v-bind="{ item, level }">-->
-          <!--              {{ item.name }}-->
-          <!--            </slot>-->
-          <!--          </button>-->
         </template>
       </List>
     </li>
   </menu>
 </template>
 
-<style scoped></style>
+<style scoped>
+menu li:has(.router-link-active) {
+  @apply bg-secondary;
+}
+</style>

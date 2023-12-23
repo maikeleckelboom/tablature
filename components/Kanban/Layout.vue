@@ -35,7 +35,11 @@ if (data.value) {
       <slot name="header" />
     </template>
     <template #aside>
-      <List :list="menu">
+      <List
+        :list="menu"
+        active-class="bg-error/50 text-on-error-container"
+        exact-active-class="bg-primary text-on-error"
+      >
         <template #name="{ item, level }">
           <span v-if="level > 0" class="mx-2 h-1 w-4 self-center rounded bg-primary-container" />
           <span>It tracks ! -> {{ item.name }}</span>
