@@ -1,16 +1,16 @@
-import type { Card, CardsReorderRequest, CreateCard } from '~/types'
+import type { Card, CardsReorderUpsert, CardUpsert } from '~/types'
 
 export function useCardResource() {
   const runtimeConfig = useRuntimeConfig()
 
-  const create = async (payload: CreateCard) => {
+  const create = async (payload: CardUpsert) => {
     return await $fetch<Card>(`${runtimeConfig.public.apiUrl}/kanban/${payload.column_id}/cards`, {
       method: 'POST',
       body: JSON.stringify(payload)
     })
   }
 
-  const edit = async (payload: CreateCard) => {
+  const edit = async (payload: CardUpsert) => {
     return await $fetch<Card>(`${runtimeConfig.public.apiUrl}/kanban/cards/${payload.column_id}`, {
       method: 'PUT',
       body: JSON.stringify(payload)
@@ -23,7 +23,7 @@ export function useCardResource() {
     })
   }
 
-  const reorder = async (columns: CardsReorderRequest) => {
+  const reorder = async (columns: CardsReorderUpsert) => {
     return await $fetch(`${runtimeConfig.public.apiUrl}/kanban/cards/reorder`, {
       method: 'PUT',
       body: JSON.stringify({ columns })

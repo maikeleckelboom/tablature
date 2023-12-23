@@ -1,11 +1,11 @@
 import type {
   Board,
   Card,
-  CardsReorderRequest,
+  CardsReorderUpsert,
   Column,
-  ColumnsReorderRequest,
-  CreateCard,
-  CreateColumn
+  ColumnsReorderUpsert,
+  CardUpsert,
+  ColumnUpsert
 } from '~/types'
 
 const useBoardStore = defineStore('board', () => {
@@ -61,7 +61,7 @@ const useBoardStore = defineStore('board', () => {
     })
   }
 
-  const reorderColumns = async (payload: ColumnsReorderRequest) => {
+  const reorderColumns = async (payload: ColumnsReorderUpsert) => {
     const runtimeConfig = useRuntimeConfig()
     await $fetch(`${runtimeConfig.public.apiUrl}/kanban/columns/reorder`, {
       method: 'PUT',
@@ -69,7 +69,7 @@ const useBoardStore = defineStore('board', () => {
     })
   }
 
-  const reorderCards = async (columns: CardsReorderRequest) => {
+  const reorderCards = async (columns: CardsReorderUpsert) => {
     const runtimeConfig = useRuntimeConfig()
     await $fetch(`${runtimeConfig.public.apiUrl}/kanban/cards/reorder`, {
       method: 'PUT',
@@ -77,7 +77,7 @@ const useBoardStore = defineStore('board', () => {
     })
   }
 
-  const createColumn = async (payload: CreateColumn) => {
+  const createColumn = async (payload: ColumnUpsert) => {
     try {
       const runtimeConfig = useRuntimeConfig()
       const column = await $fetch<Column>(
@@ -93,7 +93,7 @@ const useBoardStore = defineStore('board', () => {
       console.error('"create column" has thrown exception:', exception)
     }
   }
-  const createCard = async (payload: CreateCard) => {
+  const createCard = async (payload: CardUpsert) => {
     const runtimeConfig = useRuntimeConfig()
     return await $fetch<Card>(`${runtimeConfig.public.apiUrl}/kanban/${payload.column_id}/cards`, {
       method: 'POST',

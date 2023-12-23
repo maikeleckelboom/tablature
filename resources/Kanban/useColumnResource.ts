@@ -1,9 +1,9 @@
-import type { Column, ColumnsReorderRequest, CreateColumn } from '~/types'
+import type { Column, ColumnsReorderUpsert, ColumnUpsert } from '~/types'
 
 export function useColumnResource() {
   const runtimeConfig = useRuntimeConfig()
 
-  const create = async (payload: CreateColumn) => {
+  const create = async (payload: ColumnUpsert) => {
     return await $fetch<Column>(
       `${runtimeConfig.public.apiUrl}/kanban/${payload.board_id}/columns`,
       {
@@ -13,7 +13,7 @@ export function useColumnResource() {
     )
   }
 
-  const edit = async (payload: CreateColumn) => {
+  const edit = async (payload: ColumnUpsert) => {
     return await $fetch<Column>(
       `${runtimeConfig.public.apiUrl}/kanban/columns/${payload.board_id}`,
       {
@@ -29,7 +29,7 @@ export function useColumnResource() {
     })
   }
 
-  const reorder = async (payload: ColumnsReorderRequest) => {
+  const reorder = async (payload: ColumnsReorderUpsert) => {
     return await $fetch(`${runtimeConfig.public.apiUrl}/kanban/columns/reorder`, {
       method: 'PUT',
       body: JSON.stringify(payload)

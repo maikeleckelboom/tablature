@@ -10,6 +10,11 @@ type Board = {
   columns: Column[]
 } & Partial<Timestamps>
 
+type BoardUpsert = {
+  id?: number
+  title: string
+}
+
 type Column = {
   id: number
   board_id: number
@@ -25,22 +30,22 @@ type Card = {
   content: string
 } & Partial<Timestamps>
 
-type ColumnsReorderRequest = {
+type ColumnsReorderUpsert = {
   id: number
   columns: Pick<Column, 'id' | 'position'>[]
 }
 
-type CardsReorderRequest = {
+type CardsReorderUpsert = {
   id: number
   cards: Pick<Card, 'id' | 'position'>[]
 }[]
 
-type CreateCard = {
+type CardUpsert = {
   content: string
   column_id: number
 }
 
-type CreateColumn = {
+type ColumnUpsert = {
   title: string
   board_id: number
 }
@@ -49,36 +54,31 @@ export type {
   Board,
   Column,
   Card,
-  ColumnsReorderRequest,
-  CardsReorderRequest,
-  CreateCard,
-  CreateColumn
+  BoardUpsert,
+  CardUpsert,
+  ColumnUpsert,
+  ColumnsReorderUpsert,
+  CardsReorderUpsert
 }
 
-type MenuItemBase = {
+type ListItemBaseProps = {
   name: string
-  label?: string
-  icon?: string
-  iconPosition?: 'before' | 'after'
+  title?: string
+  prefixIcon?: string
+  suffixIcon?: string
 }
 
-type MenuItemWithChildren = MenuItemBase & {
-  open: boolean
-  children: MenuItemBase[]
-}
-
-type MenuItemLink = MenuItemBase & {
+type ListItemLink = ListItemBaseProps & {
   href: string
 }
 
-type MenuItem = MenuItemBase | MenuItemWithChildren | MenuItemLink
+type ListItemType = ListItemBaseProps | ListItemLink
 
-type HoverState = {
-  isHovered: boolean
+type ListItemWithChildren = ListItemType & {
+  open: boolean
+  children: (ListItemType | ListItemWithChildren)[]
 }
 
-type ActiveState = {
-  isActive: boolean
-}
+type ListItem = ListItemBaseProps | ListItemWithChildren | ListItemLink
 
-export type { MenuItem, MenuItemWithChildren, MenuItemLink }
+export type { ListItem, ListItemWithChildren, ListItemLink }

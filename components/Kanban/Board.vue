@@ -54,7 +54,7 @@ const addList = () => {
     <div ref="container" class="flex h-full">
       <KanbanColumn v-for="column in columns" :key="column.id" :column="column" />
     </div>
-    <div class="p-3 [min-inline-size:max-content;]">
+    <div class="p-3 [min-inline-size:max-content]">
       <Button intent="tonal" @click="addList"> Create a new list</Button>
     </div>
   </div>

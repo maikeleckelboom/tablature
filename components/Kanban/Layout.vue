@@ -1,24 +1,32 @@
 <script lang="ts" setup>
-import type { MenuItem } from '~/types'
+import type { Board, ListItem, ListItemWithChildren } from '~/types'
 
-const menu = ref<MenuItem[]>([
+const menu = ref<ListItem[]>([
   {
     name: 'Home',
     href: '/'
-  },
-  {
-    name: 'Boards',
-    href: '/boards'
-  },
-  {
-    name: 'Boards/1',
-    href: '/boards/1'
-  },
-  {
-    name: 'About',
-    href: '/about'
   }
 ])
+
+const { data } = await useAsyncData<Board[]>('boards', () =>
+  $fetch('http://127.0.0.1:8000/api/v1/kanban/boards')
+)
+const store = useBoardStore()
+
+if (data.value) {
+  const menuBoards = {
+    name: 'Boards',
+    href: '/boards',
+    children: data.value.map((board) => {
+      return {
+        name: board.title,
+        href: `/boards/${board.id}`
+      }
+    })
+  }
+  menu.value.push(menuBoards)
+  store.setBoards(data.value)
+}
 </script>
 
 <template>
@@ -27,9 +35,12 @@ const menu = ref<MenuItem[]>([
       <slot name="header" />
     </template>
     <template #aside>
-      <VMenu :menu="menu" />
-      <div class="my-4 h-0.5 w-full bg-outline-variant" />
-      <slot name="aside" />
+      <List :list="menu">
+        <template #name="{ item, level }">
+          <span v-if="level > 0" class="mx-2 h-1 w-4 self-center rounded bg-primary-container" />
+          <span>It tracks ! -> {{ item.name }}</span>
+        </template>
+      </List>
     </template>
     <template #default>
       <slot name="default" />

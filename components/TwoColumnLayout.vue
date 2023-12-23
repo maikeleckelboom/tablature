@@ -1,4 +1,25 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+interface Props {
+  footerHeight?: string
+  headerHeight?: string
+  asideWidth?: string
+  asideHeight?: string
+}
+
+const {
+  footerHeight = '40px',
+  headerHeight = '50px',
+  asideWidth = '280px',
+  asideHeight = 'calc(100vh - var(--h-footer) - var(--h-header))'
+} = defineProps<Props>()
+
+const slots = defineSlots<{
+  header(): any
+  aside(): any
+  default(): any
+  footer(): any
+}>()
+</script>
 
 <template>
   <div data-layout="TwoColumn" class="h-svh w-svw overflow-clip">
@@ -19,9 +40,9 @@
 
 <style scoped>
 [data-layout='TwoColumn'] {
-  --h-footer: 100px;
-  --h-header: 64px;
-  --w-aside: 280px;
+  --h-footer: v-bind(footerHeight);
+  --h-header: v-bind(headerHeight);
+  --w-aside: v-bind(asideWidth);
   --h-aside: calc(100svh - var(--h-footer) - var(--h-header));
 
   display: grid;
@@ -57,7 +78,7 @@
 
   aside {
     grid-area: aside;
-    @apply overflow-y-auto overflow-x-clip bg-surface-level-2;
+    @apply scrollbar overflow-y-auto overflow-x-clip bg-surface-level-2;
   }
 
   main {
