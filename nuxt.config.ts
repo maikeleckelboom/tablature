@@ -26,6 +26,7 @@ export default defineNuxtConfig({
   image: {
     provider: 'sirv',
     sirv: {
+      // Trial ended
       baseURL: 'https://exclave.sirv.com'
     }
   },
@@ -70,6 +71,8 @@ export default defineNuxtConfig({
     'nuxt-viewport',
     'nuxt-lodash',
     '~/modules/theme/module.ts',
-    '~/modules/dialog/module.ts'
+    '~/modules/dialog/module.ts',
+    '~/modules/list/module.ts',
+    'nuxt-typed-router'
   ]
 })

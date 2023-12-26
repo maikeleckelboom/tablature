@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <KanbanLayout> </KanbanLayout>
+  <KanbanLayout> About </KanbanLayout>
 </template>
 
 <style scoped></style>

@@ -5,7 +5,7 @@ const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
 const { apiUrl } = runtimeConfig.public
 const { data, pending, error } = await useAsyncData<TBoard>('board', () =>
-  $fetch(`${apiUrl}/kanban/boards/${route.params.id}`)
+  $fetch(`${apiUrl}/kanban/boards/${(route as any).params.id ?? 1}`)
 )
 
 const store = useBoardStore()

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+
+}
+
 @layer utilities {
     .scrollbar {
         --_track: rgb(var(--surface-rgb));

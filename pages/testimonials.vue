@@ -1,7 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <KanbanLayout> </KanbanLayout>
+  <div>
+    <h1>Testimonials</h1>
+  </div>
 </template>
 
 <style scoped></style>

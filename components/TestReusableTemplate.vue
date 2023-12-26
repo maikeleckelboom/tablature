@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { createReusableTemplate } from '@vueuse/core'
 
-const [DefineBar, ReuseBar] = createReusableTemplate<{ items: string[] }>()
+const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{ items: string[] }>()
 </script>
 
 <template>
-  <DefineBar v-slot="{ items }">
+  <DefineTemplate v-slot="{ items }">
     <div>{{ items.map((item) => item.toUpperCase()).join(' ') }}</div>
-  </DefineBar>
+  </DefineTemplate>
 
-  <ReuseBar :items="['hello', 'world']" />
+  <ReuseTemplate :items="['hello', 'world']" />
 </template>

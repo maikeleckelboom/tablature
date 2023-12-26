@@ -52,8 +52,8 @@ const slots = defineSlots<{
 
   grid-template-areas:
     'header header'
-    'aside aside'
     'main main'
+    'aside aside '
     'footer footer';
   inline-size: 100svw;
   block-size: 100svh;

@@ -1,16 +1,5 @@
 <script lang="ts" setup>
-import type { Board, ListItem } from '~/types'
-
-const list = ref<ListItem[]>([
-  {
-    name: 'Home',
-    href: '/'
-  },
-  {
-    name: 'Create Board',
-    href: '/boards/create'
-  }
-])
+import type { Board } from '~/types'
 
 const { data } = await useAsyncData<Board[]>('boards', () =>
   $fetch('http://127.0.0.1:8000/api/v1/kanban/boards')
@@ -18,14 +7,6 @@ const { data } = await useAsyncData<Board[]>('boards', () =>
 const store = useBoardStore()
 
 if (data.value) {
-  list.value.push({
-    name: 'Boards',
-    href: '/boards',
-    children: data.value.map((board) => ({
-      name: board.title,
-      href: `/boards/${board.id}`
-    }))
-  })
   store.setBoards(data.value)
 }
 </script>
@@ -35,11 +16,11 @@ if (data.value) {
     <template #header>
       <slot name="header" />
     </template>
-    <template #aside>
-      <List :list="list" />
-    </template>
+    <template #aside></template>
     <template #default>
-      <slot name="default" />
+      <div class="h-full overflow-y-auto p-3">
+        <slot name="default" />
+      </div>
     </template>
     <template #footer>
       <slot name="footer" />
