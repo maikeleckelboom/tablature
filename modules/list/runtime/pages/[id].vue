@@ -5,9 +5,10 @@ const { abstractList, navigationList } = useListStore()
 <template>
   <KanbanLayout>
     <div class="flex flex-col">
-      <section class="">
-        <h1 class="mb-2 text-title-lg text-secondary">AccordionList</h1>
-        <AccordionList :list="navigationList"></AccordionList>
+      <section class="mx-auto w-full max-w-md">
+        <div class="bg-surface-container-dim rounded-xl p-6">
+          <AccordionList :list="navigationList"></AccordionList>
+        </div>
       </section>
     </div>
   </KanbanLayout>

@@ -4,7 +4,9 @@ const store = useListStore()
 
 <template>
   <KanbanLayout>
-    <AccordionList :list="store.navigationList"></AccordionList>
+    <div class="mx-auto w-full max-w-md">
+      <AccordionList :list="store.navigationList"></AccordionList>
+    </div>
   </KanbanLayout>
 </template>
 

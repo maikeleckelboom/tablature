@@ -109,6 +109,29 @@ const useListStore = defineStore('lists', () => {
       ]
     },
     {
+      name: 'Boards',
+      open: false,
+      children: [
+        {
+          name: 'Board 1',
+          href: '/boards/1'
+        },
+        {
+          name: 'Board 2',
+          href: '/boards/2'
+        },
+        {
+          name: 'Board 3',
+          href: '/boards/3'
+        },
+        {
+          name: 'All',
+          href: '/boards'
+        }
+      ]
+    },
+
+    {
       name: 'Blog',
       href: '/blog'
     },

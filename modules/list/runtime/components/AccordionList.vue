@@ -7,16 +7,10 @@ interface Props {
   transitionDuration?: number
 }
 
-const {
-  list,
-  transitionName = 'list-item',
-  transitionDuration = 400
-} = defineProps<Props>()
+const { list, transitionName = 'list-item', transitionDuration = 400 } = defineProps<Props>()
 
-
-const transitionDelay = computed<number>(()=>transitionDuration / (transitionDuration * 0.1));
-const transitionTotalDuration = computed<number>(() => transitionDuration + transitionDelay.value);
-
+const transitionDelay = computed<number>(() => transitionDuration / (transitionDuration * 0.1))
+const transitionTotalDuration = computed<number>(() => transitionDuration + transitionDelay.value)
 </script>
 
 <template>
@@ -98,11 +92,11 @@ const transitionTotalDuration = computed<number>(() => transitionDuration + tran
   .list-item-enter-from ul,
   .list-item-leave-to ul {
     opacity: 0;
-    transform: translateX(18px);
+    transform: translateX(1em);
   }
 
   .list-item-enter-active ul {
-    transition-delay:calc(var(--transition-delay * 2));
+    transition-delay: calc(var(--transition-delay) * 2);
   }
 }
 </style>
