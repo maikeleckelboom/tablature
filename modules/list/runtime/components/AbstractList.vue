@@ -37,7 +37,7 @@ function isRecursiveListItem<T>(item: T): item is T extends RecursiveListItem ? 
               <AbstractList :level="level + 1" :list="<TItem[]>item.children">
                 <slot name="item" v-bind="{ item, isRecursive: isRecursiveListItem(item), level }">
                   <AbstractListItem :item="item" :level="level">
-                    {{ item.name }}
+                    {{ item }}
                   </AbstractListItem>
                 </slot>
               </AbstractList>

@@ -10,13 +10,17 @@ interface Props {
 const {
   list,
   transitionName = 'list-item',
-  transitionDuration: transitionTotalDuration = 400
+  transitionDuration = 400
 } = defineProps<Props>()
 
-const transitionDuration = computed<number>(() => transitionTotalDuration - transitionDelay.value)
-const transitionDelay = computed<number>(
-  () => transitionTotalDuration / (transitionTotalDuration / 100)
-)
+
+const transitionDelay = shallowRef<number>(transitionDuration / (transitionDuration * 0.1));
+
+const transitionTotalDuration = computed<number>(() => transitionDuration + transitionDelay.value);
+
+watch(() => list, () => {
+  transitionDelay.value = transitionDuration / (transitionDuration * 0.1);
+}, { immediate: true });
 </script>
 
 <template>

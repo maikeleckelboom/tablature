@@ -1,8 +1,10 @@
-<script setup lang="ts"></script>
+<script lang="ts" setup>
+const store = useListStore()
+</script>
 
 <template>
   <KanbanLayout>
-    <h1>Blog</h1>
+    <AccordionList :list="store.navigationList"></AccordionList>
   </KanbanLayout>
 </template>
 
