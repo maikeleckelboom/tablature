@@ -14,13 +14,9 @@ const {
 } = defineProps<Props>()
 
 
-const transitionDelay = shallowRef<number>(transitionDuration / (transitionDuration * 0.1));
-
+const transitionDelay = computed<number>(()=>transitionDuration / (transitionDuration * 0.1));
 const transitionTotalDuration = computed<number>(() => transitionDuration + transitionDelay.value);
 
-watch(() => list, () => {
-  transitionDelay.value = transitionDuration / (transitionDuration * 0.1);
-}, { immediate: true });
 </script>
 
 <template>
@@ -43,7 +39,7 @@ watch(() => list, () => {
           </div>
           <template #tail="{ item, level }">
             <Transition :duration="transitionTotalDuration" :name="transitionName">
-              <div v-show="item.open" :class="{ 'pl-4': level > 0 }">
+              <div v-show="item.open" :class="{ 'pl-4': level >= 0 }">
                 <AccordionList :level="level + 1" :list="<TItem[]>item.children" />
               </div>
             </Transition>
@@ -92,8 +88,6 @@ watch(() => list, () => {
       transition-delay: var(--transition-delay);
     }
   }
-
-  /* List item transition */
 
   .list-item-enter-active ul,
   .list-item-leave-active ul {
