@@ -1,24 +1,22 @@
 <script setup lang="ts">
-import useListStore from '~/stores/useListStore'
-
 const { abstractList, navigationList } = useListStore()
 </script>
 
 <template>
-  <KanbanLayout>
-    <div class="flex flex-col gap-y-8">
-      <div class="grid grid-cols-2">
-        <section>
-          <h1 class="mb-2 text-title-lg text-secondary">AbstractList</h1>
-          <AbstractList :list="abstractList" />
-        </section>
-        <section>
+  <div class="grid grid-cols-3">
+    <section>
+      <h1 class="mb-2 text-title-lg text-secondary">AbstractList</h1>
+      <AbstractList :list="abstractList" />
+    </section>
+    <!--    <section>
           <h1 class="mb-2 text-title-lg text-secondary">NavigationList</h1>
           <NavigationList :list="navigationList" />
-        </section>
-      </div>
-    </div>
-  </KanbanLayout>
+        </section>-->
+    <section class="">
+      <h1 class="mb-2 text-title-lg text-secondary">AccordionList</h1>
+      <AccordionList :list="navigationList"></AccordionList>
+    </section>
+  </div>
 </template>
 
 <style scoped></style>

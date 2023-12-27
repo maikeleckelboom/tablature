@@ -9,7 +9,7 @@ interface Props {
 const {
   footerHeight = '40px',
   headerHeight = '50px',
-  asideWidth = '280px',
+  asideWidth = '0px',
   asideHeight = 'calc(100vh - var(--h-footer) - var(--h-header))'
 } = defineProps<Props>()
 

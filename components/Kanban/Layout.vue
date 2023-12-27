@@ -16,7 +16,6 @@ if (data.value) {
     <template #header>
       <slot name="header" />
     </template>
-    <template #aside></template>
     <template #default>
       <div class="h-full overflow-y-auto p-3">
         <slot name="default" />

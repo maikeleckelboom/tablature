@@ -1,7 +1,5 @@
 <script generic="TItem extends AbstractListItem" lang="ts" setup>
 /**
- * This is a generic component that can be used to render any type of list.
- *  Please note that this component strictly follows the Single Responsibility Principle.
  *  - It should not contain any state.
  *  - It should not contain any business logic.
  *  - It should not contain any routing logic.
@@ -30,12 +28,11 @@ function isRecursiveListItem<T>(item: T): item is T extends RecursiveListItem ? 
 </script>
 
 <template>
-  <ul>
+  <ul class="list">
     <slot :level="level" v-bind="{ list, level }">
       <template v-for="item in list" :key="item.name">
         <slot name="item" v-bind="{ item, isRecursive: isRecursiveListItem(item), level }">
           <AbstractListItem :item="item" :level="level">
-            {{ item.name }}
             <template v-if="isRecursiveListItem(item)">
               <AbstractList :level="level + 1" :list="<TItem[]>item.children">
                 <slot name="item" v-bind="{ item, isRecursive: isRecursiveListItem(item), level }">

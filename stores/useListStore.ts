@@ -61,6 +61,10 @@ const useListStore = defineStore('lists', () => {
         {
           name: 'List 3',
           href: '/lists/list-3'
+        },
+        {
+          name: 'Show All',
+          href: '/lists'
         }
       ]
     },

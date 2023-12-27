@@ -3,6 +3,9 @@
  */
 type ListItemBase = {
   name: string
+  leadingIcon?: string
+  trailingIcon?: string
+  trailingText?: string
 }
 
 type RecursiveListItem<T extends ListItemBase = ListItemBase> = T & {
@@ -22,18 +25,23 @@ type AbstractListItem<T extends ListItemBase = ListItemBase> =
 export type { AbstractListItem, ListItemBase, RecursiveListItem, NonRecursiveListItem }
 
 /**
- * Accordion List Item
+ * Navigation List Item (extends Abstract List Item)
+ * can be either a link or a button with children
  */
+type NavigationListItemLink = {
+  href: string
+  children?: never
+  open?: never
+}
+
+type NavigationListItemButton = {
+  href?: never
+  children: NavigationListItem[]
+  open: boolean
+}
+
 type NavigationListItem = AbstractListItem<
-  ListItemBase &
-    (
-      | { href: string; children?: never; open?: never }
-      | {
-          href?: never
-          children: NavigationListItem[]
-          open: boolean
-        }
-    )
+  ListItemBase & (NavigationListItemLink | NavigationListItemButton)
 >
 
-export type { NavigationListItem }
+export type { NavigationListItem, NavigationListItemLink, NavigationListItemButton }

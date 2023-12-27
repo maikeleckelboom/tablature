@@ -19,9 +19,9 @@ defineSlots<{
 </script>
 
 <template>
-  <li class="group/list-item">
+  <li>
     <slot :item="<T>item" :level="level">
-      {{ (item as T)?.name || item }}
+      {{ item }}
     </slot>
   </li>
 </template>

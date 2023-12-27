@@ -1,6 +1,5 @@
 <script generic="TItem extends NavigationListItem" lang="ts" setup>
 import type { NavigationListItem } from '~/modules/list/types'
-import { NuxtLink } from '#components'
 
 const { item: listItem, level = 0 } = defineProps<{
   item: TItem
@@ -37,7 +36,7 @@ defineSlots<{
       </slot>
     </NuxtLink>
     <template v-if="isButton(item)">
-      <button @click="item.open = !item.open">
+      <button @click="item.open = !item.open" class="size-full">
         <slot :item="<TItem>item" :level="level">
           {{ item.name }}
         </slot>
