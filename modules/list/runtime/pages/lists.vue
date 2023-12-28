@@ -66,10 +66,10 @@ const items = ref<AccordionItem[]>([
   <div class="mx-auto w-full max-w-4xl">
     <div class="grid gap-6 md:grid-cols-3">
       <Breadcrumbs class="col-span-full mb-5 mt-4" />
-      <section class="">
-        <h1 class="mb-4 text-title-lg text-secondary">[type='single']</h1>
-        <AccordionList :list="navigationList2" type="single" />
-      </section>
+      <!--      <section class="">
+              <h1 class="mb-4 text-title-lg text-secondary">[type='single']</h1>
+              <AccordionList :list="navigationList2" type="single" />
+            </section>-->
       <section class="">
         <h1 class="mb-4 whitespace-nowrap text-title-lg text-secondary">[type='multiple']</h1>
         <AccordionList :list="navigationList1" type="multiple" />

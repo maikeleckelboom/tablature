@@ -3,6 +3,9 @@ import { repeatingLinearGradient } from '~/modules/theme/runtime/utils/color'
 
 useHead({
   title: 'Tablature',
+  htmlAttrs: {
+    lang: 'en'
+  },
   meta: [
     {
       id: 'description',

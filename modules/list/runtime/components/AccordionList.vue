@@ -69,7 +69,7 @@ const onTrigger = (item: TItem) => {
                 v-show="item.open"
                 :aria-labelledby="labelledBy"
                 :class="{ 'pl-4': level >= 0 }"
-                :id="`panel-${labelledBy}`"
+                :id="`${labelledBy}-panel`"
                 class="accordion-panel"
                 role="region"
               >

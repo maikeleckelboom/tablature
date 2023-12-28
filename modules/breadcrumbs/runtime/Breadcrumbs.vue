@@ -17,12 +17,13 @@ const { breadcrumbs, isNotFirstCrumb, isNotCurrentCrumb } = useBreadcrumbs()
         Divider - can be multiple
         -->
         <div v-if="isNotFirstCrumb(crumb)" class="flex-row items-center">
-          <NuxtLink
-            :to="`/${crumb.path}` as any"
-            class="on-surface-variant hover:on-surface-variant/90 rounded-md"
-          >
-            <Icon class="h-4 w-4" name="fluent:divider-short-16-filled" />
-          </NuxtLink>
+          <Icon class="h-4 w-4" name="fluent:divider-short-16-filled" />
+          <!--          <NuxtLink-->
+          <!--            :to="`/${crumb.path}` as any"-->
+          <!--            class="on-surface-variant hover:on-surface-variant/90 rounded-md"-->
+          <!--          >-->
+          <!--            <Icon class="h-4 w-4" name="fluent:divider-short-16-filled" />-->
+          <!--          </NuxtLink>-->
         </div>
         <!--
         Prev Breadcrumb (inactive) - can be multiple

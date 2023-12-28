@@ -31,9 +31,16 @@ defineSlots<{
   children({ item, level }: { item: TItem; level: number; labelledBy?: string }): any
 }>()
 
-const triggerLabel = computed<string | undefined>(() => {
+function slugify(str: string) {
+  return str
+    .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '')
+}
+
+const triggerLabel = computed<string>(() => {
   if (isRecursive(item)) {
-    return `${decodeURIComponent(item.name.toLowerCase())}-${level}`
+    return `${slugify(item.name)}-${level}`
   }
 })
 </script>
@@ -53,7 +60,7 @@ const triggerLabel = computed<string | undefined>(() => {
     <template v-if="isRecursive(item)">
       <button
         :id="triggerLabel"
-        :aria-controls="`panel-${triggerLabel}`"
+        :aria-controls="`${triggerLabel}-panel`"
         :class="{
           [activeClass]: item?.children?.some((child) => child.href === $route.path)
         }"
