@@ -1,4 +1,4 @@
-import type { AbstractListItem, NavigationListItem } from '~/modules/list/types'
+import type { MaybeListItemWithChildren, NavigationListItem } from '~/modules/list/types'
 
 const useListStore = defineStore('lists', () => {
   const navigationList: NavigationListItem[] = [
@@ -27,16 +27,16 @@ const useListStore = defineStore('lists', () => {
                   open: false,
                   children: [
                     {
-                      name: 'Nested List Item',
-                      href: '/nested-list-item'
+                      name: 'Nested List Item 1.1.1.1',
+                      href: '/lists/nested-list-item-1-1-1-1'
                     },
                     {
-                      name: 'Nested List Item',
-                      href: '/nested-list-item'
+                      name: 'Nested List Item 1.1.1.2',
+                      href: '/lists/nested-list-item-1-1-1-2'
                     },
                     {
-                      name: 'Nested List Item',
-                      href: '/nested-list-item'
+                      name: 'Nested List Item 1.1.1.3',
+                      href: '/lists/nested-list-item-1-1-1-3'
                     }
                   ]
                 }
@@ -63,7 +63,7 @@ const useListStore = defineStore('lists', () => {
           href: '/lists/list-3'
         },
         {
-          name: 'Show All',
+          name: 'All',
           href: '/lists'
         }
       ]
@@ -145,7 +145,7 @@ const useListStore = defineStore('lists', () => {
     }
   ]
 
-  const abstractList: AbstractListItem[] = [
+  const abstractList: MaybeListItemWithChildren[] = [
     {
       name: 'Home'
     },

@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div></div>
+  <div class="mx-auto w-full max-w-2xl"></div>
 </template>
 
 <style scoped></style>

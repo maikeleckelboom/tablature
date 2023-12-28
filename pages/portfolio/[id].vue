@@ -1,9 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div>
-    <h1>Portfolio {{ $route.params.slug }}</h1>
-  </div>
+  <div></div>
 </template>
 
 <style scoped></style>

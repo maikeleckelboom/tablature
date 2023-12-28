@@ -3,7 +3,7 @@ const store = useListStore()
 </script>
 
 <template>
-  <KanbanLayout> </KanbanLayout>
+  <div></div>
 </template>
 
 <style scoped></style>

@@ -14,7 +14,9 @@ if (data.value) {
 <template>
   <TwoColumnLayout>
     <template #header>
-      <slot name="header" />
+      <div class="mx-auto w-full max-w-md">
+        <Breadcrumbs />
+      </div>
     </template>
     <template #default>
       <div class="h-full overflow-y-auto p-3">

@@ -1,23 +1,24 @@
 <script setup lang="ts">
-const { abstractList, navigationList } = useListStore()
+const { navigationList } = useListStore()
+
+const navigationList1 = ref(useCloneDeep(navigationList))
+
+const navigationList2 = ref(useCloneDeep(navigationList))
 </script>
 
 <template>
   <div class="mx-auto w-full max-w-2xl">
-    <div class="grid max-w-xl gap-4 md:grid-cols-2">
-      <section>
-        <h1 class="mb-2 text-title-lg text-secondary">AbstractList</h1>
-        <AbstractList :list="abstractList">
-          <template #item="{ item, level }">
-            <AbstractListItem>
-              {{ item.name }}
-            </AbstractListItem>
-          </template>
-        </AbstractList>
+    <div class="grid gap-6 md:grid-cols-2">
+      <Breadcrumbs class="col-span-full mb-5 mt-4" />
+      <section class="">
+        <h1 class="mb-4 text-title-lg text-secondary">AccordionList [type='single']</h1>
+        <AccordionList :list="navigationList2" type="single" class="bg-surface-container-low p-3" />
       </section>
       <section class="">
-        <h1 class="mb-2 text-title-lg text-secondary">AccordionList</h1>
-        <AccordionList :list="navigationList"></AccordionList>
+        <h1 class="mb-4 whitespace-nowrap text-title-lg text-secondary">
+          AccordionList [type='multiple']
+        </h1>
+        <AccordionList :list="navigationList1" type="multiple" />
       </section>
     </div>
   </div>

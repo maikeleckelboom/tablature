@@ -1,39 +1,75 @@
 <script generic="TItem extends TNavigationListItem" lang="ts" setup>
 import type { NavigationListItem as TNavigationListItem } from '~/modules/list/types'
+import RecursiveList from '~/modules/list/runtime/components/RecursiveList.vue'
 
 interface Props {
   list: TItem[]
+  type?: 'single' | 'multiple'
   transitionName?: string
   transitionDuration?: number
 }
 
-const { list, transitionName = 'list-item', transitionDuration = 400 } = defineProps<Props>()
+const {
+  list,
+  transitionName = 'list-item',
+  transitionDuration = 400,
+  type = 'multiple'
+} = defineProps<Props>()
 
-const transitionDelay = computed<number>(() => transitionDuration / (transitionDuration * 0.1))
+const transitionDelay = computed<number>(() => 100)
 const transitionTotalDuration = computed<number>(() => transitionDuration + transitionDelay.value)
+
+function openItemCloseOthers(item: TItem) {
+  list.forEach((i) => {
+    i.open = i !== item ? false : !i.open
+  })
+}
+
+const onTrigger = (item: TItem) => {
+  if (type === 'single') {
+    openItemCloseOthers(item)
+    return
+  }
+
+  item.open = !item.open
+}
 </script>
 
 <template>
-  <AbstractList
+  <RecursiveList
     :list="list"
     :style="{
       '--transition-delay': `${transitionDelay}ms`,
       '--transition-duration': `${transitionDuration}ms`
     }"
+    class="accordion-list"
   >
-    <template #item="{ item, level, isRecursive }">
-      <slot name="item" v-bind="{ item, level, isRecursive }">
-        <NavigationListItem :item="item" :level="level">
-          <div class="flex w-full justify-between gap-4 p-2">
-            <span> {{ item.name }}</span>
-            <template v-if="isRecursive">
-              <Icon v-if="item.open" class="h-6 w-6" name="ic:baseline-folder" />
-              <Icon v-else class="h-6 w-6" name="ic:outline-folder" />
+    <template #item="{ item, level, hasChildren }">
+      <slot name="item" v-bind="{ item, level, hasChildren }">
+        <NavigationListItem
+          :item="item"
+          :level="level"
+          :on-trigger="onTrigger"
+          active-class="text-primary font-semibold"
+          exact-active-class="text-primary font-bold"
+        >
+          <span
+            class="flex w-full items-center justify-between gap-4 rounded-sm p-2 hover:bg-primary-container/10 active:bg-primary-container/20"
+          >
+            {{ item.name }}
+            <template v-if="hasChildren">
+              <Icon v-if="item.open" class="size-4" name="ic:baseline-unfold-more" />
+              <Icon v-else class="size-4" name="ic:baseline-unfold-less" />
             </template>
-          </div>
-          <template #tail="{ item, level }">
+          </span>
+          <template #children="{ item, level }">
             <Transition :duration="transitionTotalDuration" :name="transitionName">
-              <div v-show="item.open" :class="{ 'pl-4': level >= 0 }">
+              <div
+                v-show="item.open"
+                :class="{ 'pl-4': level >= 0 }"
+                role="region"
+                class="accordion-panel"
+              >
                 <AccordionList :level="level + 1" :list="<TItem[]>item.children" />
               </div>
             </Transition>
@@ -41,11 +77,11 @@ const transitionTotalDuration = computed<number>(() => transitionDuration + tran
         </NavigationListItem>
       </slot>
     </template>
-  </AbstractList>
+  </RecursiveList>
 </template>
 
 <style>
-.list {
+.accordion-list {
   --transition-delay: var(--transition-delay, 0.1s);
   --transition-duration: var(--transition-duration, 0.4s);
 

@@ -69,10 +69,12 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-icon',
     'nuxt-viewport',
+    'nuxt-typed-router',
     'nuxt-lodash',
     '~/modules/theme/module.ts',
     '~/modules/dialog/module.ts',
     '~/modules/list/module.ts',
-    'nuxt-typed-router'
+    '~/modules/breadcrumbs/module.ts',
+    '~/modules/contextMenu/module.ts'
   ]
 })
