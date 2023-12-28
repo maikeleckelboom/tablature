@@ -1,9 +1,14 @@
 <script generic="TItem extends MaybeListItemWithChildren" lang="ts" setup>
 import type { MaybeListItemWithChildren } from '~/modules/list/types'
 
-const { list, level = 0 } = defineProps<{
+const {
+  list,
+  level = 0,
+  labelValue = (item) => item.name
+} = defineProps<{
   list: TItem[]
   level?: number
+  labelValue?: (item: TItem) => string
 }>()
 
 defineSlots<{
@@ -31,7 +36,7 @@ function isListItemWithChildren<T>(
             >
               <slot name="item" v-bind="{ item, level, hasChildren: isListItemWithChildren(item) }">
                 <li>
-                  {{ item }}
+                  {{ labelValue(item) }}
                 </li>
               </slot>
             </RecursiveList>

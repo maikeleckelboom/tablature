@@ -1,9 +1,9 @@
 <script generic="TItem extends TNavigationListItem" lang="ts" setup>
 import type { NavigationListItem as TNavigationListItem } from '~/modules/list/types'
-import RecursiveList from '~/modules/list/runtime/components/RecursiveList.vue'
 
 interface Props {
   list: TItem[]
+  value?: keyof Props['list']
   type?: 'single' | 'multiple'
   transitionName?: string
   transitionDuration?: number
@@ -49,12 +49,13 @@ const onTrigger = (item: TItem) => {
         <NavigationListItem
           :item="item"
           :level="level"
-          :on-trigger="onTrigger"
-          active-class="text-primary font-semibold"
-          exact-active-class="text-primary font-bold"
+          :triggerCallback="onTrigger"
+          active-class="bg-primary-container/10 text-on-primary-container font-semibold"
+          exact-active-class="bg-primary-container/20 text-on-primary font-bold"
         >
+          <!-- Inside button or anchor -->
           <span
-            class="flex w-full items-center justify-between gap-4 rounded-sm p-2 hover:bg-primary-container/10 active:bg-primary-container/20"
+            class="flex w-full items-center justify-between gap-4 rounded-sm p-2.5 hover:bg-primary-container/10 active:bg-primary-container/20"
           >
             {{ item.name }}
             <template v-if="hasChildren">
@@ -62,13 +63,15 @@ const onTrigger = (item: TItem) => {
               <Icon v-else class="size-4" name="ic:baseline-unfold-less" />
             </template>
           </span>
-          <template #children="{ item, level }">
+          <template #children="{ item, level, labelledBy }">
             <Transition :duration="transitionTotalDuration" :name="transitionName">
               <div
                 v-show="item.open"
+                :aria-labelledby="labelledBy"
                 :class="{ 'pl-4': level >= 0 }"
-                role="region"
+                :id="`panel-${labelledBy}`"
                 class="accordion-panel"
+                role="region"
               >
                 <AccordionList :level="level + 1" :list="<TItem[]>item.children" />
               </div>

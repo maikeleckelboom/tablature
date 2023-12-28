@@ -6,14 +6,13 @@ const {
   level = 0,
   activeClass,
   exactActiveClass,
-  onTrigger = () => {}
+  triggerCallback = () => {}
 } = defineProps<{
   item: TItem
   level?: number
   activeClass?: string
   exactActiveClass?: string
-  trigger?: 'hover' | 'click'
-  onTrigger?: (item: TItem) => void
+  triggerCallback?: (item: TItem) => void
 }>()
 
 function isLink<T>(item: T): item is T extends NavigationListItem ? T : never {
@@ -29,8 +28,14 @@ function isRecursive<T>(item: T): item is T extends NavigationListItem ? T : nev
 
 defineSlots<{
   default({ item, level }: { item: TItem; level: number }): any
-  children({ item, level }: { item: TItem; level: number }): any
+  children({ item, level }: { item: TItem; level: number; labelledBy?: string }): any
 }>()
+
+const triggerLabel = computed<string | undefined>(() => {
+  if (isRecursive(item)) {
+    return `${decodeURIComponent(item.name.toLowerCase())}-${level}`
+  }
+})
 </script>
 
 <template>
@@ -47,17 +52,25 @@ defineSlots<{
     </NuxtLink>
     <template v-if="isRecursive(item)">
       <button
+        :id="triggerLabel"
+        :aria-controls="`panel-${triggerLabel}`"
         :class="{
           [activeClass]: item?.children?.some((child) => child.href === $route.path)
         }"
         class="size-full"
-        @click="onTrigger(<TItem>item)"
+        @click="triggerCallback(<TItem>item)"
       >
         <slot :item="<TItem>item" :level="level">
           {{ item.name }}
         </slot>
       </button>
     </template>
-    <slot v-if="isRecursive(item)" :item="<TItem>item" :level="level" name="children" />
+    <slot
+      v-if="isRecursive(item)"
+      :item="<TItem>item"
+      :labelledBy="triggerLabel"
+      :level="level"
+      name="children"
+    />
   </li>
 </template>

@@ -60,3 +60,11 @@ export type {
   ColumnsReorderUpsert,
   CardsReorderUpsert
 }
+
+export type AccordionItem = {
+  value: string
+  title?: string
+  content?: string
+  children?: AccordionItem[]
+  expanded?: boolean
+}
