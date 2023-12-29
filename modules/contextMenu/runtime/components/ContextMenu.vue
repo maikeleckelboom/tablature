@@ -11,9 +11,11 @@ onClickOutside(contextMenu, () => {
 </script>
 
 <template>
-  <div ref="contextMenu" class="absolute bg-surface-container p-2">
-    <div v-for="n in 5" :key="n" class="p-2">
-      <button class="p-2">Item {{ n }}</button>
+  <div ref="contextMenu" class="absolute w-[200px]">
+    <div v-for="n in 5" :key="n" class="relative z-50 w-full border border-tertiary bg-surface">
+      <button class="flex w-full justify-start p-3 hover:bg-tertiary-container/50">
+        Item {{ n }}
+      </button>
     </div>
   </div>
 </template>

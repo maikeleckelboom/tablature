@@ -1,10 +1,12 @@
 <script generic="TItem extends MaybeRecursiveListItem" lang="ts" setup>
 import type { MaybeRecursiveListItem } from '~/modules/list/types'
 
+type AllowedTags = 'ul' | 'ol' | 'menu'
+
 interface Props {
   list: TItem[]
   level?: number
-  tag?: 'ul' | 'ol' | 'menu'
+  tag?: ((item: TItem) => AllowedTags) | AllowedTags
   titleValue?: (item: TItem) => string
   listClass?: (level: number) => string
   itemClass?: (item: TItem, level: number) => string
@@ -41,8 +43,10 @@ function isRecursiveListItem<T>(item: T): item is T extends MaybeRecursiveListIt
           v-if="isRecursiveListItem(item)"
           v-slot="{ item, level }"
           :class="listClass(level + 1)"
+          :item-class="() => itemClass(item, level + 1)"
           :level="level + 1"
           :list="<TItem[]>item.children"
+          :list-class="() => listClass(level + 1)"
         >
           <slot v-bind="{ item, level, hasChildren: isRecursiveListItem(item) }">
             <li :class="itemClass(item, level)">
@@ -50,9 +54,10 @@ function isRecursiveListItem<T>(item: T): item is T extends MaybeRecursiveListIt
               <RecursiveList
                 v-if="isRecursiveListItem(item)"
                 v-slot="{ item, level }"
-                :class="listClass(level + 1)"
+                :item-class="() => itemClass(item, level + 1)"
                 :level="level + 1"
                 :list="<TItem[]>item.children"
+                :list-class="() => listClass(level + 1)"
               />
             </li>
           </slot>

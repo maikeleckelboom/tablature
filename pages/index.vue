@@ -63,11 +63,9 @@ const items = ref<AccordionItem[]>([
 </script>
 
 <template>
-  <KanbanLayout>
-    <div class="mx-auto w-full max-w-md">
-      <NavigationList :list="store.navigationList" />
-    </div>
-  </KanbanLayout>
+  <div class="m-4 mx-auto w-full max-w-md">
+    <NavigationList :list="store.navigationList" />
+  </div>
 </template>
 
 <style scoped></style>

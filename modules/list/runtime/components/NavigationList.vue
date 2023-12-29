@@ -15,7 +15,14 @@ const {
   type = 'multiple'
 } = defineProps<Props>()
 
-const transitionDelay = computed<number>(() => 100)
+function scaleValue(input: number): number {
+  // Linear scaling: output = m * input + b
+  const m = 0.25 // slope
+  const b = 0 // y-intercept
+  return m * input + b
+}
+
+const transitionDelay = computed<number>(() => scaleValue(transitionDuration))
 const transitionTotalDuration = computed<number>(() => transitionDuration + transitionDelay.value)
 
 function openItemCloseOthers(item: TItem) {

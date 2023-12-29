@@ -43,6 +43,10 @@ const triggerLabel = computed<string>(() => {
     return `${slugify(item.name)}-${level}`
   }
 })
+
+const baseItemClass = computed<string>(() => {
+  return 'rounded border border-transparent focus-visible:border-primary focus-visible:bg-primary-container/10 focus-visible:outline-none'
+})
 </script>
 
 <template>
@@ -51,7 +55,7 @@ const triggerLabel = computed<string>(() => {
       v-if="isLink(item)"
       :active-class="activeClass"
       :exact-active-class="exactActiveClass"
-      class="rounded border border-transparent focus-visible:border-primary focus-visible:bg-primary-container/10 focus-visible:outline-none"
+      :class="baseItemClass"
       :to="item.href"
     >
       <slot :item="<TItem>item" :level="level">
@@ -63,9 +67,10 @@ const triggerLabel = computed<string>(() => {
         :id="triggerLabel"
         :aria-controls="`${triggerLabel}-panel`"
         :class="{
+          [baseItemClass]: true,
           [activeClass]: item?.children?.some((child) => child.href === $route.path)
         }"
-        class="size-full rounded border border-transparent focus-visible:border-primary focus-visible:bg-primary-container/10 focus-visible:outline-none"
+        class="size-full"
         @click="onClicked($event, <TItem>item)"
       >
         <slot :item="<TItem>item" :level="level"></slot>

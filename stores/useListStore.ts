@@ -15,6 +15,10 @@ const useListStore = defineStore('lists', () => {
       open: false,
       children: [
         {
+          name: 'List',
+          href: '/modules/lists'
+        },
+        {
           name: 'Context Menu',
           href: '/modules/context-menu'
         }
@@ -26,27 +30,27 @@ const useListStore = defineStore('lists', () => {
       children: [
         {
           name: 'Nested List Item 1',
-          open: false,
+          open: true,
           children: [
             {
               name: 'Nested List Item 1.1',
-              open: false,
+              open: true,
               children: [
                 {
                   name: 'Nested List Item 1.1.1',
-                  open: false,
+                  open: true,
                   children: [
                     {
                       name: 'Nested List Item 1.1.1.1',
-                      href: '/lists/nested-list-item-1-1-1-1'
+                      href: '/modules/lists/nested-list-item-1-1-1-1'
                     },
                     {
                       name: 'Nested List Item 1.1.1.2',
-                      href: '/lists/nested-list-item-1-1-1-2'
+                      href: '/modules/lists/nested-list-item-1-1-1-2'
                     },
                     {
                       name: 'Nested List Item 1.1.1.3',
-                      href: '/lists/nested-list-item-1-1-1-3'
+                      href: '/modules/lists/nested-list-item-1-1-1-3'
                     }
                   ]
                 }
@@ -62,19 +66,11 @@ const useListStore = defineStore('lists', () => {
       children: [
         {
           name: 'List 1',
-          href: '/lists/list-1'
+          href: '/modules/lists/list-1'
         },
         {
           name: 'List 2',
-          href: '/lists/list-2'
-        },
-        {
-          name: 'List 3',
-          href: '/lists/list-3'
-        },
-        {
-          name: 'All',
-          href: '/lists'
+          href: '/modules/lists/list-2'
         }
       ]
     },
@@ -101,24 +97,6 @@ const useListStore = defineStore('lists', () => {
       ]
     },
     {
-      name: 'Portfolio',
-      open: false,
-      children: [
-        {
-          name: 'Projects 1',
-          href: '/portfolio/project-1'
-        },
-        {
-          name: 'Projects 2',
-          href: '/portfolio/project-2'
-        },
-        {
-          name: 'Projects 3',
-          href: '/portfolio/project-3'
-        }
-      ]
-    },
-    {
       name: 'Boards',
       open: false,
       children: [
@@ -139,19 +117,6 @@ const useListStore = defineStore('lists', () => {
           href: '/boards'
         }
       ]
-    },
-
-    {
-      name: 'Blog',
-      href: '/blog'
-    },
-    {
-      name: 'Contact Us',
-      href: '/contact'
-    },
-    {
-      name: 'Testimonials',
-      href: '/testimonials'
     }
   ]
 

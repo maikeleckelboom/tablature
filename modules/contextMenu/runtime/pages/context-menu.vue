@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 const isVisible = ref<boolean>(false)
-const offset = ref<{ x: number; y: number }>({ x: 20, y: 20 })
+const offset = ref<{ x: number; y: number }>({ x: 16, y: 16 })
 const clickPosition = ref<{ x: number; y: number }>({ x: 0, y: 0 })
 
 function showContextMenu(evt: MouseEvent) {
-  console.log('showContextMenu')
   const { x: offsetX, y: offsetY } = offset.value
   clickPosition.value = { x: evt.clientX + offsetX, y: evt.clientY + offsetY }
   isVisible.value = !isVisible.value

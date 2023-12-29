@@ -15,12 +15,12 @@ export default defineNuxtModule<ModuleOptions>({
     extendPages((pages) => {
       pages.push({
         name: 'List',
-        path: '/lists/:id',
+        path: '/modules/lists/:id',
         file: resolve('./runtime/pages/[id].vue')
       })
       pages.push({
         name: 'Lists',
-        path: '/lists',
+        path: '/modules/lists',
         file: resolve('./runtime/pages/lists.vue')
       })
     })
