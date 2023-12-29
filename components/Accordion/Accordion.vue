@@ -1,54 +1,61 @@
 <script generic="TItem extends AccordionItem" lang="ts" setup>
 import type { AccordionItem } from '~/types'
 
-const { list, level = 0 } = defineProps<{
+const { list, level = 1 } = defineProps<{
   list: TItem[]
   level?: number
 }>()
+
+const accordionRef = ref<HTMLElement>()
+
+function getHeadingComponent(level: number) {
+  return `h${level + 1}`
+}
 </script>
 
 <template>
-  <div class="accordion">
+  <div ref="accordionRef" class="accordion">
     <div v-for="(item, index) in list" :key="index" class="accordion-item">
-      <h3 class="accordion-header">
+      <Component :is="getHeadingComponent(level)" class="accordion-header">
         <button
           :id="`trigger-${level}-${index}`"
-          :aria-expanded="item.expanded"
+          :aria-expanded="item.open"
           class="accordion-trigger"
-          @click="item.expanded = !item.expanded"
+          @click="item.open = !item.open"
         >
-          {{ item?.title || item.value }}
+          {{ item.title || item.name }}
 
           <template v-if="item?.content">
-            <Icon v-if="item.expanded" class="accordion-icon" name="ic:baseline-unfold-more" />
+            <Icon v-if="item.open" class="accordion-icon" name="ic:baseline-unfold-more" />
             <Icon v-else class="accordion-icon" name="ic:baseline-unfold-less" />
           </template>
         </button>
-      </h3>
-      <Transition name="accordion-item">
+      </Component>
+      <Transition name="accordion-list-item" :duration="400">
         <div
-          v-show="item.expanded"
+          v-show="item.open"
+          :aria-controls="`trigger-${level}-${index}-panel`"
           :aria-labelledby="`trigger-${level}-${index}`"
           class="accordion-content"
           role="region"
         >
-          <p>{{ item?.content }}</p>
-          <template v-if="item?.children">
-            <Accordion :level="level + 1" :list="<TItem[]>item.children" />
-          </template>
+          <div class="size-full">
+            {{ item.content }}
+            <Accordion v-if="item?.children" :level="level + 1" :list="<TItem[]>item.children" />
+          </div>
         </div>
       </Transition>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style>
 .accordion {
   @apply flex flex-col;
 }
 
 .accordion-item {
-  @apply grid rounded-sm border border-primary-container;
+  @apply rounded-sm border border-primary-container;
 }
 
 .accordion-header {
@@ -56,7 +63,7 @@ const { list, level = 0 } = defineProps<{
 }
 
 .accordion-trigger {
-  @apply flex w-full items-center justify-between rounded-sm p-2.5 hover:bg-primary-container/10 active:bg-primary-container/20;
+  @apply flex w-full items-center justify-between rounded-sm p-4 hover:bg-primary-container/10 active:bg-primary-container/20;
 }
 
 .accordion-icon {
@@ -64,21 +71,61 @@ const { list, level = 0 } = defineProps<{
 }
 
 .accordion-content {
-  @apply flex flex-col gap-3 rounded-sm border border-primary-container/50 p-4;
+  @apply flex flex-col gap-3 rounded-sm border border-primary-container/50 px-4;
 }
 
-.accordion-item-enter-active,
-.accordion-item-leave-active {
-  @apply transition-all;
-}
+.accordion {
+  --transition-delay: var(--transition-delay, 100ms);
+  --transition-duration: var(--transition-duration, 400ms);
 
-.accordion-item-enter-from,
-.accordion-item-leave-to {
-  @apply opacity-0;
-}
+  .accordion-item {
+    display: grid;
+    grid-template-rows: auto 0fr;
 
-.accordion-item-enter-to,
-.accordion-item-leave-from {
-  @apply opacity-100;
+    transform: translateX(0px);
+    transition-duration: var(--transition-duration);
+    transition-property: grid-template-rows;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:has([aria-expanded]) {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 0fr;
+      place-content: start;
+
+      min-block-size: 100%;
+      min-height: 0;
+
+      .accordion-content {
+        overflow: hidden;
+        min-inline-size: 100%;
+      }
+    }
+
+    &:has([aria-expanded='true']) {
+      grid-template-rows: auto 1fr;
+    }
+
+    &:has([aria-expanded='false']) {
+      transition-timing-function: ease-in-out;
+      transition-delay: var(--transition-delay);
+    }
+  }
+
+  .accordion-list-item-enter-active .accordion-content > div,
+  .accordion-list-item-leave-active .accordion-content > div {
+    transition-duration: var(--transition-duration);
+    transition-property: transform, opacity;
+  }
+
+  .accordion-list-item-enter-from .accordion-content > div,
+  .accordion-list-item-leave-to .accordion-content > div {
+    opacity: 0;
+    transform: translateX(1em);
+  }
+
+  .accordion-list-item-enter-active .accordion-content > div {
+    transition-delay: calc(var(--transition-delay) * 2);
+  }
 }
 </style>

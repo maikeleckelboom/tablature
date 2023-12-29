@@ -5,26 +5,21 @@ type ListItemBase = {
   name: string
 }
 
-type ListItemWithChildren<T extends ListItemBase = ListItemBase> = T & {
-  children: MaybeListItemWithChildren<T>[]
+type RecursiveListItem<T extends ListItemBase = ListItemBase> = T & {
+  children: MaybeRecursiveListItem<T>[]
   open?: boolean
 }
 
-type ListItemWithoutChildren<T extends ListItemBase = ListItemBase> = T & {
+type NonRecursiveListItem<T extends ListItemBase = ListItemBase> = T & {
   children?: never
   open?: never
 }
 
-type MaybeListItemWithChildren<T extends ListItemBase = ListItemBase> =
-  | ListItemWithChildren<T>
-  | ListItemWithoutChildren<T>
+type MaybeRecursiveListItem<T extends ListItemBase = ListItemBase> =
+  | RecursiveListItem<T>
+  | NonRecursiveListItem<T>
 
-export type {
-  ListItemBase,
-  MaybeListItemWithChildren,
-  ListItemWithChildren,
-  ListItemWithoutChildren
-}
+export type { ListItemBase, MaybeRecursiveListItem }
 
 /**
  * Navigation List Item (extends Abstract List Item)
@@ -42,7 +37,7 @@ type NavigationListItemButton = {
   open: boolean
 }
 
-type NavigationListItem = MaybeListItemWithChildren<
+type NavigationListItem = MaybeRecursiveListItem<
   ListItemBase & (NavigationListItemLink | NavigationListItemButton)
 >
 

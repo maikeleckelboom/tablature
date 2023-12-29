@@ -13,37 +13,23 @@ const { breadcrumbs, isNotFirstCrumb, isNotCurrentCrumb } = useBreadcrumbs()
         :key="index"
         class="flex flex-row items-center gap-2"
       >
-        <!--
-        Divider - can be multiple
-        -->
-        <div v-if="isNotFirstCrumb(crumb)" class="flex-row items-center">
-          <Icon class="h-4 w-4" name="fluent:divider-short-16-filled" />
-          <!--          <NuxtLink-->
-          <!--            :to="`/${crumb.path}` as any"-->
-          <!--            class="on-surface-variant hover:on-surface-variant/90 rounded-md"-->
-          <!--          >-->
-          <!--            <Icon class="h-4 w-4" name="fluent:divider-short-16-filled" />-->
-          <!--          </NuxtLink>-->
-        </div>
-        <!--
-        Prev Breadcrumb (inactive) - can be multiple
-        -->
-        <div v-if="isNotCurrentCrumb(crumb)" class="flex-row items-center">
-          <NuxtLink
-            :to="`/${crumb.path}` as any"
-            class="on-surface-variant hover:on-surface-variant/90 rounded-md capitalize"
-          >
-            {{ crumb.name }}
-          </NuxtLink>
-        </div>
-        <!-- Current Breadcrumb (active) - always one -->
-        <div v-else class="flex flex-row items-center">
-          <span
-            class="text-shadow-bold-variant rounded-md text-on-surface-variant/90 first-letter:uppercase"
-          >
-            {{ crumb.name }}
-          </span>
-        </div>
+        <!-- Divider - can be multiple -->
+        <Icon v-if="isNotFirstCrumb(crumb)" class="h-4 w-4" name="fluent:divider-short-16-filled" />
+        <!-- Prev Breadcrumb (inactive) - can be multiple  -->
+        <NuxtLink
+          v-if="isNotCurrentCrumb(crumb)"
+          :to="`/${crumb.path}` as any"
+          class="on-surface-variant hover:on-surface-variant/90 rounded-md capitalize"
+        >
+          {{ crumb.name }}
+        </NuxtLink>
+        <!-- Current Breadcrumb (active) - can be multiple  -->
+        <span
+          v-else
+          class="text-shadow-bold-variant rounded-md text-on-surface-variant/90 first-letter:uppercase"
+        >
+          {{ crumb.name }}
+        </span>
       </li>
     </ul>
   </div>

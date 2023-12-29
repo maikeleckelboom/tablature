@@ -1,48 +1,63 @@
-<script generic="TItem extends MaybeListItemWithChildren" lang="ts" setup>
-import type { MaybeListItemWithChildren } from '~/modules/list/types'
+<script generic="TItem extends MaybeRecursiveListItem" lang="ts" setup>
+import type { MaybeRecursiveListItem } from '~/modules/list/types'
+
+interface Props {
+  list: TItem[]
+  level?: number
+  tag?: 'ul' | 'ol' | 'menu'
+  titleValue?: (item: TItem) => string
+  listClass?: (level: number) => string
+  itemClass?: (item: TItem, level: number) => string
+}
 
 const {
   list,
   level = 0,
-  labelValue = (item) => item.name
-} = defineProps<{
-  list: TItem[]
-  level?: number
-  labelValue?: (item: TItem) => string
-}>()
+  tag = 'ul',
+  listClass = () => '',
+  itemClass = () => '',
+  titleValue = (item) => item.name
+} = defineProps<Props>()
 
 defineSlots<{
-  default: (props?: { list: TItem[]; level: number }) => any
-  item: (props?: { item: TItem; level: number; hasChildren: boolean }) => any
+  default: (props?: { item: TItem; level: number; hasChildren: boolean }) => any
 }>()
 
-function isListItemWithChildren<T>(
-  item: T
-): item is T extends MaybeListItemWithChildren ? T : never {
-  return (item as MaybeListItemWithChildren)?.children !== undefined
+function isRecursiveListItem<T>(item: T): item is T extends MaybeRecursiveListItem ? T : never {
+  return (item as MaybeRecursiveListItem)?.children !== undefined
 }
 </script>
 
 <template>
-  <ul>
-    <slot v-bind="{ list, level }">
-      <template v-for="item in list" :key="item.name">
-        <slot name="item" v-bind="{ item, level, hasChildren: isListItemWithChildren(item) }">
-          <li>
-            <RecursiveList
-              v-if="isListItemWithChildren(item)"
-              :level="level + 1"
-              :list="<TItem[]>item.children"
-            >
-              <slot name="item" v-bind="{ item, level, hasChildren: isListItemWithChildren(item) }">
-                <li>
-                  {{ labelValue(item) }}
-                </li>
-              </slot>
-            </RecursiveList>
-          </li>
-        </slot>
-      </template>
+  <Component :is="tag" :class="listClass(level)">
+    <slot
+      v-for="item in list"
+      :key="item.name"
+      v-bind="{ item, level, hasChildren: isRecursiveListItem(item) }"
+    >
+      <li :class="itemClass(item, level)">
+        <span>{{ titleValue(item) }}</span>
+        <RecursiveList
+          v-if="isRecursiveListItem(item)"
+          v-slot="{ item, level }"
+          :class="listClass(level + 1)"
+          :level="level + 1"
+          :list="<TItem[]>item.children"
+        >
+          <slot v-bind="{ item, level, hasChildren: isRecursiveListItem(item) }">
+            <li :class="itemClass(item, level)">
+              <span>{{ titleValue(item) }}</span>
+              <RecursiveList
+                v-if="isRecursiveListItem(item)"
+                v-slot="{ item, level }"
+                :class="listClass(level + 1)"
+                :level="level + 1"
+                :list="<TItem[]>item.children"
+              />
+            </li>
+          </slot>
+        </RecursiveList>
+      </li>
     </slot>
-  </ul>
+  </Component>
 </template>

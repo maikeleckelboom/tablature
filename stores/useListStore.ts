@@ -1,4 +1,4 @@
-import type { MaybeListItemWithChildren, NavigationListItem } from '~/modules/list/types'
+import type { MaybeRecursiveListItem, NavigationListItem } from '~/modules/list/types'
 
 const useListStore = defineStore('lists', () => {
   const navigationList: NavigationListItem[] = [
@@ -9,6 +9,16 @@ const useListStore = defineStore('lists', () => {
     {
       name: 'About',
       href: '/about'
+    },
+    {
+      name: 'Modules',
+      open: false,
+      children: [
+        {
+          name: 'Context Menu',
+          href: '/modules/context-menu'
+        }
+      ]
     },
     {
       name: 'Deeply Nested List',
@@ -145,57 +155,7 @@ const useListStore = defineStore('lists', () => {
     }
   ]
 
-  const abstractList: MaybeListItemWithChildren[] = [
-    {
-      name: 'Home'
-    },
-    {
-      name: 'About Us'
-    },
-    {
-      name: 'Services',
-      children: [
-        {
-          name: 'Web Development'
-        },
-        {
-          name: 'Graphic Design'
-        },
-        {
-          name: 'SEO'
-        },
-        {
-          name: 'Mobile App Development'
-        }
-      ]
-    },
-    {
-      name: 'Portfolio',
-      children: [
-        {
-          name: 'Projects 1'
-        },
-        {
-          name: 'Projects 2'
-        },
-        {
-          name: 'Projects 3'
-        }
-      ]
-    },
-    {
-      name: 'Blog'
-    },
-    {
-      name: 'Contact Us'
-    },
-    {
-      name: 'Testimonials'
-    }
-  ]
-
   return {
-    abstractList,
     navigationList
   }
 })

@@ -1,9 +1,8 @@
-<script generic="TItem extends TNavigationListItem" lang="ts" setup>
-import type { NavigationListItem as TNavigationListItem } from '~/modules/list/types'
+<script generic="TItem extends NavListItem" lang="ts" setup>
+import type { NavigationListItem as NavListItem } from '~/modules/list/types'
 
 interface Props {
   list: TItem[]
-  value?: keyof Props['list']
   type?: 'single' | 'multiple'
   transitionName?: string
   transitionDuration?: number
@@ -25,7 +24,7 @@ function openItemCloseOthers(item: TItem) {
   })
 }
 
-const onTrigger = (item: TItem) => {
+const onClicked = (evt: MouseEvent, item: TItem) => {
   if (type === 'single') {
     openItemCloseOthers(item)
     return
@@ -37,6 +36,7 @@ const onTrigger = (item: TItem) => {
 
 <template>
   <RecursiveList
+    v-slot="{ item, level, hasChildren }"
     :list="list"
     :style="{
       '--transition-delay': `${transitionDelay}ms`,
@@ -44,49 +44,47 @@ const onTrigger = (item: TItem) => {
     }"
     class="accordion-list"
   >
-    <template #item="{ item, level, hasChildren }">
-      <slot name="item" v-bind="{ item, level, hasChildren }">
-        <NavigationListItem
-          :item="item"
-          :level="level"
-          :triggerCallback="onTrigger"
-          active-class="bg-primary-container/10 text-on-primary-container font-semibold"
-          exact-active-class="bg-primary-container/20 text-on-primary font-bold"
+    <slot v-bind="{ item, level, hasChildren }">
+      <NavigationListItem
+        :item="item"
+        :level="level"
+        :on-clicked="onClicked"
+        active-class="bg-primary-container/10 text-on-primary-container font-semibold"
+        exact-active-class="bg-primary-container/20 text-on-primary font-bold"
+      >
+        <!-- Inside trigger (button or anchor) -->
+        <span
+          class="flex w-full items-center justify-between gap-4 rounded-sm p-2.5 hover:bg-primary-container/10 active:bg-primary-container/20"
         >
-          <!-- Inside button or anchor -->
-          <span
-            class="flex w-full items-center justify-between gap-4 rounded-sm p-2.5 hover:bg-primary-container/10 active:bg-primary-container/20"
-          >
-            {{ item.name }}
-            <template v-if="hasChildren">
-              <Icon v-if="item.open" class="size-4" name="ic:baseline-unfold-more" />
-              <Icon v-else class="size-4" name="ic:baseline-unfold-less" />
-            </template>
-          </span>
-          <template #children="{ item, level, labelledBy }">
-            <Transition :duration="transitionTotalDuration" :name="transitionName">
-              <div
-                v-show="item.open"
-                :aria-labelledby="labelledBy"
-                :class="{ 'pl-4': level >= 0 }"
-                :id="`${labelledBy}-panel`"
-                class="accordion-panel"
-                role="region"
-              >
-                <AccordionList :level="level + 1" :list="<TItem[]>item.children" />
-              </div>
-            </Transition>
+          {{ item.name }}
+          <template v-if="hasChildren">
+            <Icon v-if="item.open" class="size-4" name="ic:baseline-unfold-more" />
+            <Icon v-else class="size-4" name="ic:baseline-unfold-less" />
           </template>
-        </NavigationListItem>
-      </slot>
-    </template>
+        </span>
+        <template #children="{ item, level, labelledBy }">
+          <!-- Inside children (if any) -->
+          <Transition :duration="transitionTotalDuration" :name="transitionName">
+            <div
+              v-show="item.open"
+              :id="`${labelledBy}-panel`"
+              :aria-labelledby="labelledBy"
+              :class="{ 'pl-4': level >= 0 }"
+              role="region"
+            >
+              <NavigationList :level="level + 1" :list="<TItem[]>item.children" />
+            </div>
+          </Transition>
+        </template>
+      </NavigationListItem>
+    </slot>
   </RecursiveList>
 </template>
 
-<style>
+<style scoped>
 .accordion-list {
-  --transition-delay: var(--transition-delay, 0.1s);
-  --transition-duration: var(--transition-duration, 0.4s);
+  --transition-delay: var(--transition-delay, 100ms);
+  --transition-duration: var(--transition-duration, 400ms);
 
   li {
     display: grid;

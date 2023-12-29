@@ -61,10 +61,22 @@ export type {
   CardsReorderUpsert
 }
 
-export type AccordionItem = {
-  value: string
+type AccordionItemBase = {
+  name: string
   title?: string
   content?: string
-  children?: AccordionItem[]
-  expanded?: boolean
 }
+
+type ItemWithChildren = {
+  children: AccordionItem[]
+  open: boolean
+}
+
+type ItemWithoutChildren = {
+  children?: never
+  open?: never
+}
+
+type AccordionItem = AccordionItemBase & (ItemWithChildren | ItemWithoutChildren)
+
+export type { AccordionItem }

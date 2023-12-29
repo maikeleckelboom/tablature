@@ -15,7 +15,7 @@ export default defineNuxtModule<ModuleOptions>({
     extendPages((pages) => {
       pages.push({
         name: 'contextMenu',
-        path: '/context-menu',
+        path: '/modules/context-menu',
         file: resolve('./runtime/pages/context-menu.vue')
       })
     })

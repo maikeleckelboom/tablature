@@ -5,8 +5,8 @@ const store = useListStore()
 <template>
   <KanbanLayout>
     <section class="mx-auto w-full max-w-md">
-      <div class="bg-surface-container-dim rounded-xl">
-        <AccordionList :list="store.navigationList"></AccordionList>
+      <div class="rounded-md bg-surface-dim p-4">
+        <NavigationList :list="store.navigationList"></NavigationList>
       </div>
     </section>
   </KanbanLayout>

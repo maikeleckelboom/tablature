@@ -6,13 +6,13 @@ const {
   level = 0,
   activeClass,
   exactActiveClass,
-  triggerCallback = () => {}
+  onClicked = () => {}
 } = defineProps<{
   item: TItem
   level?: number
   activeClass?: string
   exactActiveClass?: string
-  triggerCallback?: (item: TItem) => void
+  onClicked?: (event: MouseEvent, item: TItem) => void
 }>()
 
 function isLink<T>(item: T): item is T extends NavigationListItem ? T : never {
@@ -51,6 +51,7 @@ const triggerLabel = computed<string>(() => {
       v-if="isLink(item)"
       :active-class="activeClass"
       :exact-active-class="exactActiveClass"
+      class="rounded border border-transparent focus-visible:border-primary focus-visible:bg-primary-container/10 focus-visible:outline-none"
       :to="item.href"
     >
       <slot :item="<TItem>item" :level="level">
@@ -64,12 +65,10 @@ const triggerLabel = computed<string>(() => {
         :class="{
           [activeClass]: item?.children?.some((child) => child.href === $route.path)
         }"
-        class="size-full"
-        @click="triggerCallback(<TItem>item)"
+        class="size-full rounded border border-transparent focus-visible:border-primary focus-visible:bg-primary-container/10 focus-visible:outline-none"
+        @click="onClicked($event, <TItem>item)"
       >
-        <slot :item="<TItem>item" :level="level">
-          {{ item.name }}
-        </slot>
+        <slot :item="<TItem>item" :level="level"></slot>
       </button>
     </template>
     <slot
