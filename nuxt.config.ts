@@ -23,18 +23,11 @@ export default defineNuxtConfig({
   vueuse: {
     autoImports: true
   },
-  image: {
-    provider: 'sirv',
-    sirv: {
-      // Trial ended
-      baseURL: 'https://exclave.sirv.com'
-    }
-  },
   appConfig: {
     theme: {
       isDark: true,
       contrastLevel: 0.3,
-      sourceColor: '#047fcc'
+      sourceColor: '#040a60'
     },
     nuxtIcon: {
       size: '24px'
@@ -55,12 +48,15 @@ export default defineNuxtConfig({
     },
     fallbackBreakpoint: 'lg'
   },
-  // stylelint: {
-  //   lintOnStart: false,
-  //   fix: true
-  // },
   imports: {
-    dirs: ['~/components', '~/components/Kanban', '~/utils']
+    dirs: [
+      '~/components',
+      '~/components/Kanban',
+      '~/utils',
+      '~/stores/useKanbanStore',
+      '~/stores/useNavigationStore',
+      '~/stores/useListStore'
+    ]
   },
   modules: [
     '@nuxtjs/tailwindcss',
@@ -71,10 +67,11 @@ export default defineNuxtConfig({
     'nuxt-viewport',
     'nuxt-typed-router',
     'nuxt-lodash',
+    '~/modules/base/module.ts',
     '~/modules/theme/module.ts',
     '~/modules/dialog/module.ts',
-    '~/modules/list/module.ts',
     '~/modules/breadcrumbs/module.ts',
-    '~/modules/contextMenu/module.ts'
+    '~/modules/menu/module.ts',
+    '~/modules/list/module.ts'
   ]
 })

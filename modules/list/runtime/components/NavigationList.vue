@@ -39,11 +39,15 @@ const onClicked = (evt: MouseEvent, item: TItem) => {
 
   item.open = !item.open
 }
+
+defineSlots<{
+  default({ item, level }: { item: TItem; level: number }): any
+}>()
 </script>
 
 <template>
   <RecursiveList
-    v-slot="{ item, level, hasChildren }"
+    v-slot="{ item, level, isRecursive }"
     :list="list"
     :style="{
       '--transition-delay': `${transitionDelay}ms`,
@@ -51,26 +55,25 @@ const onClicked = (evt: MouseEvent, item: TItem) => {
     }"
     class="accordion-list"
   >
-    <slot v-bind="{ item, level, hasChildren }">
+    <slot v-bind="{ item, level, isRecursive }">
       <NavigationListItem
         :item="item"
         :level="level"
         :on-clicked="onClicked"
-        active-class="bg-primary-container/10 text-on-primary-container font-semibold"
+        active-class="text-primary font-semibold border-r border-2 border-error"
         exact-active-class="bg-primary-container/20 text-on-primary font-bold"
       >
-        <!-- Inside trigger (button or anchor) -->
+        <!-- Link or Trigger -->
         <span
           class="flex w-full items-center justify-between gap-4 rounded-sm p-2.5 hover:bg-primary-container/10 active:bg-primary-container/20"
         >
           {{ item.name }}
-          <template v-if="hasChildren">
+          <template v-if="isRecursive">
             <Icon v-if="item.open" class="size-4" name="ic:baseline-unfold-more" />
             <Icon v-else class="size-4" name="ic:baseline-unfold-less" />
           </template>
         </span>
         <template #children="{ item, level, labelledBy }">
-          <!-- Inside children (if any) -->
           <Transition :duration="transitionTotalDuration" :name="transitionName">
             <div
               v-show="item.open"

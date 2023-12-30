@@ -1,9 +1,7 @@
-<script setup lang="ts">
-const store = useListStore()
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div></div>
+  <ColumnLayout></ColumnLayout>
 </template>
 
 <style scoped></style>

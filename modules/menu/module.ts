@@ -4,8 +4,8 @@ interface ModuleOptions {}
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'list',
-    configKey: 'list',
+    name: 'menu',
+    configKey: 'menu',
     dependencies: {}
   },
   defaults: {},
@@ -14,9 +14,9 @@ export default defineNuxtModule<ModuleOptions>({
     const { resolve } = createResolver(import.meta.url)
     extendPages((pages) => {
       pages.push({
-        name: 'Lists',
-        path: '/modules/lists',
-        file: resolve('./runtime/pages/lists.vue')
+        name: 'menu',
+        path: '/modules/menu',
+        file: resolve('./runtime/pages/menu.vue')
       })
     })
     await addComponentsDir({

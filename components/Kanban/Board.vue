@@ -2,12 +2,13 @@
 import type { Board } from '~/types'
 import { useDraggable } from 'vue-draggable-plus'
 import type { SortableOptions } from 'sortablejs'
+import useKanbanStore from '~/stores/useKanbanStore'
 
 const { board } = defineProps<{
   board: Board
 }>()
 
-const store = useBoardStore()
+const store = useKanbanStore()
 
 const draggableOptions: SortableOptions = {
   group: 'columns',

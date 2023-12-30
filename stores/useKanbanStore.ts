@@ -8,7 +8,7 @@ import type {
   ColumnUpsert
 } from '~/types'
 
-const useBoardStore = defineStore('board', () => {
+const useKanbanStore = defineStore('kanban-board', () => {
   const boards = ref<Board[]>()
   const board = ref<Board>()
 
@@ -143,4 +143,4 @@ const useBoardStore = defineStore('board', () => {
   }
 })
 
-export default useBoardStore
+export default useKanbanStore

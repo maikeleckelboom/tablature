@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { Board as TBoard } from '~/types'
+import useKanbanStore from '~/stores/useKanbanStore'
 
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
@@ -8,7 +9,7 @@ const { data, pending, error } = await useAsyncData<TBoard>('board', () =>
   $fetch(`${apiUrl}/kanban/boards/${(route as any).params.id ?? 1}`)
 )
 
-const store = useBoardStore()
+const store = useKanbanStore()
 
 if (data.value) {
   store.setBoard(data.value)
@@ -26,9 +27,9 @@ const { board } = storeToRefs(store)
     <pre>{{ error }}</pre>
   </div>
   <div v-else>
-    <KanbanLayout>
+    <ColumnLayout>
       <KanbanBoard :board="data" />
-    </KanbanLayout>
+    </ColumnLayout>
   </div>
 </template>
 

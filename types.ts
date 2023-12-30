@@ -63,8 +63,9 @@ export type {
 
 type AccordionItemBase = {
   name: string
-  title?: string
-  content?: string
+  label?: string
+  href?: string
+  children?: AccordionItem[]
 }
 
 type ItemWithChildren = {

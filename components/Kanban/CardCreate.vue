@@ -1,9 +1,11 @@
 <script lang="ts" setup>
+import useKanbanStore from '~/stores/useKanbanStore'
+
 const { columnId } = defineProps<{
   columnId: number
 }>()
 
-const store = useBoardStore()
+const store = useKanbanStore()
 
 const formModel = reactive({
   content: ''

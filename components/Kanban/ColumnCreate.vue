@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-const store = useBoardStore()
+import useKanbanStore from '~/stores/useKanbanStore'
+
+const store = useKanbanStore()
 
 const { board } = storeToRefs(store)
 

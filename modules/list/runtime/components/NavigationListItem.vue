@@ -44,9 +44,22 @@ const triggerLabel = computed<string>(() => {
   }
 })
 
-const baseItemClass = computed<string>(() => {
-  return 'rounded border border-transparent focus-visible:border-primary focus-visible:bg-primary-container/10 focus-visible:outline-none'
-})
+// todo: look into how to use tw and get full ide support
+// const baseItemClass = computed<string | string[]>(
+//   () =>
+//     <string | string[]>(
+//       tw(
+//         `rounded border border-transparent focus-visible:border-primary focus-visible:bg-primary-container/10 focus-visible:outline-none`
+//       )
+//     )
+// )
+
+const baseItemClass = computed<string | string[]>(
+  () =>
+    <string | string[]>(
+      `rounded border border-transparent focus-visible:border-primary focus-visible:bg-primary-container/10 focus-visible:outline-none`
+    )
+)
 </script>
 
 <template>
@@ -54,8 +67,8 @@ const baseItemClass = computed<string>(() => {
     <NuxtLink
       v-if="isLink(item)"
       :active-class="activeClass"
-      :exact-active-class="exactActiveClass"
       :class="baseItemClass"
+      :exact-active-class="exactActiveClass"
       :to="item.href"
     >
       <slot :item="<TItem>item" :level="level">
@@ -67,7 +80,7 @@ const baseItemClass = computed<string>(() => {
         :id="triggerLabel"
         :aria-controls="`${triggerLabel}-panel`"
         :class="{
-          [baseItemClass]: true,
+          [Array.isArray(baseItemClass) ? baseItemClass.join(' ') : baseItemClass]: true,
           [activeClass]: item?.children?.some((child) => child.href === $route.path)
         }"
         class="size-full"

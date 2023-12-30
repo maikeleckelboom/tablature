@@ -4,11 +4,7 @@ import tailwindContainerQueries from '@tailwindcss/container-queries'
 
 export const materialThemePreset = {
   content: [],
-  plugins: [
-    tailwindMaterialColorTheme(),
-    tailwindCustomVariants(),
-    tailwindContainerQueries
-  ],
+  plugins: [tailwindMaterialColorTheme(), tailwindCustomVariants(), tailwindContainerQueries],
   darkMode: 'class',
   theme: {
     extend: {
@@ -225,32 +221,22 @@ export const materialThemePreset = {
         'surface-level-2': 'rgb(var(--primary-rgb) / 0.08)',
         'surface-level-3': 'rgb(var(--primary-rgb) / 0.12)'
       },
-      height: {
-        'screen-svh': '100svh'
-      },
-      width: {
-        'screen-svw': '100svw'
-      },
       maxWidth: {
-        'screen-svw': '100svw',
         compact: '640px',
         medium: '768px',
         expanded: '1024px'
       },
       maxHeight: {
-        'screen-svh': '100svh',
         compact: '640px',
         medium: '768px',
         expanded: '1024px'
       },
       minWidth: {
-        'screen-svw': '100svw',
         compact: '640px',
         medium: '768px',
         expanded: '1024px'
       },
       minHeight: {
-        'screen-svh': '100svh',
         compact: '640px',
         medium: '768px',
         expanded: '1024px'

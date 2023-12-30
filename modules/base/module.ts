@@ -4,8 +4,8 @@ interface ModuleOptions {}
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'contextMenu',
-    configKey: 'contextMenu',
+    name: 'base',
+    configKey: 'base',
     dependencies: {}
   },
   defaults: {},
@@ -14,9 +14,9 @@ export default defineNuxtModule<ModuleOptions>({
     const { resolve } = createResolver(import.meta.url)
     extendPages((pages) => {
       pages.push({
-        name: 'contextMenu',
-        path: '/modules/context-menu',
-        file: resolve('./runtime/pages/context-menu.vue')
+        name: 'modules',
+        path: '/modules',
+        file: resolve('./runtime/pages/modules.vue')
       })
     })
     await addComponentsDir({

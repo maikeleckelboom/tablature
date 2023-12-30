@@ -1,7 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div></div>
+  <ColumnLayout> </ColumnLayout>
 </template>
 
 <style scoped></style>

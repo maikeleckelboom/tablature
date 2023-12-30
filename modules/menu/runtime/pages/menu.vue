@@ -2,11 +2,11 @@
 import type { MenuItem } from '~/modules/menu/types'
 
 const isVisible = ref<boolean>(false)
-const offset = ref<{ x: number; y: number }>({ x: 16, y: 16 })
+const offset = ref<{ x: number; y: number }>({ x: 12, y: 12 })
 const clickPosition = ref<{ x: number; y: number }>({ x: 0, y: 0 })
+const store = useNavigationStore()
 
 const indexClicked = ref<number>(-1)
-const store = useNavigationStore()
 
 function showContextMenu({ clientX, clientY }: MouseEvent, item: MenuItem) {
   if (item.children === undefined) return
@@ -19,6 +19,9 @@ function showContextMenu({ clientX, clientY }: MouseEvent, item: MenuItem) {
 
 <template>
   <ColumnLayout>
+    <template #header>
+      <Breadcrumbs class="px-2 py-4" />
+    </template>
     <div class="mx-auto w-full max-w-4xl">
       <div class="ml-auto flex w-fit px-2">
         <div class="flex flex-row">

@@ -2,12 +2,13 @@
 import type { Card as TCard, Column as TColumn } from '~/types'
 import { useDraggable } from 'vue-draggable-plus'
 import type { SortableOptions } from 'sortablejs'
+import useKanbanStore from '~/stores/useKanbanStore'
 
 const { column } = defineProps<{
   column: TColumn
 }>()
 
-const store = useBoardStore()
+const store = useKanbanStore()
 
 const { board } = storeToRefs(store)
 

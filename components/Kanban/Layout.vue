@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import type { Board } from '~/types'
+import useKanbanStore from '~/stores/useKanbanStore'
 
 const { data } = await useAsyncData<Board[]>('boards', () =>
   $fetch('http://127.0.0.1:8000/api/v1/kanban/boards')
 )
-const store = useBoardStore()
+const store = useKanbanStore()
 
 if (data.value) {
   store.setBoards(data.value)
