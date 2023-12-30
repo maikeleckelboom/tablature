@@ -12,6 +12,10 @@ const useNavigationStore = defineStore('navigation', () => {
       open: false,
       children: [
         {
+          name: '/',
+          href: '/modules'
+        },
+        {
           name: 'List',
           href: '/modules/lists'
         },
@@ -29,6 +33,10 @@ const useNavigationStore = defineStore('navigation', () => {
           name: 'Board 1',
           open: false,
           children: [
+            {
+              name: 'Show',
+              href: '/boards/1'
+            },
             {
               name: 'Column 1',
               open: false,
@@ -89,6 +97,10 @@ const useNavigationStore = defineStore('navigation', () => {
           name: 'Board 2',
           open: false,
           children: [
+            {
+              name: 'Show',
+              href: '/boards/2'
+            },
             {
               name: 'Column 1',
               open: false,
@@ -182,9 +194,9 @@ const useNavigationStore = defineStore('navigation', () => {
           children: [
             { name: 'Bold', leadingIcon: 'ic:outline-format-bold', href: '#' },
             { name: 'Italic', leadingIcon: 'ic:outline-format-italic', href: '#' },
-            { name: 'Underline', leadingIcon: 'ic:underline', href: '#' },
-            { name: 'Strikethrough', leadingIcon: 'ic:strikethrough', href: '#' },
-            { name: 'Superscript', leadingIcon: 'ic:superscript', href: '#' }
+            { name: 'Underline', leadingIcon: 'ic:outline-format-underlined', href: '#' },
+            { name: 'Strikethrough', leadingIcon: 'ic:outline-strikethrough-s', href: '#' },
+            { name: 'Superscript', leadingIcon: 'ic:outline-superscript', href: '#' }
           ]
         },
         {

@@ -25,7 +25,6 @@
         <div class="size-32">
           <ExampleLogo6 />
         </div>
-        <div class="size-32"></div>
       </div>
     </div>
   </ColumnLayout>

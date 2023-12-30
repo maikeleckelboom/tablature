@@ -5,7 +5,7 @@ interface Props {
   list: TItem[]
   level?: number
   tag?: 'ul' | 'ol' | 'menu'
-  titleValue?: (item: TItem) => string
+  labelValue?: (item: TItem) => string
   listClass?: (level: number) => string
   itemClass?: (item: TItem, level: number) => string
 }
@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
   tag: 'ul',
   listClass: () => '',
   itemClass: () => '',
-  titleValue: (item: TItem) => item.name
+  labelValue: (item: TItem) => item.name
 })
 
 defineSlots<{
@@ -26,9 +26,9 @@ function isRecursiveListItem<T>(item: T): item is T extends MaybeRecursiveListIt
   return (item as MaybeRecursiveListItem)?.children !== undefined
 }
 
-onMounted(() => {
-  console.log('test')
-})
+const emit = defineEmits<{
+  select: [item: TItem, level: number]
+}>()
 </script>
 
 <template>
@@ -39,7 +39,7 @@ onMounted(() => {
       v-bind="{ item, level, isRecursive: isRecursiveListItem(item) }"
     >
       <li :class="itemClass(item, level)">
-        <span>{{ titleValue(item) }}</span>
+        <span>{{ labelValue(item) }}</span>
         <RecursiveList
           v-if="isRecursiveListItem(item)"
           v-slot="{ item, level }"
@@ -50,7 +50,7 @@ onMounted(() => {
         >
           <slot v-bind="{ item, level, isRecursive: isRecursiveListItem(item) }">
             <li :class="itemClass(item, level)">
-              <span>{{ titleValue(item) }}</span>
+              <span>{{ labelValue(item) }}</span>
               <RecursiveList
                 v-if="isRecursiveListItem(item)"
                 v-slot="{ item, level }"

@@ -1,5 +1,7 @@
 <script lang="ts" setup></script>
 
-<template></template>
+<template>
+  <div>ExampleLogo7</div>
+</template>
 
 <style scoped></style>

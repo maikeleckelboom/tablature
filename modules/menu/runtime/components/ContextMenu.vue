@@ -9,8 +9,6 @@ const props = withDefaults(defineProps<Props>(), {
   menu: () => []
 })
 
-console.log(unref(props.menu))
-
 const rootElement = ref<HTMLElement>()
 
 const emit = defineEmits<{
@@ -45,7 +43,6 @@ function openMenu(evt: MouseEvent, item: MenuItem) {
       y: clickTargetRect.top
     }
 
-    // if open on same level, close all other items
     if (item.open) {
       props.menu.forEach((item) => {
         item.open = item === item ? !item.open : false
@@ -65,13 +62,11 @@ function openMenu(evt: MouseEvent, item: MenuItem) {
       class="relative z-50 flex h-[38px] w-full cursor-pointer items-center border-x-thin border-surface-variant bg-surface px-4 text-label-md shadow-2xl first:rounded-t first:border-t-thin last:rounded-b last:border-b-thin hover:bg-surface-level-1 active:bg-surface-level-2"
       @click="openMenu($event, item)"
     >
-      <!--
       <Icon
         v-if="item.leadingIcon"
         :name="item.leadingIcon"
         class="mr-4 size-[16px] text-outline"
       />
-      -->
       <span>{{ item.name }}</span>
       <Icon v-if="item.trailingIcon" :name="item.trailingIcon" class="size-[22px] text-primary" />
       <span v-if="item.trailingText" class="ml-4 text-primary">{{ item.trailingText }}</span>
