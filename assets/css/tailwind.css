@@ -9,15 +9,18 @@
 @layer utilities {
     .scrollbar {
         --_track: rgb(var(--surface-rgb));
-        --_thumb: rgb(var(--surface-variant-rgb));
+        --_thumb: rgb(var(--surface-rgb));
         --_size: 4px;
         --_radius: 4px;
 
         scrollbar-color: var(--_thumb) var(--_track);
         scrollbar-width: thin;
+        transition-property: scrollbar-color;
+        transition-duration: 0.1s;
+        transition-timing-function: ease-in;
 
         &:hover {
-            --_thumb: rgb(var(--on-surface-variant-rgb));
+            --_thumb: rgb(var(--surface-variant-rgb));
         }
 
         &::-webkit-scrollbar {
@@ -60,7 +63,7 @@
 @keyframes fade-in-up-enter {
     from {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translateY(1em);
     }
     to {
         opacity: 1;
@@ -75,6 +78,6 @@
     }
     to {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translateY(1em);
     }
 }

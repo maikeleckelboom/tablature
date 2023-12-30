@@ -20,12 +20,8 @@ onClickOutside(
   () => {
     emit('click-outside')
   },
-  { ignore: ['menu', 'li'] }
+  { ignore: ['.menu'] }
 )
-
-function isLink(item: MenuItem): item is MenuItem & { href: string } {
-  return item.href !== undefined
-}
 
 function isRecursive(item: MenuItem): item is MenuItem & { children: MenuItem[] } {
   return item.children !== undefined
@@ -55,7 +51,7 @@ function openMenu(evt: MouseEvent, item: MenuItem) {
 </script>
 
 <template>
-  <menu ref="rootElement" class="absolute bg-surface">
+  <menu ref="rootElement" class="menu absolute bg-surface">
     <li
       v-for="(item, i) in menu"
       :key="item.name"
@@ -67,13 +63,18 @@ function openMenu(evt: MouseEvent, item: MenuItem) {
         :name="item.leadingIcon"
         class="mr-4 size-[16px] text-outline"
       />
+
       <span>{{ item.name }}</span>
+
       <Icon v-if="item.trailingIcon" :name="item.trailingIcon" class="size-[22px] text-primary" />
+
       <span v-if="item.trailingText" class="ml-4 text-primary">{{ item.trailingText }}</span>
+
       <template v-if="isRecursive(item)">
         <span class="ml-auto">
           <Icon :name="`ic:round-arrow-${item.open ? 'left' : 'right'}`" class="ml-4 size-4" />
         </span>
+
         <Teleport to="body">
           <Transition name="fade-in-up">
             <ContextMenu

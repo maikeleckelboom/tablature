@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const store = useNavigationStore()
+
+const isColorMenuOpen = ref<boolean>(false)
 </script>
 
 <template>
@@ -24,9 +26,16 @@ const store = useNavigationStore()
     >
       <slot name="aside">
         <NavigationList :list="store.list" />
-        <div class="w-full max-w-full px-2 pt-8">
-          <ColorMode />
-          <KeyColorPickers />
+
+        <div class="flex w-full max-w-full flex-col gap-4 px-2 pt-8">
+          <Button size="sm" @click="isColorMenuOpen = !isColorMenuOpen">
+            <Icon name="ic:round-color-lens" class="mr-2" />
+            <span>Appearance</span>
+          </Button>
+          <template v-if="isColorMenuOpen">
+            <ColorMode />
+            <KeyColorPickers />
+          </template>
         </div>
       </slot>
     </aside>

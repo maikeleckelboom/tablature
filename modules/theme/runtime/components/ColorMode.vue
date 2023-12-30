@@ -27,7 +27,7 @@ const isActiveBoxStyles = (mode: ColorModeOption) => ({
 
 <template>
   <div class="flex flex-col">
-    <div>
+    <div class="mb-4">
       <label class="text-label-lg">Color Mode</label>
     </div>
     <div class="flex flex-row gap-4">
