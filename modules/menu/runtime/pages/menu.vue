@@ -27,7 +27,7 @@ function showContextMenu({ clientX, clientY }: MouseEvent, item: MenuItem) {
         <div class="flex flex-row">
           <template v-for="item in store.toolbarMenu" :key="item.name">
             <button
-              class="text-balance break-words bg-surface-container px-3 py-1.5 text-title-sm outline-thin outline-inverse-primary first:rounded-l-md last:rounded-r-md hover:bg-surface-container-high focus-visible:z-10 active:bg-surface-container-highest"
+              class="text-balance break-words bg-surface px-3 py-1.5 text-title-sm outline-thin outline-inverse-primary first:rounded-l-md last:rounded-r-md hover:bg-surface-container focus-visible:z-10 focus-visible:bg-surface-container-highest active:bg-surface-container-highest"
               @click.prevent="showContextMenu($event, item)"
               @click.prevent.right="showContextMenu($event, item)"
             >

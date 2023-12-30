@@ -1,4 +1,4 @@
-import type { AccordionItem } from '~/types'
+import type { MenuItem } from '~/modules/menu/types'
 
 /**
  * List Item
@@ -34,3 +34,28 @@ export type {
   NavigationListItemButton,
   MaybeRecursiveListItem
 }
+
+type NavigationCollapsible = (
+  | {
+      open?: never
+      children?: MenuItem[]
+    }
+  | {
+      open: boolean
+      children: MenuItem[]
+    }
+) &
+  (
+    | {
+        href: string
+      }
+    | {
+        href?: never
+      }
+  )
+
+type ListItemType = {
+  type: 'group' | 'select-multiple' | 'select-single' | 'trigger' | 'link' | 'divider'
+}
+
+export type { NavigationCollapsible, ListItemType }

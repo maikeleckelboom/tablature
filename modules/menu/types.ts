@@ -5,6 +5,7 @@ type MenuItemBase = {
   trailingIcon?: string
   trailingText?: string
   divider?: boolean
+  disabled?: boolean
 }
 
 type MenuItem = MenuItemBase &

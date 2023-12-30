@@ -2,11 +2,8 @@
 
 <template>
   <ColumnLayout>
-    <div class="flex w-full flex-col items-center pt-8">
-      <div class="w-full p-2">
-        <h1 class="text-center text-display-lg text-secondary">Modules</h1>
-      </div>
-      <div class="flex flex-wrap justify-center gap-8 p-12">
+    <div class="flex w-full flex-col items-center justify-start">
+      <div class="flex w-full flex-wrap items-start justify-start gap-8 p-12">
         <div class="size-32">
           <ExampleLogo1 />
         </div>

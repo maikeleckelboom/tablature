@@ -9,7 +9,7 @@ const useNavigationStore = defineStore('navigation', () => {
     },
     {
       name: 'Modules',
-      open: false,
+      open: true,
       children: [
         {
           name: '/',
