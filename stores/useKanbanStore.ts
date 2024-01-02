@@ -8,7 +8,7 @@ import type {
   ColumnUpsert
 } from '~/types'
 
-const useKanbanStore = defineStore('kanban-board', () => {
+const useKanbanStore = defineStore('kanban-store', () => {
   const boards = ref<Board[]>()
   const board = ref<Board>()
 

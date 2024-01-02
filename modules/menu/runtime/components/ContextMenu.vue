@@ -1,5 +1,6 @@
 <script generic="TMenuItem extends MenuItem" lang="ts" setup>
 import type { MenuItem } from '~/modules/menu/types'
+import { type ReferenceElement, useFloating } from '@floating-ui/vue'
 
 interface Props {
   menu: MenuItem[]
@@ -10,6 +11,12 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const rootElement = ref<HTMLElement>()
+
+const contextMenu = useTemplateRefsList()
+
+watchEffect(() => {
+  if (!contextMenu.value) return
+})
 
 const emit = defineEmits<{
   (ev: 'click-outside'): void
@@ -39,7 +46,7 @@ function openMenu(evt: MouseEvent, item: MenuItem) {
       y: clickTargetRect.top
     }
 
-    if (item.open) {
+    if (item.open === undefined) {
       props.menu.forEach((item) => {
         item.open = item === item ? !item.open : false
       })
@@ -75,19 +82,18 @@ function openMenu(evt: MouseEvent, item: MenuItem) {
           <Icon :name="`ic:round-arrow-${item.open ? 'left' : 'right'}`" class="ml-4 size-4" />
         </span>
 
-        <Teleport to="body">
-          <Transition name="fade-in-up">
-            <ContextMenu
-              v-if="item.open"
-              :menu="item.children"
-              :style="{
-                top: nextOpenCoords.y + 'px',
-                left: nextOpenCoords.x + 'px'
-              }"
-              @click-outside="item.open = false"
-            />
-          </Transition>
-        </Teleport>
+        <Transition name="fade-in-up">
+          <ContextMenu
+            v-if="item.open"
+            ref="contextMenu"
+            :menu="item.children"
+            :style="{
+              top: nextOpenCoords.y + 'px',
+              left: nextOpenCoords.x + 'px'
+            }"
+            @click-outside="item.open = false"
+          />
+        </Transition>
       </template>
     </li>
   </menu>

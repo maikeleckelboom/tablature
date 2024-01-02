@@ -1,5 +1,4 @@
 type MenuItemBase = {
-  name: string
   label?: string
   leadingIcon?: string
   trailingIcon?: string
@@ -8,24 +7,31 @@ type MenuItemBase = {
   disabled?: boolean
 }
 
-type MenuItem = MenuItemBase &
-  (
-    | {
-        open?: never
-        children?: MenuItem[]
-      }
-    | {
-        open: boolean
-        children: MenuItem[]
-      }
-  ) &
-  (
-    | {
-        href: string
-      }
-    | {
-        href?: never
-      }
-  )
+type MenuItemWithHref = MenuItemBase & {
+  href: string
+  onClick?: never
+  children?: never
+  open?: never
+}
 
-export type { MenuItem, MenuItemBase }
+type MenuItemWithOnClick = MenuItemBase & {
+  onClick: (item: any) => void
+  href?: never
+  children?: never
+  open?: never
+}
+
+type MenuItemWithChildren = MenuItemBase & {
+  children: MenuItem[]
+  open: boolean
+  href?: never
+  onClick?: never
+}
+type MenuItem = { name: string } & (
+  | MenuItemWithHref
+  | MenuItemWithOnClick
+  | MenuItemWithChildren
+  | (MenuItemBase & { href?: never; onClick?: never; children?: never; open?: never })
+)
+
+export type { MenuItem }

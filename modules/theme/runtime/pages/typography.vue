@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="my-4 h-0.5 w-full bg-outline-variant" />
+  <div>typography</div>
 </template>
 
 <style scoped></style>

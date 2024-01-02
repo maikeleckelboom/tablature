@@ -54,8 +54,19 @@ type NavigationCollapsible = (
       }
   )
 
-type ListItemType = {
-  type: 'group' | 'select-multiple' | 'select-single' | 'trigger' | 'link' | 'divider'
+export type { NavigationCollapsible }
+
+// Try 2:
+type ItemWithChildren = {
+  children: NavigationListItem[]
+  open: boolean
 }
 
-export type { NavigationCollapsible, ListItemType }
+type ItemWithoutChildren = {
+  children?: never
+  open?: never
+}
+
+type MaybeItemWithChildren = ItemWithChildren | ItemWithoutChildren
+
+export type { ItemWithChildren, ItemWithoutChildren, MaybeItemWithChildren }

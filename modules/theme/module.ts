@@ -1,6 +1,7 @@
 import { addComponentsDir, addPlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
 import { defu } from 'defu'
 import type { ThemeModuleOptions } from '~/modules/theme/types'
+import { setup } from 'xstate'
 
 const { resolve } = createResolver(import.meta.url)
 
@@ -16,7 +17,7 @@ export default defineNuxtModule<ThemeModuleOptions>({
   defaults: {
     isDark: false,
     contrastLevel: 0.3,
-    sourceColor: '#47814a',
+    sourceColor: '#0092fa',
     staticColors: []
   },
   hooks: {
@@ -25,9 +26,19 @@ export default defineNuxtModule<ThemeModuleOptions>({
     },
     'pages:extend'(pages) {
       pages.push({
-        name: 'schemes',
-        path: '/app/schemes',
-        file: resolve('./runtime/pages/schemes.vue')
+        name: 'Theme',
+        path: '/modules/theme',
+        file: resolve('./runtime/pages/index.vue')
+      })
+      pages.push({
+        name: 'Colors',
+        path: '/modules/theme/colors',
+        file: resolve('./runtime/pages/colors.vue')
+      })
+      pages.push({
+        name: 'Typography',
+        path: '/modules/theme/typography',
+        file: resolve('./runtime/pages/typography.vue')
       })
     }
   },
