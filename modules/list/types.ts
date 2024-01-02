@@ -35,27 +35,6 @@ export type {
   MaybeRecursiveListItem
 }
 
-type NavigationCollapsible = (
-  | {
-      open?: never
-      children?: MenuItem[]
-    }
-  | {
-      open: boolean
-      children: MenuItem[]
-    }
-) &
-  (
-    | {
-        href: string
-      }
-    | {
-        href?: never
-      }
-  )
-
-export type { NavigationCollapsible }
-
 // Try 2:
 type ItemWithChildren = {
   children: NavigationListItem[]

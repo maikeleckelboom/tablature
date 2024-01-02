@@ -61,23 +61,23 @@ export type {
   CardsReorderUpsert
 }
 
-type AccordionItemBase = {
-  name: string
-  label?: string
-  href?: string
-  children?: AccordionItem[]
-}
-
-type ItemWithChildren = {
-  children: AccordionItem[]
-  open: boolean
-}
-
-type ItemWithoutChildren = {
-  children?: never
-  open?: never
-}
-
-type AccordionItem = AccordionItemBase & (ItemWithChildren | ItemWithoutChildren)
-
-export type { AccordionItem }
+// type AccordionItemBase = {
+//   name: string
+//   label?: string
+//   href?: string
+//   children?: AccordionItem[]
+// }
+//
+// type ItemWithChildren = {
+//   children: AccordionItem[]
+//   open: boolean
+// }
+//
+// type ItemWithoutChildren = {
+//   children?: never
+//   open?: never
+// }
+//
+// type AccordionItem = AccordionItemBase & (ItemWithChildren | ItemWithoutChildren)
+//
+// export type { AccordionItem }

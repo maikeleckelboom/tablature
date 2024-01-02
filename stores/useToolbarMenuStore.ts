@@ -1,8 +1,8 @@
-import type { MenuItem } from '~/modules/menu/types'
+import type { MenuItem, MenuItemBase } from '~/modules/menu/types'
 
 const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
   // [accessorKey] => [function]
-  const state = ref<MenuItem[]>([
+  const state = ref<MenuItemBase[]>([
     {
       name: 'Format',
       open: false,
