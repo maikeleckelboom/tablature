@@ -1,46 +1,54 @@
-type MenuItemBase = {
-  name: string
+type BaseMenuItem = {
   label?: string
   leadingIcon?: string
   trailingIcon?: string
   trailingText?: string
   divider?: boolean
   disabled?: boolean
+  shortcut?: string
+  onAction?: (args?: any) => void
+  checked?: boolean
+} & (
+  | {
+      selectable?: false
+      multiple?: never
+    }
+  | {
+      selectable: true
+      multiple?: boolean
+      children: MenuItem[]
+      open?: boolean
+    }
+) &
+  (
+    | {
+        children?: never
+        open?: never
+      }
+    | {
+        children: MenuItem[]
+        open?: boolean
+      }
+  )
 
-  children?: MenuItemBase[]
-  open?: boolean
-  href?: string
-  fn?: (item: any) => void
+type ParentMenuItem<T = any> = BaseMenuItem & {
+  children: T[]
 }
 
-type MenuItemWithHref = MenuItemBase & {
-  href: string
-  onClick?: never
-  children?: never
-  open?: never
+type SelectableMenuItem<T = any> = ParentMenuItem<T> & {
+  selectable: boolean
 }
 
-type MenuItemWithOnClick = MenuItemBase & {
-  onClick: (item: MenuItem) => void
-  href?: never
-  children?: never
-  open?: never
+type MenuItem = BaseMenuItem | ParentMenuItem | SelectableMenuItem
+
+export type { MenuItem }
+
+function isParentMenuItem(item: MenuItem): item is ParentMenuItem<MenuItem> {
+  return (item as ParentMenuItem<MenuItem>)?.children !== undefined
 }
 
-type MenuItemWithChildren = MenuItemBase & {
-  children: MenuItem[]
-  open: boolean
-  href?: never
-  onClick?: never
+function isSelectableMenuItem(item: MenuItem): item is SelectableMenuItem<MenuItem> {
+  return (item as SelectableMenuItem<MenuItem>)?.selectable !== undefined && isParentMenuItem(item)
 }
 
-type PlainMenuItem = MenuItemBase & {
-  href?: never
-  onClick?: never
-  children?: never
-  open?: never
-}
-
-type MenuItem = MenuItemBase
-
-export type { MenuItem, MenuItemBase, MenuItemWithHref, MenuItemWithOnClick, MenuItemWithChildren }
+export { isSelectableMenuItem, isParentMenuItem }

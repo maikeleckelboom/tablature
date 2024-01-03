@@ -34,35 +34,18 @@ const fns = new Map<string, () => void>([
   ]
 ])
 
-const items = ref(
-  mapRecursive(store.state, (item) => {
-    const children = item.children?.map((child) => {
-      if (fns.has(child.name)) {
-        return {
-          ...child,
-          fn: fns.get(child.name)
+function mapToolbarFunctionItems() {
+  return mapRecursive(store.state, (item) =>
+    fns.has(item.label)
+      ? {
+          ...item,
+          onAction: fns.get(item.label)
         }
-      }
-      return child
-    })
+      : item
+  )
+}
 
-    if (children) {
-      return {
-        ...item,
-        children
-      }
-    }
-
-    if (fns.has(item.name)) {
-      return {
-        ...item,
-        fn: fns.get(item.name)
-      }
-    }
-
-    return item
-  })
-)
+const items = ref(mapToolbarFunctionItems())
 </script>
 
 <template>
@@ -70,7 +53,6 @@ const items = ref(
     <div class="flex flex-row items-start gap-4">
       <List :items="items" />
     </div>
-    <pre>{{ items }}</pre>
   </ColumnLayout>
 </template>
 

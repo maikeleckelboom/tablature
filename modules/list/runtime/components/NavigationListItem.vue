@@ -44,16 +44,6 @@ const triggerLabel = computed<string>(() => {
   }
 })
 
-// todo: look into how to use tw and get full ide support
-// const baseItemClass = computed<string | string[]>(
-//   () =>
-//     <string | string[]>(
-//       tw(
-//         `rounded border border-transparent focus-visible:border-primary focus-visible:bg-primary-container/10 focus-visible:outline-none`
-//       )
-//     )
-// )
-
 const baseItemClass = computed<string | string[]>(
   () =>
     <string | string[]>(

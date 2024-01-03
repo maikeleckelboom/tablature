@@ -1,94 +1,108 @@
-import type { MenuItem, MenuItemBase } from '~/modules/menu/types'
+import type { MenuItem } from '~/modules/menu/types'
 
+/**
+ *      Menu
+ *      MenuGroup
+ *      MenuItem
+ */
 const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
-  // [accessorKey] => [function]
-  const state = ref<MenuItemBase[]>([
+  const state = ref<MenuItem[]>([
     {
-      name: 'Format',
-      open: false,
+      label: 'Format',
       children: [
         {
-          name: 'Text Styles',
-          open: false,
+          label: 'Text Styles',
+          selectable: true,
           children: [
-            { name: 'Bold', leadingIcon: 'ic:outline-format-bold' },
-            { name: 'Italic', leadingIcon: 'ic:outline-format-italic' },
-            { name: 'Underline', leadingIcon: 'ic:outline-format-underlined' },
-            { name: 'Strikethrough', leadingIcon: 'ic:outline-strikethrough-s' },
-            { name: 'Superscript', leadingIcon: 'ic:outline-superscript' }
+            {
+              label: 'Bold',
+              leadingIcon: 'ic:outline-format-bold',
+              shortcut: 'Ctrl+B'
+            },
+            {
+              label: 'Italic',
+              leadingIcon: 'ic:outline-format-italic',
+              shortcut: 'Ctrl+I'
+            },
+            {
+              label: 'Underline',
+              leadingIcon: 'ic:outline-format-underlined',
+              checked: true
+            },
+            {
+              label: 'Strikethrough',
+              leadingIcon: 'ic:outline-strikethrough-s'
+            },
+            {
+              label: 'Superscript',
+              leadingIcon: 'ic:outline-superscript'
+            }
           ]
         },
         {
-          name: 'Paragraph Styles',
-          open: false,
+          label: 'Paragraph Styles',
           children: [
-            { name: 'Align', leadingIcon: 'ic:outline-format-align-left' },
+            { label: 'Align', leadingIcon: 'ic:outline-format-align-left' },
             {
-              name: 'Line Spacing',
-              open: false,
+              label: 'Line Spacing',
               children: [
-                { name: 'Single' },
-                { name: '1.15' },
-                { name: 'Double' },
-                { name: 'Custom: 1.2' }
+                { label: 'Single' },
+                { label: '1.15' },
+                { label: 'Double' },
+                { label: 'Custom: 1.2' }
               ]
             },
-            { name: 'Add Space Before Paragraph', leadingIcon: 'ic:keyboard-arrow-up' },
-            { name: 'Add Space After Paragraph', leadingIcon: 'ic:keyboard-arrow-down' },
-            { name: 'Custom Spacing...', leadingIcon: 'ic:outline-space-bar' }
+            { label: 'Add Space Before Paragraph', leadingIcon: 'ic:keyboard-arrow-up' },
+            { label: 'Add Space After Paragraph', leadingIcon: 'ic:keyboard-arrow-down' },
+            { label: 'Custom Spacing...', leadingIcon: 'ic:outline-space-bar' }
           ]
         },
         {
-          name: 'List Options',
-          open: false,
+          label: 'List Options',
           children: [
-            { name: 'Numbered Lists', leadingIcon: 'ic:format-list-numbered' },
-            { name: 'Bulleted Lists', leadingIcon: 'ic:format-list-bulleted' },
-            { name: 'List Options', leadingIcon: 'ic:format-list-bulleted' },
-            { name: 'Clear Formatting', leadingIcon: 'ic:format-clear' }
+            { label: 'Numbered Lists', leadingIcon: 'ic:format-list-numbered' },
+            { label: 'Bulleted Lists', leadingIcon: 'ic:format-list-bulleted' },
+            { label: 'List Options', leadingIcon: 'ic:format-list-bulleted' },
+            { label: 'Clear Formatting', leadingIcon: 'ic:format-clear' }
           ]
         }
       ]
     },
     {
-      name: 'Tools',
-      open: false,
+      label: 'Tools',
       children: [
-        { name: 'Spelling & Grammar', leadingIcon: 'ic:spellcheck' },
-        { name: 'Word Count', leadingIcon: 'ic:outline-text-increase' }
+        { label: 'Spelling & Grammar', leadingIcon: 'ic:spellcheck' },
+        { label: 'Word Count', leadingIcon: 'ic:outline-label-increase' }
       ]
     },
     {
-      name: 'Tables',
-      open: false,
+      label: 'Tables',
       children: [
-        { name: 'Insert Table', leadingIcon: 'ic:select-all' },
-        { name: 'Delete Table', leadingIcon: 'ic:select-all' },
-        { name: 'Select Table', leadingIcon: 'ic:select-all' },
-        { name: 'Select Row', leadingIcon: 'ic:select-all' },
-        { name: 'Select Column', leadingIcon: 'ic:select-all' },
-        { name: 'Select Cell', leadingIcon: 'ic:select-all' },
-        { name: 'Merge Cells', leadingIcon: 'ic:call-merge' },
-        { name: 'Split Cells', leadingIcon: 'ic:call-split' },
-        { name: 'Resize Table', leadingIcon: 'ic:select-all' },
-        { name: 'Table Properties', leadingIcon: 'ic:select-all' }
+        { label: 'Insert Table', leadingIcon: 'ic:select-all' },
+        { label: 'Delete Table', leadingIcon: 'ic:select-all' },
+        { label: 'Select Table', leadingIcon: 'ic:select-all' },
+        { label: 'Select Row', leadingIcon: 'ic:select-all' },
+        { label: 'Select Column', leadingIcon: 'ic:select-all' },
+        { label: 'Select Cell', leadingIcon: 'ic:select-all' },
+        { label: 'Merge Cells', leadingIcon: 'ic:call-merge' },
+        { label: 'Split Cells', leadingIcon: 'ic:call-split' },
+        { label: 'Resize Table', leadingIcon: 'ic:select-all' },
+        { label: 'Table Properties', leadingIcon: 'ic:select-all' }
       ]
     },
     {
-      name: 'Add-ons',
-      open: false,
+      label: 'Add-ons',
       children: [
-        { name: 'Get Add-ons...', leadingIcon: 'ic:get-app' },
-        { name: 'Manage Add-ons...', leadingIcon: 'ic:settings' }
+        { label: 'Get Add-ons...', leadingIcon: 'ic:get-app' },
+        { label: 'Manage Add-ons...', leadingIcon: 'ic:settings' }
       ]
     },
     {
-      name: 'Help',
-      open: false,
+      label: 'Help',
       children: [
-        { name: 'Docs', leadingIcon: 'ic:outline-description' },
-        { name: 'Report an issue', leadingIcon: 'ic:report-problem' },
-        { name: 'Keyboard shortcuts', leadingIcon: 'ic:keyboard' }
+        { label: 'Docs', leadingIcon: 'ic:outline-description' },
+        { label: 'Report an issue', leadingIcon: 'ic:report-problem' },
+        { label: 'Keyboard shortcuts', leadingIcon: 'ic:keyboard' }
       ]
     }
   ])

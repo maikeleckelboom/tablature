@@ -28,7 +28,7 @@ export const mapRecursive = <T>(
     }
     // create an array of the current new array and the result of the current item and the callback function
     const interimArray = [...newArray, callback(item)]
-    // return a recursive call to to map to process the next item.
+    // return a recursive call to map to process the next item.
     return mapRecursive<T>(theRest, callback, interimArray)
   }
 }

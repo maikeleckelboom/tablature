@@ -15,11 +15,8 @@ const {
   type = 'multiple'
 } = defineProps<Props>()
 
-function scaleValue(input: number): number {
-  // Linear scaling: output = m * input + b
-  const m = 0.25 // slope
-  const b = 0 // y-intercept
-  return m * input + b
+function scaleValue(input: number, slope: number = 0.25, yIntercept: number = 0): number {
+  return slope * input + yIntercept
 }
 
 const transitionDelay = computed<number>(() => scaleValue(transitionDuration))

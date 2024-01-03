@@ -1,10 +1,15 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
   experimental: {
-    viewTransition: true,
-    typedPages: true,
-    reactivityTransform: true
+    viewTransition: true
+  },
+  vite: {
+    vue: {
+      script: {
+        defineModel: true,
+        propsDestructure: true
+      }
+    }
   },
   typescript: {
     typeCheck: true,
@@ -16,7 +21,7 @@ export default defineNuxtConfig({
     }
   },
   tailwindcss: {
-    viewer: true,
+    viewer: false,
     configPath: '~/tailwind.config',
     exposeConfig: true
   },
@@ -67,7 +72,6 @@ export default defineNuxtConfig({
     'nuxt-viewport',
     'nuxt-typed-router',
     'nuxt-lodash',
-    '~/modules/base/module.ts',
     '~/modules/theme/module.ts',
     '~/modules/dialog/module.ts',
     '~/modules/breadcrumbs/module.ts',
