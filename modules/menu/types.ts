@@ -45,4 +45,15 @@ function isItemWithChildren(item: MenuItem): item is MenuItem & { children: Menu
   return item.children !== undefined && item.children.length > 0
 }
 
-export { isItemWithChildren }
+function isItemWithSelectableChildren(item: MenuItem): item is MenuItem & { children: MenuItem[] } {
+  return isItemWithChildren(item) && item.selectable === true
+}
+
+function isSelectableItem(
+  item: MenuItem,
+  option: MenuItem
+): item is MenuItem & { selected: boolean } {
+  return isItemWithSelectableChildren(item) && !option.disabled
+}
+
+export { isItemWithChildren, isItemWithSelectableChildren, isSelectableItem }

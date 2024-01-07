@@ -20,13 +20,6 @@ function isDisabled(item: T): boolean {
   return item.disabled || false
 }
 
-function getIndent() {
-  if (props.indent === false) {
-    return 0
-  }
-  return props.indent * props.level
-}
-
 function onClick(item: T) {
   if (item?.onClick !== undefined) {
     item.onClick()
@@ -39,7 +32,6 @@ function onClick(item: T) {
   item.open = !item.open
 }
 
-// Main function to handle selection
 function onSelect(item: T, option: T) {
   // Check if the item allows multiple selections
   if (item.multiple) {
@@ -51,7 +43,6 @@ function onSelect(item: T, option: T) {
   handleSingleSelection(item, option)
 }
 
-// Handler for multiple selections
 function handleMultipleSelection(item: T, option: T) {
   // If minSelections is set to 1, select the current option
   if (item.minSelections === 1) {
@@ -62,11 +53,8 @@ function handleMultipleSelection(item: T, option: T) {
   option.selected = !option.selected
 }
 
-// Handler for single selection
 function handleSingleSelection(item: T, option: T) {
-  // Extract children and minSelections from the item
   const { children, minSelections } = item
-  // Check if minSelections is a positive number
   if (Number(minSelections) && minSelections > 0) {
     // If true, select only the clicked option
     children.forEach((opt) => {
@@ -80,60 +68,70 @@ function handleSingleSelection(item: T, option: T) {
   })
 }
 
-function radioOrCheckbox(item: T) {
+function getRadioOrCheckbox(item: T) {
   if (item.multiple) {
     return 'checkbox'
   }
   return 'radio'
 }
 
+function getIndent() {
+  if (props.indent === false) {
+    return 0
+  }
+  return props.indent * props.level
+}
+
+const indentStyles = computed<Record<string, string>>(() => ({
+  paddingLeft: `${getIndent()}px`
+}))
+
 const itemOpenIcon = 'ic:round-indeterminate-check-box'
 const itemClosedIcon = 'ic:round-add-box'
 
-const shouldRender = computed<boolean>(() => !!props.static)
+const alwaysOpen = computed<boolean>(() => !!props.static)
 </script>
 
 <template>
   <ul>
-    <li v-for="(item, index) in props.items" :key="index">
+    <li v-for="(item, index) in items" :key="index">
       <slot :item="item">
         <button :disabled="isDisabled(item)" @click="onClick(item)">
           <template v-if="isItemWithChildren(item)">
-            <Icon v-if="item.open" class="size-4" :name="itemOpenIcon" />
-            <Icon v-else class="size-4" :name="itemClosedIcon" />
+            <Icon v-if="item.open" :name="itemOpenIcon" class="size-4" />
+            <Icon v-else :name="itemClosedIcon" class="size-4" />
           </template>
           {{ item.label }}
         </button>
         <template v-if="isItemWithChildren(item)">
           <template v-if="item.selectable">
             <List
-              v-if="shouldRender || item.open"
+              v-if="alwaysOpen || item.open"
+              v-slot="{ item: option }"
               :items="<T[]>item.children"
-              :level="props.level + 1"
-              :style="{ paddingLeft: `${getIndent() / 2}px` }"
+              :level="level + 1"
+              :style="indentStyles"
             >
-              <template #default="{ item: option }">
-                <label :for="slugify(option.label)" class="flex flex-row gap-2">
-                  <input
-                    :id="slugify(option.label)"
-                    :type="radioOrCheckbox(item)"
-                    :disabled="isDisabled(option)"
-                    :checked="option.selected"
-                    @click="onSelect(item, option)"
-                  />
-                  <button :disabled="isDisabled(option)" @click="onSelect(item, option)">
-                    {{ option.label }}
-                  </button>
-                </label>
-              </template>
+              <label :for="slugify(option.label)" class="flex flex-row gap-2">
+                <input
+                  :id="slugify(option.label)"
+                  :checked="option.selected"
+                  :disabled="isDisabled(option)"
+                  :type="getRadioOrCheckbox(item)"
+                  @click="onSelect(item, option)"
+                />
+                <button :disabled="isDisabled(option)" @click="onSelect(item, option)">
+                  {{ option.label }}
+                </button>
+              </label>
             </List>
           </template>
           <template v-else>
             <List
-              v-if="shouldRender || item.open"
+              v-if="alwaysOpen || item.open"
               :items="<T[]>item.children"
-              :level="props.level + 1"
-              :style="{ paddingLeft: `${getIndent()}px` }"
+              :level="level + 1"
+              :style="indentStyles"
             />
           </template>
         </template>
