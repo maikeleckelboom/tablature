@@ -280,8 +280,23 @@ const onInput = (ev: Event, key: keyof FormModel) => {
       <div class="mb-4 mt-2.5 h-2.5 w-full rounded-lg" :style="tonalSpectra" />
     </fieldset>
     <fieldset>
-      <InputSlider v-model="contrastLevel" max="1" label="Contrast level" min="0" step="0.1">
-      </InputSlider>
+      <InputSlider
+        v-model="contrastLevel"
+        max="1"
+        label="Contrast level"
+        min="0"
+        step="0.1"
+        :tick-marks="[
+          {
+            value: 0,
+            label: 'Low'
+          },
+          {
+            value: 1,
+            label: 'High'
+          }
+        ]"
+      />
     </fieldset>
   </div>
 </template>

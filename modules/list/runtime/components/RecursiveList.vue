@@ -34,8 +34,8 @@ const emit = defineEmits<{
 <template>
   <Component :is="tag" :class="listClass(level)">
     <slot
-      v-for="item in list"
-      :key="item.name"
+      v-for="(item, index) in list"
+      :key="index"
       v-bind="{ item, level, isRecursive: isRecursiveListItem(item) }"
     >
       <li :class="itemClass(item, level)">

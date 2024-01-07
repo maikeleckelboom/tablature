@@ -60,3 +60,10 @@ export type {
   ColumnsReorderUpsert,
   CardsReorderUpsert
 }
+
+type SelectListItem = {
+  label: string
+  value: string
+  icon?: string
+  disabled?: boolean
+}

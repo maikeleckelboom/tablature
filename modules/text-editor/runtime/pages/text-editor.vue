@@ -1,7 +1,9 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div></div>
+  <ColumnLayout>
+    <div class="p-8">Text Editor</div>
+  </ColumnLayout>
 </template>
 
 <style scoped></style>

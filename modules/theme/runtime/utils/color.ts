@@ -92,15 +92,6 @@ function textFromProperties(
     .join(options?.lineBreak ? '\n' : '')
 }
 
-const getRepeatingLinearGradient = () => {
-  const { primary, secondary, tertiary } = {
-    primary: 'rgb(var(--primary-rgb))',
-    secondary: 'rgb(var(--secondary-rgb))',
-    tertiary: 'rgb(var(--tertiary-rgb))'
-  }
-  return `repeating-linear-gradient(to right,${primary} 0%,${secondary} 50%,${tertiary} 100%)`
-}
-
 const repeatingLinearGradient = (() => {
   const { primary, secondary, tertiary } = {
     primary: 'rgb(var(--primary-rgb))',

@@ -1,54 +1,51 @@
-type BaseMenuItem = {
-  label?: string
+type BaseProps = {
+  label: string
   leadingIcon?: string
   trailingIcon?: string
   trailingText?: string
-  divider?: boolean
+  shortcuts?: string
   disabled?: boolean
-  shortcut?: string
-  onAction?: (args?: any) => void
-  checked?: boolean
-} & (
-  | {
-      selectable?: false
-      multiple?: never
-    }
-  | {
-      selectable: true
-      multiple?: boolean
-      children: MenuItem[]
-      open?: boolean
-    }
-) &
-  (
-    | {
-        children?: never
-        open?: never
-      }
-    | {
-        children: MenuItem[]
-        open?: boolean
-      }
-  )
+  divider?: boolean
+  onClick?: () => void
+  onSelect?: () => void
+  children?: any[]
+  open?: boolean
+  selectable?: boolean
+  allowNoSelection?: boolean
+  // replace allowNoSelection with minSelections (also change store)
+  // minSelections?: number
 
-type ParentMenuItem<T = any> = BaseMenuItem & {
-  children: T[]
+  multiple?: boolean
+  selected?: boolean
 }
 
-type SelectableMenuItem<T = any> = ParentMenuItem<T> & {
-  selectable: boolean
+type OptionProps = BaseProps & {
+  selected?: boolean
 }
 
-type MenuItem = BaseMenuItem | ParentMenuItem | SelectableMenuItem
+type BaseWithOptionProps = BaseProps & {
+  options?: OptionProps[]
+}
+
+type RecursiveItem = BaseWithOptionProps & {
+  children: MenuItem[]
+}
+
+type MaybeRecursiveItem = BaseWithOptionProps | RecursiveItem
+
+type RecursiveItemWithOption = BaseWithOptionProps & {
+  children: MenuItem[]
+  open?: boolean
+}
+
+type MaybeRecursiveItemWithOption = BaseWithOptionProps | RecursiveItemWithOption
+
+type MenuItem = BaseProps & (MaybeRecursiveItem | MaybeRecursiveItemWithOption)
 
 export type { MenuItem }
 
-function isParentMenuItem(item: MenuItem): item is ParentMenuItem<MenuItem> {
-  return (item as ParentMenuItem<MenuItem>)?.children !== undefined
+function isRecursiveItem(item: MenuItem): item is MenuItem & { children: MenuItem[] } {
+  return item.children !== undefined && item.children.length > 0
 }
 
-function isSelectableMenuItem(item: MenuItem): item is SelectableMenuItem<MenuItem> {
-  return (item as SelectableMenuItem<MenuItem>)?.selectable !== undefined && isParentMenuItem(item)
-}
-
-export { isSelectableMenuItem, isParentMenuItem }
+export { isRecursiveItem }

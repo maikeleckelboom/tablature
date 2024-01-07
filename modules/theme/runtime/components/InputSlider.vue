@@ -199,17 +199,21 @@ const onPointerdown = (ev: PointerEvent) => {
 
   const onPointerup = (ev: PointerEvent) => {
     target.releasePointerCapture(ev.pointerId)
-    if (!isTrackFill && tickMarks) {
-      snapToClosestTickMark(ev)
-    }
     cleanupPointermove()
     cleanupPointerup()
     cleanupPointercancel()
     isDragging.value = false
+    if (!isTrackFill && tickMarks) {
+      // make sure user does not intent to scroll page
+      if (ev.type === 'pointercancel') {
+        // Set back to original value
+        return
+      }
+      snapToClosestTickMark(ev)
+    }
   }
 
   const cleanupPointercancel = useEventListener('pointercancel', onPointerup, { passive: true })
-
   const cleanupPointermove = useEventListener('pointermove', onPointermove, { passive: false })
   const cleanupPointerup = useEventListener('pointerup', onPointerup, { passive: true })
 }
@@ -224,27 +228,6 @@ function roundValue(value: number | number[]): string {
   const inv = 1.0 / Number(step)
   return `${Math.round(value * inv) / inv}`
 }
-
-/** Computed rounded value **/
-const roundedValue = computed(() => {
-  return (
-    Math.round(
-      Array.isArray(modelValue.value)
-        ? Number(modelValue.value[0])
-        : Number(modelValue.value) / Number(step)
-    ) * Number(step)
-  )
-})
-
-/** Computed rounded value **/
-const roundedValueEnd = computed(
-  () =>
-    Math.round(
-      Array.isArray(modelValue.value)
-        ? Number(modelValue.value[1])
-        : Number(modelValue.value) / Number(step)
-    ) * Number(step)
-)
 
 /** Computed handle position **/
 const handleStyle = computed(() => ({
@@ -293,6 +276,7 @@ const labelValueContainerEndStyle = computed(() => {
     opacity: isActive ? 1 : 0
   }
 })
+
 const isActiveTickMark = (index: number) => {
   const isBetween =
     index / ticksCount.value >= Math.min(percent.value, percentEnd.value) &&

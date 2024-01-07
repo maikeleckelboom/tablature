@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { Button } from '#components'
 import {
   autoUpdate,
   flip,
@@ -10,46 +9,19 @@ import {
   useFloating
 } from '@floating-ui/vue'
 
-const triggerRef = ref<InstanceType<typeof Button>>()
-const tooltipRef = ref<HTMLElement>()
+const reference = ref<HTMLElement>()
+const floating = ref<HTMLElement>()
 
-const initialPlacement = ref<Placement>('top')
-const middleware = ref<Middleware[]>([
-  flip({
-    padding: 2
-  }),
-  offset(2),
-  shift()
-])
+const initialPlacement = ref<Placement>('bottom')
+const middleware = ref<Middleware[]>([flip(), shift(), offset()])
 
 const open = ref<boolean>(false)
 
-const { floatingStyles, isPositioned, middlewareData, placement } = useFloating(
-  triggerRef,
-  tooltipRef,
-  {
-    open,
-    middleware,
-    placement: initialPlacement,
-    whileElementsMounted: autoUpdate
-  }
-)
-
-const opposedSide = computed(() => {
-  if (!unref(placement)) return
-  const [side] = unref(placement).split('-')
-  const map = {
-    top: 'bottom',
-    bottom: 'top',
-    left: 'right',
-    right: 'left'
-  }
-  return map[side] as Placement
-})
-
-const arrowStyles = computed(() => {
-  const { arrow } = middlewareData.value
-  if (!arrow) return {}
+const { floatingStyles, strategy } = useFloating(reference, floating, {
+  placement: initialPlacement,
+  middleware,
+  whileElementsMounted: autoUpdate,
+  open
 })
 
 function show() {
@@ -59,30 +31,35 @@ function show() {
 function hide() {
   open.value = false
 }
+
+function getClickOutsideHandler(evt: MouseEvent) {
+  if (evt.target instanceof HTMLElement) {
+    if (reference.value.contains(evt.target)) {
+      return
+    }
+
+    if (floating.value?.contains(evt.target)) {
+      return
+    }
+  }
+
+  hide()
+}
+
+onClickOutside(reference, getClickOutsideHandler)
 </script>
 
 <template>
-  <Button
-    ref="triggerRef"
-    class="p-4"
-    intent="text"
-    @blur="hide"
-    @focus="show"
-    @mouseenter="show"
-    @mouseleave="hide"
-  >
-    Hover me to show tooltip
-  </Button>
+  <button ref="reference" @click="show" class="relative size-fit">
+    <slot name="trigger">Show tooltip</slot>
+  </button>
   <div
     v-if="open"
-    ref="tooltipRef"
+    ref="floating"
     :style="floatingStyles"
-    class="absolute left-0 top-0 z-50 max-h-fit max-w-xs rounded-xl bg-surface-container-high p-4 text-center"
+    class="absolute z-50 max-h-fit max-w-xs rounded-xl bg-surface-container-high p-4 text-center"
   >
-    <p>
-      Hello (emoji: 👋) and another emoji: 🤖 and another: 🐶 and another: 🐱 and last one: 🐭 but
-      not least: 🐹
-    </p>
+    <slot></slot>
   </div>
 </template>
 

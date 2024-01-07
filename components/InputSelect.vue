@@ -14,9 +14,6 @@ const props = defineProps<{
 
 const model = defineModel<TValue>()
 
-// This helps us get the value of the option
-// We can't rely on a falsy check to determine if the option is selected
-// as the value could be 0
 function optToValue(opt: TOption) {
   if (props.optionValue) {
     return props.optionValue(opt)
@@ -24,10 +21,8 @@ function optToValue(opt: TOption) {
   return opt
 }
 
-// This helps us get a string key of the option
-// You can use a different approach here
 function toKey(opt: TOption): string {
-  return JSON.stringify(optToValue(opt))
+  return slugify(JSON.stringify(optToValue(opt)))
 }
 </script>
 <template>

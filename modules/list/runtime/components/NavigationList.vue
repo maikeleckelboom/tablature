@@ -60,7 +60,6 @@ defineSlots<{
         active-class="text-primary font-semibold border-r border-2 border-error"
         exact-active-class="bg-primary-container/20 text-on-primary font-bold"
       >
-        <!-- Link or Trigger -->
         <span
           class="flex w-full items-center justify-between gap-4 rounded-sm p-2.5 hover:bg-primary-container/10 active:bg-primary-container/20"
         >

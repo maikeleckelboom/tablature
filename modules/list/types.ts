@@ -16,9 +16,7 @@ type NavigationListItemButton = {
 
 type MaybeRecursiveListItem = ListItemBase & (NavigationListItemLink | NavigationListItemButton)
 
-type NavigationListItemImpl = {}
-
-type NavigationListItem = NavigationListItemImpl & MaybeRecursiveListItem
+type NavigationListItem = MaybeRecursiveListItem
 
 export type {
   NavigationListItem,
