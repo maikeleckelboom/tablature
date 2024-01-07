@@ -1,5 +1,5 @@
 <script generic="T extends MenuItem" lang="ts" setup>
-import { isRecursiveItem, type MenuItem } from '~/modules/menu/types'
+import { isItemWithChildren, type MenuItem } from '~/modules/menu/types'
 
 const props = withDefaults(
   defineProps<{
@@ -17,7 +17,7 @@ const props = withDefaults(
 )
 
 function isDisabled(item: T): boolean {
-  return false
+  return item.disabled || false
 }
 
 function getIndent() {
@@ -32,64 +32,105 @@ function onClick(item: T) {
     item.onClick()
   }
 
-  if (!isRecursiveItem(item)) {
+  if (!isItemWithChildren(item)) {
     return
   }
 
   item.open = !item.open
 }
 
+// Main function to handle selection
 function onSelect(item: T, option: T) {
+  // Check if the item allows multiple selections
   if (item.multiple) {
-    option.selected = !option.selected
+    // Call the handler for multiple selections
+    handleMultipleSelection(item, option)
     return
   }
+  // Call the handler for single selection
+  handleSingleSelection(item, option)
+}
 
-  item.children.map((opt) => {
-    // noBlankSelection, or allowNoSelection
-    if (!item.allowNoSelection) {
+// Handler for multiple selections
+function handleMultipleSelection(item: T, option: T) {
+  // If minSelections is set to 1, select the current option
+  if (item.minSelections === 1) {
+    option.selected = true
+    return
+  }
+  // Otherwise, toggle the selection state of the current option
+  option.selected = !option.selected
+}
+
+// Handler for single selection
+function handleSingleSelection(item: T, option: T) {
+  // Extract children and minSelections from the item
+  const { children, minSelections } = item
+  // Check if minSelections is a positive number
+  if (Number(minSelections) && minSelections > 0) {
+    // If true, select only the clicked option
+    children.forEach((opt) => {
       opt.selected = opt === option
-      return
-    }
+    })
+    return
+  }
+  // Otherwise, toggle the selection state of the clicked option
+  children.forEach((opt) => {
     opt.selected = opt === option ? !opt.selected : false
   })
 }
+
+function radioOrCheckbox(item: T) {
+  if (item.multiple) {
+    return 'checkbox'
+  }
+  return 'radio'
+}
+
+const itemOpenIcon = 'ic:round-indeterminate-check-box'
+const itemClosedIcon = 'ic:round-add-box'
+
+const shouldRender = computed<boolean>(() => !!props.static)
 </script>
 
 <template>
   <ul>
     <li v-for="(item, index) in props.items" :key="index">
-      <slot :item="item" name="item">
+      <slot :item="item">
         <button :disabled="isDisabled(item)" @click="onClick(item)">
-          <template v-if="isRecursiveItem(item)">
-            <Icon v-if="item.open" class="size-4" name="ic:round-indeterminate-check-box" />
-            <Icon v-else class="size-4" name="ic:round-add-box" />
+          <template v-if="isItemWithChildren(item)">
+            <Icon v-if="item.open" class="size-4" :name="itemOpenIcon" />
+            <Icon v-else class="size-4" :name="itemClosedIcon" />
           </template>
           {{ item.label }}
         </button>
-        <template v-if="isRecursiveItem(item)">
+        <template v-if="isItemWithChildren(item)">
           <template v-if="item.selectable">
             <List
-              v-if="props.static || item.open"
+              v-if="shouldRender || item.open"
               :items="<T[]>item.children"
               :level="props.level + 1"
-              :style="{ paddingLeft: `${getIndent()}px` }"
+              :style="{ paddingLeft: `${getIndent() / 2}px` }"
             >
-              <template #item="{ item: option }">
-                <div class="flex flex-row">
-                  <div class="w-6">
-                    <Icon v-if="option.selected" class="mr-2 size-4" name="ic:baseline-check" />
-                  </div>
+              <template #default="{ item: option }">
+                <label :for="slugify(option.label)" class="flex flex-row gap-2">
+                  <input
+                    :id="slugify(option.label)"
+                    :type="radioOrCheckbox(item)"
+                    :disabled="isDisabled(option)"
+                    :checked="option.selected"
+                    @click="onSelect(item, option)"
+                  />
                   <button :disabled="isDisabled(option)" @click="onSelect(item, option)">
                     {{ option.label }}
                   </button>
-                </div>
+                </label>
               </template>
             </List>
           </template>
           <template v-else>
             <List
-              v-if="props.static || item.open"
+              v-if="shouldRender || item.open"
               :items="<T[]>item.children"
               :level="props.level + 1"
               :style="{ paddingLeft: `${getIndent()}px` }"

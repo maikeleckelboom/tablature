@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
   tag: 'ul',
   listClass: () => '',
   itemClass: () => '',
-  labelValue: (item: TItem) => item.name
+  labelValue: (item: TItem) => item.label
 })
 
 defineSlots<{

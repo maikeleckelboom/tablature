@@ -63,7 +63,7 @@ defineSlots<{
         <span
           class="flex w-full items-center justify-between gap-4 rounded-sm p-2.5 hover:bg-primary-container/10 active:bg-primary-container/20"
         >
-          {{ item.name }}
+          {{ item.label }}
           <template v-if="isRecursive">
             <Icon v-if="item.open" class="size-4" name="ic:baseline-unfold-more" />
             <Icon v-else class="size-4" name="ic:baseline-unfold-less" />

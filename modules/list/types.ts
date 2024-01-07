@@ -1,5 +1,5 @@
 type ListItemBase = {
-  name: string
+  label: string
 }
 
 type NavigationListItemLink = {

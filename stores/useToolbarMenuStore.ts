@@ -1,5 +1,18 @@
 import type { MenuItem } from '~/modules/menu/types'
 
+type ItemBase = {
+  label: string
+  leadingIcon?: string
+  trailingIcon?: string
+  trailingText?: string
+  shortcuts?: string[]
+  disabled?: boolean
+}
+
+type Option = ItemBase & {
+  selected?: boolean
+}
+
 const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
   const state = ref<MenuItem[]>([
     {
@@ -41,6 +54,7 @@ const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
             {
               label: 'Line Spacing',
               selectable: true,
+              minSelections: 1,
               children: [
                 { label: 'Single' },
                 { label: '1.15', selected: true },
@@ -65,8 +79,6 @@ const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
         {
           label: 'List Options',
           selectable: true,
-          allowNoSelection: true,
-          minSelections: 0,
           children: [
             {
               label: 'Numbered Lists',

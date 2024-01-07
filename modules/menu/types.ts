@@ -11,10 +11,7 @@ type BaseProps = {
   children?: any[]
   open?: boolean
   selectable?: boolean
-  allowNoSelection?: boolean
-  // replace allowNoSelection with minSelections (also change store)
-  // minSelections?: number
-
+  minSelections?: number
   multiple?: boolean
   selected?: boolean
 }
@@ -44,8 +41,8 @@ type MenuItem = BaseProps & (MaybeRecursiveItem | MaybeRecursiveItemWithOption)
 
 export type { MenuItem }
 
-function isRecursiveItem(item: MenuItem): item is MenuItem & { children: MenuItem[] } {
+function isItemWithChildren(item: MenuItem): item is MenuItem & { children: MenuItem[] } {
   return item.children !== undefined && item.children.length > 0
 }
 
-export { isRecursiveItem }
+export { isItemWithChildren }

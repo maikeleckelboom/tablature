@@ -3,31 +3,31 @@ import type { NavigationListItem } from '~/modules/list/types'
 const useNavigationStore = defineStore('navigation-store', () => {
   const list = ref<NavigationListItem[]>([
     {
-      name: 'Home',
+      label: 'Home',
       href: '/'
     },
     {
-      name: 'Modules',
+      label: 'Modules',
       open: true,
       children: [
         {
-          name: 'List',
+          label: 'List',
           href: '/modules/lists'
         },
         {
-          name: 'Menu',
+          label: 'Menu',
           href: '/modules/menu'
         },
         {
-          name: 'Theme',
+          label: 'Theme',
           open: false,
           children: [
             {
-              name: 'Colors',
+              label: 'Colors',
               href: '/modules/theme/colors'
             },
             {
-              name: 'Typography',
+              label: 'Typography',
               href: '/modules/theme/typography'
             }
           ]
@@ -35,37 +35,37 @@ const useNavigationStore = defineStore('navigation-store', () => {
       ]
     },
     {
-      name: 'Boards',
+      label: 'Boards',
       open: false,
       children: [
         {
-          name: 'Board 1',
+          label: 'Board 1',
           href: '/boards/board-1'
         },
         {
-          name: 'Board 2',
+          label: 'Board 2',
           href: '/boards/board-2'
         }
       ]
     },
     {
-      name: 'Services',
+      label: 'Services',
       open: false,
       children: [
         {
-          name: 'Web Development',
+          label: 'Web Development',
           href: '/services/web-development'
         },
         {
-          name: 'Graphic Design',
+          label: 'Graphic Design',
           href: '/services/graphic-design'
         },
         {
-          name: 'SEO',
+          label: 'SEO',
           href: '/services/seo'
         },
         {
-          name: 'Mobile App Development',
+          label: 'Mobile App Development',
           href: '/services/mobile-app-development'
         }
       ]

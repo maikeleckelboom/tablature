@@ -31,16 +31,9 @@ defineSlots<{
   children({ item, level }: { item: TItem; level: number; labelledBy?: string }): any
 }>()
 
-function slugify(str: string) {
-  return str
-    .toLowerCase()
-    .replace(/ /g, '-')
-    .replace(/[^\w-]+/g, '')
-}
-
 const triggerLabel = computed<string>(() => {
   if (isRecursive(item)) {
-    return `${slugify(item.name)}-${level}`
+    return `${slugify(item.label)}-${level}`
   }
 })
 
@@ -62,7 +55,7 @@ const baseItemClass = computed<string | string[]>(
       :to="item.href"
     >
       <slot :item="<TItem>item" :level="level">
-        {{ item.name }}
+        {{ item.label }}
       </slot>
     </NuxtLink>
     <template v-if="isRecursive(item)">
