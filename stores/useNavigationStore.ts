@@ -19,6 +19,10 @@ const useNavigationStore = defineStore('navigation-store', () => {
           href: '/modules/menu'
         },
         {
+          label: 'Floating',
+          href: '/floating'
+        },
+        {
           label: 'Theme',
           open: false,
           children: [

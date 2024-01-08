@@ -50,16 +50,16 @@ import VueJsonPretty from 'vue-json-pretty'
           :data="store.state"
           :show-line-number="false"
           :show-double-quotes="false"
-          :deep="2"
+          :deep="1"
           :virtual="false"
         />
       </div>
       <div class="scrollbar h-full overflow-y-auto">
-        <h2>TreeList</h2>
-        <ContextList :items="store.state" />
+        <h2>Output</h2>
+        <ContextList :items="store.state" :indent="false" />
       </div>
       <div class="scrollbar h-full overflow-y-auto">
-        <h2>Output</h2>
+        <h2>Selected</h2>
         <pre>{{ selectedItems }}</pre>
       </div>
     </div>
@@ -67,27 +67,65 @@ import VueJsonPretty from 'vue-json-pretty'
 </template>
 
 <style>
-.vjs-tree-node {
-  &:hover {
-    background: transparent;
-  }
-}
-
 .custom-list {
   inline-size: clamp(12em, 100%, 24em);
   accent-color: rgb(var(--primary-rgb));
 
+  li {
+    position: relative;
+  }
+
   .custom-list {
     width: 100%;
+    padding-inline-start: 6px !important;
+
+    &[role='group'] {
+      li {
+        padding-inline-start: 16px;
+
+        button,
+        label {
+          display: flex;
+          align-items: center;
+          padding-block: 2px;
+          padding-inline: 4px;
+          background: rgb(var(--surface-rgb));
+          column-gap: 4px;
+        }
+
+        &::before,
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+        }
+
+        &::before {
+          border-left: 1px solid rgb(var(--outline-variant-rgb));
+          pointer-events: none;
+        }
+
+        &::after {
+          background: rgb(var(--outline-variant-rgb));
+          height: 1px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 12px;
+        }
+
+        &[aria-expanded='true'] {
+          &::after {
+            top: 12px;
+          }
+        }
+      }
+    }
   }
 
   .custom-list-item {
     button,
     label {
-      display: flex;
-      align-items: center;
-      padding: 4px;
-      gap: 8px;
     }
   }
 }

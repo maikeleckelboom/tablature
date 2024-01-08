@@ -90,8 +90,8 @@ function getDisabled(item: T): boolean {
 }
 
 function getGroupName(item: T) {
-  item.groupName ??= slugify(item.label)
-  return item.groupName
+  item.name ??= slugify(item.label)
+  return item.name
 }
 
 const isAlwaysOpen = computed<boolean>(() => !!props.static)

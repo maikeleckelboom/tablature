@@ -74,6 +74,7 @@ export default defineNuxtConfig({
     'nuxt-viewport',
     'nuxt-typed-router',
     'nuxt-lodash',
+    'floating-vue/nuxt',
     '~/modules/theme/module.ts',
     '~/modules/dialog/module.ts',
     '~/modules/breadcrumbs/module.ts',

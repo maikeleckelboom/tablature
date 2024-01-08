@@ -1,5 +1,6 @@
 type BaseProps = {
   label: string
+  name?: string
   leadingIcon?: string
   trailingIcon?: string
   trailingText?: string
@@ -13,7 +14,6 @@ type BaseProps = {
   open?: boolean
   selectable?: boolean
   minSelections?: number
-  groupName?: string
   multiple?: boolean
   selected?: boolean
 }

@@ -3,7 +3,7 @@
 }
 
 .vjs-tree-brackets:hover {
-    color: #1890ff
+    color: rgb(var(--primary-rgb));
 }
 
 .vjs-check-controller {
@@ -12,8 +12,8 @@
 }
 
 .vjs-check-controller.is-checked .vjs-check-controller-inner {
-    background-color: #1890ff;
-    border-color: #0076e4
+    background-color: rgb(var(--primary-container-rgb));
+    border-color: rgb(var(--primary-rgb))
 }
 
 .vjs-check-controller.is-checked .vjs-check-controller-inner.is-checkbox:after {
@@ -90,7 +90,7 @@
 }
 
 .vjs-carets:hover {
-    color: #1890ff
+    color: rgb(var(--primary-rgb));
 }
 
 .vjs-carets-close {
@@ -111,9 +111,6 @@
     padding-left: 30px
 }
 
-.vjs-tree-node.is-highlight, .vjs-tree-node:hover {
-    background-color: #e6f7ff
-}
 
 .vjs-tree-node .vjs-indent {
     display: flex;
@@ -149,18 +146,15 @@
 }
 
 .vjs-value-null, .vjs-value-undefined {
-    color: #d55fde;
-    //color: rgb(var(--tertiary-rgb));
+    color: rgb(var(--tertiary-rgb));
 }
 
 .vjs-value-boolean, .vjs-value-number {
-    color: #1d8ce0;
     color: rgb(var(--primary-rgb));
 }
 
 .vjs-value-string {
     color: #27d374;
-    //color: rgb(var(--primary-rgb));
 }
 
 .vjs-tree {
