@@ -123,20 +123,27 @@ function getListItemClass(item: T): VueCSSRule {
 </script>
 
 <template>
-  <ul :class="getListClass()" :data-level="level">
+  <ul
+    :class="getListClass()"
+    :data-level="level"
+    aria-labelledby=""
+    :role="level === 1 ? 'tree' : 'group'"
+  >
     <li
       v-for="item in items"
       :key="getKey(item)"
       :class="getListItemClass(item)"
+      :aria-selected="item.selected"
+      :role="isItemWithChildren(item) ? 'treeitem' : undefined"
       :aria-expanded="isItemWithChildren(item) ? item.open : undefined"
     >
       <slot :item="item">
+        <!-- ContextListButton -->
         <button :disabled="getDisabled(item)" @click="onClick(item)" class="size-full text-start">
           <template v-if="isItemWithChildren(item)">
             <Icon v-if="item.open" :class="itemToggleIconClass" :name="itemOpenIconName" />
             <Icon v-else :class="itemToggleIconClass" :name="itemClosedIconName" />
           </template>
-          <!-- duplicate -->
           <template v-if="item.leadingIcon">
             <Icon :class="itemToggleIconClass" :name="item.leadingIcon" />
           </template>
@@ -148,6 +155,7 @@ function getListItemClass(item: T): VueCSSRule {
             <span>{{ item.trailingText }}</span>
           </template>
           <template v-if="item.shortcuts?.length">
+            <!-- ContextListShortcuts -->
             <span class="text-sm">
               <span v-for="(shortcut, index) in item.shortcuts" :key="index">
                 <kbd>{{ shortcut }}</kbd>
@@ -155,8 +163,8 @@ function getListItemClass(item: T): VueCSSRule {
               </span>
             </span>
           </template>
-          <!-- end duplicate -->
         </button>
+
         <template v-if="isItemWithChildren(item)">
           <template v-if="isSelectableItem(item)">
             <ContextList
