@@ -16,10 +16,6 @@ const props = withDefaults(
   }
 )
 
-function isDisabled(item: T): boolean {
-  return item.disabled || false
-}
-
 function onClick(item: T) {
   if (item?.onClick !== undefined) {
     item.onClick()
@@ -55,7 +51,8 @@ function handleMultipleSelection(item: T, option: T) {
 
 function handleSingleSelection(item: T, option: T) {
   const { children, minSelections } = item
-  if (Number(minSelections) && minSelections > 0) {
+  // Check if minSelections is not undefined and is greater than 0
+  if (minSelections !== undefined && minSelections > 0) {
     // If true, select only the clicked option
     children.forEach((opt) => {
       opt.selected = opt === option
@@ -82,7 +79,15 @@ function getIndent() {
   return props.indent * props.level
 }
 
-function getInputName(item: T) {
+function getKey(item: T) {
+  return slugify(item.label)
+}
+
+function getDisabled(item: T): boolean {
+  return item.disabled || false
+}
+
+function getGroupName(item: T) {
   item.groupName ??= slugify(item.label)
   return item.groupName
 }
@@ -96,24 +101,37 @@ const indentStyles = computed<Record<string, string>>(() => ({
 const itemOpenIconName = 'ic:round-indeterminate-check-box'
 const itemClosedIconName = 'ic:round-add-box'
 const itemToggleIconClass = 'size-4'
-const itemSelectableLabelClass = 'flex flex-row gap-2'
+const itemSelectableLabelClass =
+  'flex flex-row items-center gap-x-2 size-full text-start cursor-pointer'
 
 defineSlots<{
   default({ item }: { item: T }): any
 }>()
 
-function getKey(item: T) {
-  return slugify(item.label)
+type VueCSSRule =
+  | string
+  | Record<string, string | number | boolean>
+  | Array<string | Record<string, string | number | boolean>>
+
+function getListClass(): VueCSSRule {
+  return 'custom-list'
 }
 
-const [DefineContentTemplate, ReuseContentTemplate] = createReusableTemplate<{ item: MenuItem }>()
+function getListItemClass(item: T): VueCSSRule {
+  return 'custom-list-item'
+}
 </script>
 
 <template>
-  <ul>
-    <li v-for="item in items" :key="getKey(item)">
+  <ul :class="getListClass()" :data-level="level">
+    <li
+      v-for="item in items"
+      :key="getKey(item)"
+      :class="getListItemClass(item)"
+      :aria-expanded="isItemWithChildren(item) ? item.open : undefined"
+    >
       <slot :item="item">
-        <button :disabled="isDisabled(item)" @click="onClick(item)">
+        <button :disabled="getDisabled(item)" @click="onClick(item)" class="size-full text-start">
           <template v-if="isItemWithChildren(item)">
             <Icon v-if="item.open" :class="itemToggleIconClass" :name="itemOpenIconName" />
             <Icon v-else :class="itemToggleIconClass" :name="itemClosedIconName" />
@@ -122,7 +140,7 @@ const [DefineContentTemplate, ReuseContentTemplate] = createReusableTemplate<{ i
           <template v-if="item.leadingIcon">
             <Icon :class="itemToggleIconClass" :name="item.leadingIcon" />
           </template>
-          {{ item.label }}
+          <span class="label-text">{{ item.label }}</span>
           <template v-if="item.trailingIcon">
             <Icon :class="itemToggleIconClass" :name="item.trailingIcon" />
           </template>
@@ -141,10 +159,11 @@ const [DefineContentTemplate, ReuseContentTemplate] = createReusableTemplate<{ i
         </button>
         <template v-if="isItemWithChildren(item)">
           <template v-if="isSelectableItem(item)">
-            <List
+            <ContextList
               v-if="isAlwaysOpen || item.open"
               v-slot="{ item: option }"
-              :items="item.children"
+              :items="<T[]>item.children"
+              :indent="indent"
               :level="level + 1"
               :style="indentStyles"
             >
@@ -152,8 +171,8 @@ const [DefineContentTemplate, ReuseContentTemplate] = createReusableTemplate<{ i
                 <input
                   :id="getKey(option)"
                   :checked="option.selected"
-                  :disabled="isDisabled(option)"
-                  :name="getInputName(item)"
+                  :disabled="getDisabled(option)"
+                  :name="getGroupName(item)"
                   :type="getRadioOrCheckbox(item)"
                   @click="onSelect(item, option)"
                 />
@@ -161,15 +180,12 @@ const [DefineContentTemplate, ReuseContentTemplate] = createReusableTemplate<{ i
                 <template v-if="option.leadingIcon">
                   <Icon :class="itemToggleIconClass" :name="option.leadingIcon" />
                 </template>
-                <button :disabled="isDisabled(option)" @click="onSelect(item, option)">
-                  {{ option.label }}
-                </button>
-                {{ option.label }}
+                <span class="label-text">{{ option.label }}</span>
                 <template v-if="option.trailingIcon">
                   <Icon :class="itemToggleIconClass" :name="option.trailingIcon" />
                 </template>
                 <template v-if="option.trailingText">
-                  <span>{{ option.trailingText }}</span>
+                  {{ option.trailingText }}
                 </template>
                 <template v-if="option.shortcuts?.length">
                   <span class="text-sm">
@@ -181,13 +197,14 @@ const [DefineContentTemplate, ReuseContentTemplate] = createReusableTemplate<{ i
                 </template>
                 <!-- end duplicate -->
               </label>
-            </List>
+            </ContextList>
           </template>
           <template v-else>
-            <List
+            <ContextList
               v-if="isAlwaysOpen || item.open"
-              :items="item.children"
+              :items="<T[]>item.children"
               :level="level + 1"
+              :indent="indent"
               :style="indentStyles"
             />
           </template>

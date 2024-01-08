@@ -1,5 +1,6 @@
 type ListItemBase = {
   label: string
+  [key: string]: any
 }
 
 type NavigationListItemLink = {
@@ -14,7 +15,9 @@ type NavigationListItemButton = {
   open: boolean
 }
 
-type MaybeRecursiveListItem = ListItemBase & (NavigationListItemLink | NavigationListItemButton)
+type MaybeRecursiveListItem =
+  | ListItemBase
+  | (ListItemBase & (NavigationListItemLink | NavigationListItemButton))
 
 type NavigationListItem = MaybeRecursiveListItem
 

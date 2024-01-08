@@ -38,6 +38,7 @@ const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
   const state = ref<MenuItem[]>([
     {
       label: 'Format',
+      // leadingIcon: 'ic:format-color-text',
       children: [
         {
           label: 'Text Styles',
@@ -46,29 +47,28 @@ const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
           children: [
             {
               label: 'Bold',
-              leadingIcon: 'ic:outline-format-bold',
-              shortcuts: ['Ctrl', 'B'],
+              // leadingIcon: 'ic:outline-format-bold',
+              // shortcuts: ['Ctrl', 'B'],
               selected: true
             },
             {
-              label: 'Italic',
-              leadingIcon: 'ic:outline-format-italic',
-              shortcuts: ['Ctrl', 'I'],
-              selected: true
+              label: 'Italic'
+              // leadingIcon: 'ic:outline-format-italic',
+              // shortcuts: ['Ctrl', 'I'],
             },
             {
               label: 'Underline',
-              leadingIcon: 'ic:outline-format-underlined',
-              shortcuts: ['Ctrl', 'U'],
+              // leadingIcon: 'ic:outline-format-underlined',
+              // shortcuts: ['Ctrl', 'U'],
               selected: true
             },
             {
-              label: 'Strikethrough',
-              leadingIcon: 'ic:outline-strikethrough-s'
+              label: 'Strikethrough'
+              // leadingIcon: 'ic:outline-strikethrough-s'
             },
             {
-              label: 'Superscript',
-              leadingIcon: 'ic:outline-superscript'
+              label: 'Superscript'
+              // leadingIcon: 'ic:outline-superscript'
             }
           ]
         },

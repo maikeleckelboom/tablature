@@ -110,7 +110,9 @@ defineSlots<{
       min-block-size: 100%;
       min-height: 0;
 
-      > button + div {
+      /* > button + div */
+
+      > * + div {
         overflow: hidden;
         min-inline-size: 100%;
       }

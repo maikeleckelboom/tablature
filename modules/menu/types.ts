@@ -3,12 +3,13 @@ type BaseProps = {
   leadingIcon?: string
   trailingIcon?: string
   trailingText?: string
-  shortcuts?: string
+  shortcuts?: string[]
   disabled?: boolean
-  divider?: boolean
   onClick?: () => void
-  onSelect?: () => void
-  children?: any[]
+
+  divider?: boolean
+
+  children?: BaseProps[]
   open?: boolean
   selectable?: boolean
   minSelections?: number
@@ -46,12 +47,8 @@ function isItemWithChildren(item: MenuItem): item is MenuItem & { children: Menu
   return item.children !== undefined && item.children.length > 0
 }
 
-function isItemWithSelectableChildren(item: MenuItem): item is MenuItem & { children: MenuItem[] } {
-  return isItemWithChildren(item) && item.selectable === true
-}
-
 function isSelectableItem(item: MenuItem): item is MenuItem & { selectable: boolean } {
-  return item.selectable !== undefined && item.selectable === true
+  return item.selectable === true
 }
 
-export { isItemWithChildren, isItemWithSelectableChildren, isSelectableItem }
+export { isItemWithChildren, isSelectableItem }
