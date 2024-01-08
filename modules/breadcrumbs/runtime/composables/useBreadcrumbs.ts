@@ -18,9 +18,9 @@ export const useBreadcrumbs = (options?: BreadCrumbOptions) => {
   const breadcrumbs = computed<Breadcrumb[]>(() => {
     const crumbs = removeRedundantSlashes(currentRoute.value.path).split('/')
     return [
-      { path: '', name: 'Home' },
+      { path: '/', name: 'Home' },
       ...crumbs.map((crumb, index) => ({
-        path: crumbs.slice(0, index + 1).join('/'),
+        path: `/${crumbs.slice(0, index + 1).join('/')}`,
         name: crumb
       }))
     ]

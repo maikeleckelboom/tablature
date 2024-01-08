@@ -15,6 +15,12 @@ const props = withDefaults(defineProps<Props>(), {
   dividerClass: 'h-4 w-4',
   dividerIcon: 'tabler:slash'
 })
+
+const router = useRouter()
+
+function routeExists(route: string): boolean {
+  return router.options.routes.some((r) => r.path === route)
+}
 </script>
 
 <template>
@@ -23,22 +29,19 @@ const props = withDefaults(defineProps<Props>(), {
     data-component="Breadcrumbs"
   >
     <ul class="flex w-full flex-row flex-wrap items-center gap-2">
-      <li
-        v-for="(crumb, _i) in breadcrumbs"
-        :key="crumb.name"
-        class="flex flex-row items-center gap-2"
-      >
-        <!-- divider -->
+      <li v-for="crumb in breadcrumbs" :key="crumb.name" class="flex flex-row items-center gap-2">
+        <!-- Divider -->
         <Icon v-if="isNotFirstCrumb(crumb)" :class="dividerClass" :name="dividerIcon" />
-        <!-- previous -->
-        <NuxtLink
-          v-if="isNotCurrentCrumb(crumb)"
-          :class="previousClass"
-          :to="`/${crumb.path}` as any"
-        >
-          {{ crumb.name }}
-        </NuxtLink>
-        <!-- current active -->
+        <!-- Previous -->
+        <template v-if="isNotCurrentCrumb(crumb)">
+          <NuxtLink v-if="routeExists(crumb.path)" :class="previousClass" :to="crumb.path">
+            {{ crumb.name }}
+          </NuxtLink>
+          <span v-else class="capitalize text-on-surface-variant/80">
+            {{ crumb.name }}
+          </span>
+        </template>
+        <!-- Currently Active -->
         <span v-else :class="currentClass">
           {{ crumb.name }}
         </span>
