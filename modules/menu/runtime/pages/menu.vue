@@ -36,18 +36,30 @@ const selectedItems = computed(() => {
       {} as Record<string, string[]>
     )
 })
+
+import VueJsonPretty from 'vue-json-pretty'
 </script>
 
 <template>
   <ColumnLayout>
-    <div class="relative grid w-full grid-cols-[auto,auto,auto]">
+    <div class="relative grid w-full grid-cols-1 gap-y-8 p-4 md:grid-cols-[1fr,1fr,1fr] md:p-0">
       <div class="scrollbar h-full overflow-y-auto">
+        <h2>Input</h2>
+        <VueJsonPretty
+          :highlight-selected-node="false"
+          :data="store.state"
+          :show-line-number="false"
+          :show-double-quotes="false"
+          :deep="2"
+          :virtual="false"
+        />
+      </div>
+      <div class="scrollbar h-full overflow-y-auto">
+        <h2>TreeList</h2>
         <ContextList :items="store.state" />
       </div>
       <div class="scrollbar h-full overflow-y-auto">
-        <pre>{{ store.state }}</pre>
-      </div>
-      <div class="scrollbar h-full overflow-y-auto">
+        <h2>Output</h2>
         <pre>{{ selectedItems }}</pre>
       </div>
     </div>
@@ -55,6 +67,12 @@ const selectedItems = computed(() => {
 </template>
 
 <style>
+.vjs-tree-node {
+  &:hover {
+    background: transparent;
+  }
+}
+
 .custom-list {
   inline-size: clamp(12em, 100%, 24em);
   accent-color: rgb(var(--primary-rgb));

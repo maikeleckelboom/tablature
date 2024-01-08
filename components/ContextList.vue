@@ -1,6 +1,8 @@
 <script generic="T extends MenuItem" lang="ts" setup>
 import { isItemWithChildren, isSelectableItem, type MenuItem } from '~/modules/menu/types'
 
+// rename to Tree.vue
+
 const props = withDefaults(
   defineProps<{
     items: T[]
@@ -123,18 +125,13 @@ function getListItemClass(item: T): VueCSSRule {
 </script>
 
 <template>
-  <ul
-    :class="getListClass()"
-    :data-level="level"
-    aria-labelledby=""
-    :role="level === 1 ? 'tree' : 'group'"
-  >
+  <ul :class="getListClass()" :data-level="level" :role="level === 1 ? 'tree' : 'group'">
     <li
       v-for="item in items"
       :key="getKey(item)"
       :class="getListItemClass(item)"
       :aria-selected="item.selected"
-      :role="isItemWithChildren(item) ? 'treeitem' : undefined"
+      role="treeitem"
       :aria-expanded="isItemWithChildren(item) ? item.open : undefined"
     >
       <slot :item="item">
@@ -207,6 +204,8 @@ function getListItemClass(item: T): VueCSSRule {
               </label>
             </ContextList>
           </template>
+
+          <!-- End node -->
           <template v-else>
             <ContextList
               v-if="isAlwaysOpen || item.open"

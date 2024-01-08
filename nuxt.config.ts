@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   experimental: {
     viewTransition: true
   },
+  css: ['~/assets/css/vue-json-pretty.css'],
   vite: {
     vue: {
       script: {
@@ -61,7 +62,8 @@ export default defineNuxtConfig({
       '~/stores/useKanbanStore',
       '~/stores/useNavigationStore',
       '~/stores/useListStore'
-    ]
+    ],
+    presets: []
   },
   modules: [
     '@nuxtjs/tailwindcss',

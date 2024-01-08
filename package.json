@@ -85,6 +85,7 @@
     "@tiptap/extension-code-block": "^2.1.13",
     "@tiptap/extension-italic": "^2.1.13",
     "@xstate/vue": "^3.0.2",
-    "cva": "1.0.0-beta.1"
+    "cva": "1.0.0-beta.1",
+    "vue-json-pretty": "^2.3.0"
   }
 }

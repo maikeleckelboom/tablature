@@ -3,7 +3,37 @@
 @tailwind utilities;
 
 @layer base {
+    h1 {
+        @apply text-headline-lg;
+    }
 
+    h2 {
+        @apply text-headline-md
+    }
+
+    h3 {
+        @apply text-headline-sm
+    }
+
+    h4 {
+        @apply text-title-lg
+    }
+
+    h5 {
+        @apply text-title-md
+    }
+
+    h6 {
+        @apply text-title-sm
+    }
+
+    p {
+        @apply text-body-md
+    }
+
+    h1, h2, h3, h4, h5, h6, p {
+        @apply mb-2;
+    }
 }
 
 @layer utilities {
