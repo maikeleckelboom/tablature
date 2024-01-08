@@ -43,12 +43,12 @@ type MenuItem = BaseProps & (MaybeRecursiveItem | MaybeRecursiveItemWithOption)
 
 export type { MenuItem }
 
-function isItemWithChildren(item: MenuItem): item is MenuItem & { children: MenuItem[] } {
+function hasChildren(item: MenuItem): item is MenuItem & { children: MenuItem[] } {
   return item.children !== undefined && item.children.length > 0
 }
 
-function isSelectableItem(item: MenuItem): item is MenuItem & { selectable: boolean } {
+function isSelectable(item: MenuItem): item is MenuItem & { selectable: boolean } {
   return item.selectable === true
 }
 
-export { isItemWithChildren, isSelectableItem }
+export { isSelectable, hasChildren }

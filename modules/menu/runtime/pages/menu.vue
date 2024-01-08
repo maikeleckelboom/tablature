@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { MenuItem } from '~/modules/menu/types'
-import ContextList from '~/components/TreeList.vue'
+import VueJsonPretty from 'vue-json-pretty'
 
 const store = useToolbarMenuStore()
 
@@ -17,27 +17,18 @@ const getRecursiveSelectedItems = (items: MenuItem[]): MenuItem[] => {
 }
 
 const selectedItems = computed(() => {
-  return getRecursiveSelectedItems(store.state)
-    .map((item) => {
-      const parent = findRecursive(store.state, (i) => i.children?.includes(item))
-      return {
-        label: parent.label,
-        value: item.label
-      }
-    })
-    .reduce(
-      (acc, item) => {
-        if (!acc[item.label]) {
-          acc[item.label] = []
-        }
-        acc[item.label].push(item.value)
-        return acc
-      },
-      {} as Record<string, string[]>
-    )
+  return getRecursiveSelectedItems(store.state).map((item) => {
+    const parent = findRecursive(store.state, (i) => i.children?.includes(item))
+    return {
+      key: parent.label,
+      value: item.label
+    }
+  })
 })
 
-import VueJsonPretty from 'vue-json-pretty'
+function getHeaderClass(classes: string, type: 'button' | 'label') {
+  return classes + ' hover:bg-surface-level-2 active:bg-surface-level-3'
+}
 </script>
 
 <template>
@@ -58,13 +49,14 @@ import VueJsonPretty from 'vue-json-pretty'
       </div>
       <div class="scrollbar h-full overflow-y-auto text-label-lg">
         <h2>Output</h2>
-        <!-- li[aria-expanded] > * + div -->
-        <TreeList :items="store.state" :indent="false" />
+        <TreeList
+          :items="store.state"
+          :indent="12"
+          :get-header-class="getHeaderClass"
+          :excludes="['shortcuts']"
+        />
       </div>
-      <div class="scrollbar h-full overflow-y-auto">
-        <h2>Selected</h2>
-        <pre>{{ selectedItems }}</pre>
-      </div>
+      <div class="scrollbar h-full overflow-y-auto"></div>
     </div>
   </ColumnLayout>
 </template>

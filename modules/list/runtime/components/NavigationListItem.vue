@@ -71,13 +71,7 @@ const baseItemClass = computed<string | string[]>(
       >
         <slot :item="<TItem>item" :level="level"></slot>
       </button>
+      <slot :item="<TItem>item" :labelledBy="triggerLabel" :level="level" name="children" />
     </template>
-    <slot
-      v-if="isRecursive(item)"
-      :item="<TItem>item"
-      :labelledBy="triggerLabel"
-      :level="level"
-      name="children"
-    />
   </li>
 </template>

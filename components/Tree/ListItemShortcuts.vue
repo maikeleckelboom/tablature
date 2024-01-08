@@ -5,7 +5,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <span class="text-sm">
+  <span class="text-xs">
     <span v-for="(shortcut, index) in shortcuts" :key="index">
       <kbd>{{ shortcut }}</kbd>
       <template v-if="index < shortcuts.length - 1">+</template>

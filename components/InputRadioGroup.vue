@@ -22,7 +22,7 @@ function optToValue(opt: TOption) {
 }
 
 function toKey(opt: TOption): string {
-  return JSON.stringify(optToValue(opt))
+  return slugify(optToValue(opt).toString())
 }
 
 const classes = {

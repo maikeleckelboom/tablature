@@ -50,7 +50,7 @@ defineSlots<{
       '--transition-delay': `${transitionDelay}ms`,
       '--transition-duration': `${transitionDuration}ms`
     }"
-    class="accordion-list"
+    class="collapsable-list"
   >
     <slot v-bind="{ item, level, isRecursive }">
       <NavigationListItem
@@ -88,7 +88,7 @@ defineSlots<{
 </template>
 
 <style scoped>
-.accordion-list {
+.collapsable-list {
   --transition-delay: var(--transition-delay, 100ms);
   --transition-duration: var(--transition-duration, 400ms);
 
@@ -110,9 +110,7 @@ defineSlots<{
       min-block-size: 100%;
       min-height: 0;
 
-      /* > button + div */
-
-      > * + div {
+      > button + div {
         overflow: hidden;
         min-inline-size: 100%;
       }

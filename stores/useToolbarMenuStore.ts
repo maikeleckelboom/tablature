@@ -1,39 +1,5 @@
 import type { MenuItem } from '~/modules/menu/types'
 
-// type ItemBase = {
-//   label: string
-//   leadingIcon?: string
-//   trailingIcon?: string
-//   trailingText?: string
-//   shortcuts?: string[]
-//   disabled?: boolean
-// }
-//
-// type RecursiveItem = ItemBase & {
-//   open?: boolean
-//   children?: RecursiveItem[]
-// }
-//
-// type CustomRecursiveItem<T, K> = T & {
-//   label: string
-//   open?: boolean
-//   children?: (RecursiveItem & K)[]
-// }
-// type SelectableParent = { selectable: true; multiple?: boolean; minSelections?: number }
-//
-// type SelectableChild = { selected?: boolean }
-//
-// type MaybeSelectableRecursiveItem<T> = T extends SelectableParent
-//   ? CustomRecursiveItem<T, SelectableChild>
-//   : RecursiveItem
-//
-// type SelectableRecursiveItem = MaybeSelectableRecursiveItem<RecursiveItem & { selectable: true }>
-// type NonSelectableRecursiveItem = MaybeSelectableRecursiveItem<
-//   RecursiveItem & { selectable: false }
-// >
-//
-// type MaybeSelectableItem = SelectableRecursiveItem | NonSelectableRecursiveItem
-
 const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
   const state = ref<MenuItem[]>([
     {
@@ -47,7 +13,7 @@ const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
             {
               label: 'Bold',
               leadingIcon: 'ic:outline-format-bold',
-              shortcuts: ['Ctrl', 'B'],
+              shortcuts: ['Ctrl', 'B'], // ['⌘', 'B']
               selected: true
             },
             {
