@@ -1,17 +1,38 @@
 import type { MenuItem } from '~/modules/menu/types'
 
-type ItemBase = {
-  label: string
-  leadingIcon?: string
-  trailingIcon?: string
-  trailingText?: string
-  shortcuts?: string[]
-  disabled?: boolean
-}
-
-type Option = ItemBase & {
-  selected?: boolean
-}
+// type ItemBase = {
+//   label: string
+//   leadingIcon?: string
+//   trailingIcon?: string
+//   trailingText?: string
+//   shortcuts?: string[]
+//   disabled?: boolean
+// }
+//
+// type RecursiveItem = ItemBase & {
+//   open?: boolean
+//   children?: RecursiveItem[]
+// }
+//
+// type CustomRecursiveItem<T, K> = T & {
+//   label: string
+//   open?: boolean
+//   children?: (RecursiveItem & K)[]
+// }
+// type SelectableParent = { selectable: true; multiple?: boolean; minSelections?: number }
+//
+// type SelectableChild = { selected?: boolean }
+//
+// type MaybeSelectableRecursiveItem<T> = T extends SelectableParent
+//   ? CustomRecursiveItem<T, SelectableChild>
+//   : RecursiveItem
+//
+// type SelectableRecursiveItem = MaybeSelectableRecursiveItem<RecursiveItem & { selectable: true }>
+// type NonSelectableRecursiveItem = MaybeSelectableRecursiveItem<
+//   RecursiveItem & { selectable: false }
+// >
+//
+// type MaybeSelectableItem = SelectableRecursiveItem | NonSelectableRecursiveItem
 
 const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
   const state = ref<MenuItem[]>([
@@ -26,16 +47,19 @@ const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
             {
               label: 'Bold',
               leadingIcon: 'ic:outline-format-bold',
+              shortcuts: ['Ctrl', 'B'],
               selected: true
             },
             {
               label: 'Italic',
               leadingIcon: 'ic:outline-format-italic',
+              shortcuts: ['Ctrl', 'I'],
               selected: true
             },
             {
               label: 'Underline',
               leadingIcon: 'ic:outline-format-underlined',
+              shortcuts: ['Ctrl', 'U'],
               selected: true
             },
             {
@@ -99,8 +123,8 @@ const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
     {
       label: 'Tools',
       children: [
-        { label: 'Spelling & Grammar', leadingIcon: 'ic:spellcheck' },
-        { label: 'Word Count', leadingIcon: 'ic:outline-label-increase' }
+        { label: 'Spelling & Grammar', leadingIcon: 'ic:baseline-spellcheck' },
+        { label: 'Word Count', leadingIcon: 'ic:baseline-123' }
       ]
     },
     {

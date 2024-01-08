@@ -1,5 +1,5 @@
 <script generic="T extends MenuItem" lang="ts" setup>
-import { isItemWithChildren, type MenuItem } from '~/modules/menu/types'
+import { isItemWithChildren, isSelectableItem, type MenuItem } from '~/modules/menu/types'
 
 const props = withDefaults(
   defineProps<{
@@ -82,54 +82,111 @@ function getIndent() {
   return props.indent * props.level
 }
 
+function getInputName(item: T) {
+  item.groupName ??= slugify(item.label)
+  return item.groupName
+}
+
+const isAlwaysOpen = computed<boolean>(() => !!props.static)
+
 const indentStyles = computed<Record<string, string>>(() => ({
   paddingLeft: `${getIndent()}px`
 }))
 
-const itemOpenIcon = 'ic:round-indeterminate-check-box'
-const itemClosedIcon = 'ic:round-add-box'
+const itemOpenIconName = 'ic:round-indeterminate-check-box'
+const itemClosedIconName = 'ic:round-add-box'
+const itemToggleIconClass = 'size-4'
+const itemSelectableLabelClass = 'flex flex-row gap-2'
 
-const alwaysOpen = computed<boolean>(() => !!props.static)
+defineSlots<{
+  default({ item }: { item: T }): any
+}>()
+
+function getKey(item: T) {
+  return slugify(item.label)
+}
+
+const [DefineContentTemplate, ReuseContentTemplate] = createReusableTemplate<{ item: MenuItem }>()
 </script>
 
 <template>
   <ul>
-    <li v-for="(item, index) in items" :key="index">
+    <li v-for="item in items" :key="getKey(item)">
       <slot :item="item">
         <button :disabled="isDisabled(item)" @click="onClick(item)">
           <template v-if="isItemWithChildren(item)">
-            <Icon v-if="item.open" :name="itemOpenIcon" class="size-4" />
-            <Icon v-else :name="itemClosedIcon" class="size-4" />
+            <Icon v-if="item.open" :class="itemToggleIconClass" :name="itemOpenIconName" />
+            <Icon v-else :class="itemToggleIconClass" :name="itemClosedIconName" />
+          </template>
+          <!-- duplicate -->
+          <template v-if="item.leadingIcon">
+            <Icon :class="itemToggleIconClass" :name="item.leadingIcon" />
           </template>
           {{ item.label }}
+          <template v-if="item.trailingIcon">
+            <Icon :class="itemToggleIconClass" :name="item.trailingIcon" />
+          </template>
+          <template v-if="item.trailingText">
+            <span>{{ item.trailingText }}</span>
+          </template>
+          <template v-if="item.shortcuts?.length">
+            <span class="text-sm">
+              <span v-for="(shortcut, index) in item.shortcuts" :key="index">
+                <kbd>{{ shortcut }}</kbd>
+                <template v-if="index < item.shortcuts.length - 1">+</template>
+              </span>
+            </span>
+          </template>
+          <!-- end duplicate -->
         </button>
         <template v-if="isItemWithChildren(item)">
-          <template v-if="item.selectable">
+          <template v-if="isSelectableItem(item)">
             <List
-              v-if="alwaysOpen || item.open"
+              v-if="isAlwaysOpen || item.open"
               v-slot="{ item: option }"
-              :items="<T[]>item.children"
+              :items="item.children"
               :level="level + 1"
               :style="indentStyles"
             >
-              <label :for="slugify(option.label)" class="flex flex-row gap-2">
+              <label :class="itemSelectableLabelClass" :for="getKey(option)">
                 <input
-                  :id="slugify(option.label)"
+                  :id="getKey(option)"
                   :checked="option.selected"
                   :disabled="isDisabled(option)"
+                  :name="getInputName(item)"
                   :type="getRadioOrCheckbox(item)"
                   @click="onSelect(item, option)"
                 />
+                <!-- duplicate -->
+                <template v-if="option.leadingIcon">
+                  <Icon :class="itemToggleIconClass" :name="option.leadingIcon" />
+                </template>
                 <button :disabled="isDisabled(option)" @click="onSelect(item, option)">
                   {{ option.label }}
                 </button>
+                {{ option.label }}
+                <template v-if="option.trailingIcon">
+                  <Icon :class="itemToggleIconClass" :name="option.trailingIcon" />
+                </template>
+                <template v-if="option.trailingText">
+                  <span>{{ option.trailingText }}</span>
+                </template>
+                <template v-if="option.shortcuts?.length">
+                  <span class="text-sm">
+                    <span v-for="(shortcut, index) in option.shortcuts" :key="index">
+                      <kbd>{{ shortcut }}</kbd>
+                      <template v-if="index < option.shortcuts.length - 1">+</template>
+                    </span>
+                  </span>
+                </template>
+                <!-- end duplicate -->
               </label>
             </List>
           </template>
           <template v-else>
             <List
-              v-if="alwaysOpen || item.open"
-              :items="<T[]>item.children"
+              v-if="isAlwaysOpen || item.open"
+              :items="item.children"
               :level="level + 1"
               :style="indentStyles"
             />

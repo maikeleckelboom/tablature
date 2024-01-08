@@ -12,6 +12,7 @@ type BaseProps = {
   open?: boolean
   selectable?: boolean
   minSelections?: number
+  groupName?: string
   multiple?: boolean
   selected?: boolean
 }
@@ -49,11 +50,8 @@ function isItemWithSelectableChildren(item: MenuItem): item is MenuItem & { chil
   return isItemWithChildren(item) && item.selectable === true
 }
 
-function isSelectableItem(
-  item: MenuItem,
-  option: MenuItem
-): item is MenuItem & { selected: boolean } {
-  return isItemWithSelectableChildren(item) && !option.disabled
+function isSelectableItem(item: MenuItem): item is MenuItem & { selectable: boolean } {
+  return item.selectable !== undefined && item.selectable === true
 }
 
 export { isItemWithChildren, isItemWithSelectableChildren, isSelectableItem }
