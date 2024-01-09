@@ -210,11 +210,10 @@ const transitionStyles = computed<Record<string, string>>(() => ({
   width: 100%;
 
   li {
-    transform: translateY(0);
-
     transition-property: grid-template-rows;
     transition-duration: var(--transition-duration);
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    /* transform: translateY(0); */
 
     display: grid;
     grid-template-rows: auto 0fr;

@@ -83,7 +83,6 @@ export default defineNuxtConfig({
     '~/modules/theme/module.ts',
     '~/modules/dialog/module.ts',
     '~/modules/breadcrumbs/module.ts',
-    '~/modules/menu/module.ts',
     '~/modules/list/module.ts',
     '~/modules/text-editor/module.ts'
   ]

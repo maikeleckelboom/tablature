@@ -1,7 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>typography</div>
+  <ColumnLayout>
+    <div>typography</div>
+  </ColumnLayout>
 </template>
 
 <style scoped></style>

@@ -4,8 +4,8 @@ interface ModuleOptions {}
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'menu',
-    configKey: 'menu',
+    name: '',
+    configKey: '',
     dependencies: {}
   },
   defaults: {},
@@ -13,11 +13,11 @@ export default defineNuxtModule<ModuleOptions>({
   setup: async (options: ModuleOptions, nuxt) => {
     const { resolve } = createResolver(import.meta.url)
     extendPages((pages) => {
-      pages.push({
-        name: 'menu',
-        path: '/modules/menu',
-        file: resolve('./runtime/pages/menu.vue')
-      })
+      // pages.push({
+      //   name: '',
+      //   path: '/modules/',
+      //   file: resolve('./runtime/pages/Component.vue')
+      // })
     })
     await addComponentsDir({
       path: resolve('./runtime/components'),
