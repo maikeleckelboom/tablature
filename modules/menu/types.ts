@@ -1,5 +1,8 @@
-type BaseProps = {
+type BaseListItem = {
   label: string
+}
+
+interface BaseProps extends BaseListItem {
   name?: string
   leadingIcon?: string
   trailingIcon?: string
@@ -8,13 +11,13 @@ type BaseProps = {
   disabled?: boolean
   onClick?: () => void
 
-  divider?: boolean
-
   children?: BaseProps[]
   open?: boolean
+
   selectable?: boolean
   minSelections?: number
   multiple?: boolean
+
   selected?: boolean
 }
 
@@ -41,7 +44,9 @@ type MaybeRecursiveItemWithOption = BaseWithOptionProps | RecursiveItemWithOptio
 
 type MenuItem = BaseProps & (MaybeRecursiveItem | MaybeRecursiveItemWithOption)
 
-export type { MenuItem }
+type ExcludeKeys = 'selection' | 'leading-icon' | 'trailing-icon' | 'trailing-text' | 'shortcuts'
+
+export type { MenuItem, ExcludeKeys, BaseListItem }
 
 function hasChildren(item: MenuItem): item is MenuItem & { children: MenuItem[] } {
   return item.children !== undefined && item.children.length > 0

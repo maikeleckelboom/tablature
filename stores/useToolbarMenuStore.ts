@@ -4,9 +4,11 @@ const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
   const state = ref<MenuItem[]>([
     {
       label: 'Format',
+      open: true,
       children: [
         {
           label: 'Text Styles',
+          open: true,
           selectable: true,
           multiple: true,
           children: [
@@ -39,9 +41,11 @@ const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
         },
         {
           label: 'Paragraph Styles',
+          open: true,
           children: [
             {
               label: 'Line Spacing',
+              open: true,
               selectable: true,
               minSelections: 1,
               children: [
@@ -69,6 +73,7 @@ const useToolbarMenuStore = defineStore('toolbar-menu-store', () => {
           label: 'List Options',
           name: 'list-options',
           selectable: true,
+          open: true,
           minSelections: 1,
           children: [
             {

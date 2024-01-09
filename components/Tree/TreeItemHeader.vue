@@ -1,18 +1,18 @@
 <script lang="ts" setup>
-import { hasChildren, type MenuItem } from '~/modules/menu/types'
+import { type ExcludeKeys, hasChildren, type MenuItem } from '~/modules/menu/types'
 
 withDefaults(
   defineProps<{
     item: MenuItem
     as?: string
-    excludes?: ('select-box' | 'leading-icon' | 'trailing-icon' | 'trailing-text' | 'shortcuts')[]
+    exclude?: ExcludeKeys[]
     openIcon?: string
     closeIcon?: string
   }>(),
   {
     as: 'button',
-    openIcon: 'ic:round-indeterminate-check-box',
-    closeIcon: 'ic:round-add-box'
+    openIcon: 'ic:round-expand-more',
+    closeIcon: 'ic:round-expand-less'
   }
 )
 
@@ -29,18 +29,18 @@ defineSlots<{
       <Icon v-if="item.open" :name="openIcon" class="size-4" />
       <Icon v-else :name="closeIcon" class="size-4" />
     </template>
-    <template v-if="!excludes?.includes('leading-icon') && item.leadingIcon">
+    <template v-if="!exclude?.includes('leading-icon') && item.leadingIcon">
       <Icon :name="item.leadingIcon" class="size-4" />
     </template>
-    <span class="label-text select-none">{{ item.label }}</span>
-    <template v-if="!excludes?.includes('trailing-icon') && item.trailingIcon">
+    <span class="label-text select-none leading-none">{{ item.label }}</span>
+    <template v-if="!exclude?.includes('trailing-icon') && item.trailingIcon">
       <Icon :name="item.trailingIcon" class="size-4" />
     </template>
-    <template v-if="!excludes?.includes('trailing-text') && item.trailingText">
+    <template v-if="!exclude?.includes('trailing-text') && item.trailingText">
       <span>{{ item.trailingText }}</span>
     </template>
-    <template v-if="!excludes?.includes('shortcuts') && item.shortcuts?.length">
-      <TreeListItemShortcuts :shortcuts="item.shortcuts" />
+    <template v-if="!exclude?.includes('shortcuts') && item.shortcuts?.length">
+      <TreeItemShortcuts :shortcuts="item.shortcuts" />
     </template>
     <slot name="trailing" />
   </Component>

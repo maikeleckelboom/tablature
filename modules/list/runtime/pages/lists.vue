@@ -2,7 +2,6 @@
 const { list } = useNavigationStore()
 
 const navigationList1 = ref(useCloneDeep(list))
-const navigationList2 = ref(useCloneDeep(list))
 </script>
 
 <template>

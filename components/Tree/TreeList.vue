@@ -1,7 +1,8 @@
 <script generic="T extends MenuItem" lang="ts" setup>
-import { hasChildren, isSelectable, type MenuItem } from '~/modules/menu/types'
+import { type ExcludeKeys, hasChildren, isSelectable, type MenuItem } from '~/modules/menu/types'
+import { scaleValue } from '~/utils/math'
 
-const baseHeaderClass = 'size-full text-start flex items-center gap-x-2 cursor-pointer'
+const baseHeaderClass = 'size-full text-start flex items-center gap-x-2 p-1.5 select-none'
 
 const props = withDefaults(
   defineProps<{
@@ -9,15 +10,19 @@ const props = withDefaults(
     level?: number
     indent?: number | false
     static?: boolean
-    excludes?: ('select-box' | 'leading-icon' | 'trailing-icon' | 'trailing-text' | 'shortcuts')[]
+    exclude?: ExcludeKeys[]
     getHeaderClass?(classes: string, type: 'button' | 'label'): string
+    transitionName?: string
+    transitionDuration?: number
   }>(),
   {
     items: () => [],
     level: 1,
     indent: 12,
     static: false,
-    getHeaderClass: () => baseHeaderClass
+    getHeaderClass: () => baseHeaderClass,
+    transitionName: 'tree-list',
+    transitionDuration: 320
   }
 )
 
@@ -51,15 +56,12 @@ function handleMultipleSelection(item: T, option: T) {
 
 function handleSingleSelection(item: T, option: T) {
   const { children, minSelections } = item
-  // Check if minSelections is defined and greater than 0
   if (minSelections !== undefined && minSelections > 0) {
-    // ... select only the clicked option
     children.forEach((opt) => {
       opt.selected = opt === option
     })
     return
   }
-  // Toggle selection state of clicked option
   children.forEach((opt) => {
     opt.selected = opt === option ? !opt.selected : false
   })
@@ -69,6 +71,9 @@ function getRadioOrCheckbox(item: T) {
   if (item.multiple) {
     return 'checkbox'
   }
+  // Focus is not working properly with radio buttons
+  // (goes to selected radio then skips to next list item)
+  // but changing it to checkbox breaks min selections logic
   return 'radio'
 }
 
@@ -109,6 +114,16 @@ function getListClass(): string {
 function getListItemClass(item: T): string {
   return 'tree-list-item'
 }
+
+const transitionDelay = computed<number>(() => scaleValue(props.transitionDuration))
+const transitionTotalDuration = computed<number>(
+  () => props.transitionDuration + transitionDelay.value
+)
+
+const transitionStyles = computed<Record<string, string>>(() => ({
+  '--transition-delay': `${transitionDelay.value}ms`,
+  '--transition-duration': `${props.transitionDuration}ms`
+}))
 </script>
 
 <template>
@@ -116,11 +131,8 @@ function getListItemClass(item: T): string {
     :class="getListClass()"
     :data-level="level"
     :role="level === 1 ? 'tree' : 'group'"
+    :style="transitionStyles"
     class="tree-list"
-    :style="{
-      '--transition-delay': `${50}ms`,
-      '--transition-duration': `${300}ms`
-    }"
   >
     <li
       v-for="item in items"
@@ -131,55 +143,55 @@ function getListItemClass(item: T): string {
       role="treeitem"
     >
       <slot :item="item">
-        <TreeListItemHeader
+        <TreeItemHeader
           :class="getHeaderClass(baseHeaderClass, 'button')"
           :disabled="getDisabled(item)"
-          :excludes="excludes"
+          :exclude="exclude"
           :item="item"
           as="button"
           @click="onClick(item)"
         />
         <template v-if="hasChildren(item)">
           <template v-if="isSelectable(item)">
-            <Transition name="tree-list" :duration="500">
+            <Transition :duration="transitionTotalDuration" :name="transitionName">
               <TreeList
                 v-show="isAlwaysOpen || item.open"
                 v-slot="{ item: option }"
-                :excludes="excludes"
+                :exclude="exclude"
                 :indent="indent"
                 :items="<T[]>item.children"
                 :level="level + 1"
                 :style="indentStyles"
               >
-                <TreeListItemHeader
+                <TreeItemHeader
                   :class="getHeaderClass(baseHeaderClass, 'label')"
+                  :exclude="exclude"
                   :for="getName(option)"
-                  :excludes="excludes"
                   :item="option"
                   as="label"
                 >
                   <template #leading>
                     <input
                       :id="getName(option)"
-                      :aria-hidden="excludes?.includes('select-box')"
+                      :aria-hidden="exclude?.includes('selection')"
                       :checked="option.selected"
-                      :class="excludes?.includes('select-box') ? 'sr-only' : ''"
+                      :class="exclude?.includes('selection') ? 'sr-only' : ''"
                       :disabled="getDisabled(option)"
                       :name="getName(item)"
                       :type="getRadioOrCheckbox(item)"
                       @click="onSelect(item, option)"
                     />
                   </template>
-                </TreeListItemHeader>
+                </TreeItemHeader>
               </TreeList>
             </Transition>
           </template>
           <template v-else>
-            <Transition name="tree-list" :duration="500">
+            <Transition :duration="transitionTotalDuration" :name="transitionName">
               <TreeList
                 v-show="isAlwaysOpen || item.open"
+                :exclude="exclude"
                 :get-header-class="getHeaderClass"
-                :excludes="excludes"
                 :indent="indent"
                 :items="<T[]>item.children"
                 :level="level + 1"
@@ -195,18 +207,18 @@ function getListItemClass(item: T): string {
 
 <style>
 .tree-list {
-  --transition-delay: var(--transition-delay, 100ms);
-  --transition-duration: var(--transition-duration, 400ms);
+  width: 100%;
 
   li {
-    transform: translateX(0px);
-    transition-duration: var(--transition-duration);
+    transform: translateY(0);
+
     transition-property: grid-template-rows;
+    transition-duration: var(--transition-duration);
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 
     display: grid;
     grid-template-rows: auto 0fr;
-
+    grid-template-columns: 1fr;
     place-content: start;
 
     &[aria-expanded] {
@@ -225,7 +237,7 @@ function getListItemClass(item: T): string {
 
     &[aria-expanded='false'] {
       transition-timing-function: ease-in-out;
-      transition-delay: var(--transition-delay);
+      transition-delay: calc(var(--transition-delay) * 0.4);
     }
   }
 
@@ -238,12 +250,12 @@ function getListItemClass(item: T): string {
   .tree-list-enter-from *,
   .tree-list-leave-to * {
     opacity: 0;
-    transform-origin: right center;
-    transform: translateY(8px) scaleX(0.9);
+    transform: translateY(-8px);
+    transform-origin: top left;
   }
 
   .tree-list-enter-active * {
-    transition-delay: calc(var(--transition-delay) * 2);
+    transition-delay: calc(var(--transition-delay) * 0.2);
   }
 }
 </style>

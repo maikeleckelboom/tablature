@@ -31,9 +31,9 @@ export default defineNuxtConfig({
   },
   appConfig: {
     theme: {
-      isDark: true,
-      contrastLevel: 0.3,
-      sourceColor: '#040a60'
+      isDark: false,
+      contrastLevel: 0.4,
+      sourceColor: '#00fa7d'
     },
     nuxtIcon: {
       size: '24px'
@@ -54,14 +54,19 @@ export default defineNuxtConfig({
     },
     fallbackBreakpoint: 'lg'
   },
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false
+    }
+  ],
   imports: {
     dirs: [
-      '~/components',
-      '~/components/Kanban',
       '~/utils',
       '~/stores/useKanbanStore',
       '~/stores/useNavigationStore',
-      '~/stores/useListStore'
+      '~/stores/useListStore',
+      '~/stores/useDocumentStore'
     ],
     presets: []
   },
