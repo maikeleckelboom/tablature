@@ -44,7 +44,13 @@ type MaybeRecursiveItemWithOption = BaseWithOptionProps | RecursiveItemWithOptio
 
 type MenuItem = BaseProps & (MaybeRecursiveItem | MaybeRecursiveItemWithOption)
 
-type ExcludeKeys = 'selection' | 'leading-icon' | 'trailing-icon' | 'trailing-text' | 'shortcuts'
+type ExcludeKeys =
+  | 'selection'
+  | 'toggle-icon'
+  | 'leading-icon'
+  | 'trailing-icon'
+  | 'trailing-text'
+  | 'shortcuts'
 
 export type { MenuItem, ExcludeKeys, BaseListItem }
 

@@ -43,7 +43,7 @@ const isColorMenuOpen = ref<boolean>(false)
       </slot>
     </aside>
     <main
-      class="row-start-3 flex w-full justify-start overflow-clip md:row-start-auto md:h-[calc(100svh-50px)]"
+      class="row-start-3 flex w-full flex-col justify-start overflow-clip md:row-start-auto md:h-[calc(100svh-50px)]"
     >
       <slot></slot>
     </main>

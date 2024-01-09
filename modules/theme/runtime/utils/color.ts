@@ -1,10 +1,16 @@
 import {
   argbFromHex,
   DynamicColor,
+  DynamicScheme,
   Hct,
   MaterialDynamicColors,
   rgbaFromArgb,
-  SchemeContent
+  SchemeContent,
+  SchemeExpressive,
+  SchemeFidelity,
+  SchemeMonochrome,
+  SchemeNeutral,
+  SchemeVibrant
 } from '@material/material-color-utilities'
 import { capitalize } from 'vue'
 
@@ -17,34 +23,52 @@ function getColorAsHct(color: Hct | string | number): Hct {
   return color
 }
 
-function makeSchemeContents(
+const schemeVariantsMap = {
+  content: SchemeContent,
+  expressive: SchemeExpressive,
+  fidelity: SchemeFidelity,
+  fruit_salad: SchemeFidelity,
+  monochrome: SchemeMonochrome,
+  neutral: SchemeNeutral,
+  rainbow: SchemeExpressive,
+  vibrant: SchemeVibrant
+} as const
+
+const schemeVariants = Object.keys(schemeVariantsMap)
+
+export function makeDynamicScheme(
   sourceColor: Hct | string | number,
   isDark: boolean,
   contrastLevel: number,
+  variant: string,
   options?: {
     brightnessSuffix?: boolean
   }
 ) {
   const { brightnessSuffix = false } = options ?? {}
   const sourceColorHct = getColorAsHct(sourceColor)
-  const schemes = new Map<'system' | 'light' | 'dark', SchemeContent>()
-  schemes.set('system', new SchemeContent(sourceColorHct, isDark, contrastLevel))
+  const schemes = new Map<'system' | 'light' | 'dark', DynamicScheme>()
+  const Scheme = schemeVariantsMap[variant]
+  if (!Scheme) {
+    throw new Error(`Invalid scheme variant ${variant}`)
+  }
+  schemes.set('system', new Scheme(sourceColorHct, isDark, contrastLevel))
   if (brightnessSuffix) {
-    schemes.set('light', new SchemeContent(sourceColorHct, false, contrastLevel))
-    schemes.set('dark', new SchemeContent(sourceColorHct, true, contrastLevel))
+    schemes.set('light', new Scheme(sourceColorHct, false, contrastLevel))
+    schemes.set('dark', new Scheme(sourceColorHct, true, contrastLevel))
   }
   return schemes
 }
 
-function colorsFromSchemeContent(
-  schemeContent: Map<'system' | 'light' | 'dark', SchemeContent> | SchemeContent,
+function colorsFromDynamicScheme(
+  schemeContent: Map<'system' | 'light' | 'dark', DynamicScheme> | DynamicScheme,
   suffix?: string
 ): Record<string, number> {
   if (schemeContent instanceof Map) {
     return Array.from(schemeContent.entries()).reduce(
       (acc, [key, value]) => ({
         ...acc,
-        ...colorsFromSchemeContent(value, key !== 'system' ? `${capitalize(key)}` : '')
+        ...colorsFromDynamicScheme(value, key !== 'system' ? `${capitalize(key)}` : '')
       }),
       {}
     )
@@ -60,13 +84,10 @@ function colorsFromSchemeContent(
   return schemeContentColors
 }
 
-function propertiesFromContentColors(
-  schemesContentsColors: Record<string, number>,
-  options: {} = {}
-) {
-  return Object.keys(schemesContentsColors).reduce(
+function propertiesFromSchemeColors(schemeColors: Record<string, number>, options: {} = {}) {
+  return Object.keys(schemeColors).reduce(
     (acc, key) => {
-      const { r, g, b } = rgbaFromArgb(schemesContentsColors[key])
+      const { r, g, b } = rgbaFromArgb(schemeColors[key])
       const kebabKey = key.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase()
       const normalizedKey = kebabKey.replace(/-palette-[a-z]+-color/, '')
       acc[`--${normalizedKey}-rgb`] = `${r} ${g} ${b}`
@@ -103,9 +124,9 @@ const repeatingLinearGradient = (() => {
 
 export {
   getColorAsHct,
-  makeSchemeContents,
-  colorsFromSchemeContent,
+  colorsFromDynamicScheme,
   textFromProperties,
-  propertiesFromContentColors,
-  repeatingLinearGradient
+  propertiesFromSchemeColors,
+  repeatingLinearGradient,
+  schemeVariants
 }

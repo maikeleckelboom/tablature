@@ -2,11 +2,15 @@
 import { type ExcludeKeys, hasChildren, isSelectable, type MenuItem } from '~/modules/menu/types'
 import { scaleValue } from '~/utils/math'
 
+defineSlots<{
+  default({ item }: { item: T }): any
+}>()
+
 const baseHeaderClass = 'size-full text-start flex items-center gap-x-2 p-1.5 select-none'
 
 const props = withDefaults(
   defineProps<{
-    items: T[]
+    list: T[]
     level?: number
     indent?: number | false
     static?: boolean
@@ -16,7 +20,7 @@ const props = withDefaults(
     transitionDuration?: number
   }>(),
   {
-    items: () => [],
+    list: () => [],
     level: 1,
     indent: 12,
     static: false,
@@ -71,9 +75,6 @@ function getRadioOrCheckbox(item: T) {
   if (item.multiple) {
     return 'checkbox'
   }
-  // Focus is not working properly with radio buttons
-  // (goes to selected radio then skips to next list item)
-  // but changing it to checkbox breaks min selections logic
   return 'radio'
 }
 
@@ -103,10 +104,6 @@ const indentStyles = computed<Record<string, string>>(() => {
   }
 })
 
-defineSlots<{
-  default({ item }: { item: T }): any
-}>()
-
 function getListClass(): string {
   return 'tree-list'
 }
@@ -135,7 +132,7 @@ const transitionStyles = computed<Record<string, string>>(() => ({
     class="tree-list"
   >
     <li
-      v-for="item in items"
+      v-for="item in list"
       :key="getName(item)"
       :aria-expanded="hasChildren(item) ? item.open : undefined"
       :aria-selected="item.selected"
@@ -159,7 +156,7 @@ const transitionStyles = computed<Record<string, string>>(() => ({
                 v-slot="{ item: option }"
                 :exclude="exclude"
                 :indent="indent"
-                :items="<T[]>item.children"
+                :list="<T[]>item.children"
                 :level="level + 1"
                 :style="indentStyles"
               >
@@ -193,7 +190,7 @@ const transitionStyles = computed<Record<string, string>>(() => ({
                 :exclude="exclude"
                 :get-header-class="getHeaderClass"
                 :indent="indent"
-                :items="<T[]>item.children"
+                :list="<T[]>item.children"
                 :level="level + 1"
                 :style="indentStyles"
               />

@@ -1,36 +1,36 @@
 import {
-  colorsFromSchemeContent,
-  makeSchemeContents,
-  propertiesFromContentColors
+  colorsFromDynamicScheme,
+  makeDynamicScheme,
+  propertiesFromSchemeColors
 } from '~/modules/theme/runtime/utils/color'
 
 export default defineNuxtPlugin((nuxt) => {
-  const { sourceColor, isDark, contrastLevel } = useThemeConfig()
+  const { sourceColor, isDark, contrastLevel, schemeVariant } = useThemeConfig()
 
-  const schemeContents = computed(() =>
-    makeSchemeContents(sourceColor.value, isDark.value, contrastLevel.value, {
+  const dynamicSchemes = computed(() =>
+    makeDynamicScheme(sourceColor.value, isDark.value, contrastLevel.value, schemeVariant.value, {
       brightnessSuffix: true
     })
   )
 
-  const contentColors = computed(() => {
-    if (!schemeContents.value) return
-    return colorsFromSchemeContent(schemeContents.value)
+  const dynamicScheme = computed(() => {
+    if (!dynamicSchemes.value) return
+    return dynamicSchemes.value.get(isDark.value ? 'dark' : 'light')
   })
 
-  const contentColorProperties = computed(() => {
-    if (!contentColors.value) return
-    return propertiesFromContentColors(contentColors.value)
+  const dynamicSchemesColors = computed(() => {
+    if (!dynamicSchemes.value) return
+    return colorsFromDynamicScheme(dynamicSchemes.value)
   })
 
-  const schemeContent = computed(() => {
-    if (!schemeContents.value) return
-    return schemeContents.value.get(isDark.value ? 'dark' : 'light')
+  const schemeColorProperties = computed(() => {
+    if (!dynamicSchemes.value) return
+    return propertiesFromSchemeColors(dynamicSchemesColors.value)
   })
 
-  const schemeContentText = computed(() =>
-    contentColorProperties.value
-      ? textFromProperties(contentColorProperties.value, { lineBreak: false })
+  const schemeColorsText = computed(() =>
+    schemeColorProperties.value
+      ? textFromProperties(schemeColorProperties.value, { lineBreak: false })
       : ''
   )
 
@@ -40,10 +40,10 @@ export default defineNuxtPlugin((nuxt) => {
     },
     style: [
       {
-        textContent: computed(() => `:root { ${schemeContentText.value} }`)
+        textContent: computed(() => `:root { ${schemeColorsText.value} }`)
       }
     ]
   })
 
-  nuxt.provide('schemeContent', schemeContent)
+  nuxt.provide('dynamicScheme', dynamicScheme)
 })

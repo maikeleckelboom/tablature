@@ -1,10 +1,10 @@
-import type { Ref } from 'vue';
-import type { SchemeContent } from '@material/material-color-utilities';
-import type { ThemeModuleOptions } from '~/modules/theme/types';
+import type { Ref } from 'vue'
+import type { DynamicScheme } from '@material/material-color-utilities'
+import type { ThemeModuleOptions } from '~/modules/theme/types'
 
 declare module '#app' {
   interface NuxtApp {
-    $schemeContent: Ref<SchemeContent>
+    $dynamicScheme: Ref<DynamicScheme>
   }
 
   interface RuntimeConfig {
@@ -20,8 +20,8 @@ declare module '#app' {
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $schemeContent: Ref<SchemeContent>
+    $dynamicScheme: Ref<DynamicScheme>
   }
 }
 
-export { }
+export {}

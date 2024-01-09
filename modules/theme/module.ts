@@ -1,7 +1,6 @@
 import { addComponentsDir, addPlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
 import { defu } from 'defu'
 import type { ThemeModuleOptions } from '~/modules/theme/types'
-import { setup } from 'xstate'
 
 const { resolve } = createResolver(import.meta.url)
 
@@ -17,6 +16,7 @@ export default defineNuxtModule<ThemeModuleOptions>({
   defaults: {
     isDark: false,
     contrastLevel: 0.3,
+    variant: 'expressive', // 'neutral
     sourceColor: '#0092fa',
     staticColors: []
   },

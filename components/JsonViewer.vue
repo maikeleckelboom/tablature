@@ -3,7 +3,7 @@ import VueJsonPretty from 'vue-json-pretty'
 import type { JSONDataType } from 'vue-json-pretty/types/utils'
 
 defineProps<{
-  data: JSONDataType
+  data: any | JSONDataType
 }>()
 </script>
 
@@ -14,7 +14,7 @@ defineProps<{
     :show-line-number="false"
     :show-double-quotes="false"
     :deep="1"
-    :virtual="false"
+    class="scrollbar"
   />
 </template>
 

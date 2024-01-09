@@ -32,8 +32,9 @@ export default defineNuxtConfig({
   appConfig: {
     theme: {
       isDark: false,
+      variant: 'vibrant',
       contrastLevel: 0.4,
-      sourceColor: '#00fa7d'
+      sourceColor: '#0c6885'
     },
     nuxtIcon: {
       size: '24px'

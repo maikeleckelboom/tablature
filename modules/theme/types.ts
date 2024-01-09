@@ -8,6 +8,7 @@ interface ThemeModuleOptions {
   isDark?: boolean
   sourceColor?: string
   contrastLevel?: number
+  variant?: string
   staticColors?: StaticColor[]
 }
 

@@ -8,11 +8,15 @@ withDefaults(
     exclude?: ExcludeKeys[]
     openIcon?: string
     closeIcon?: string
+    iconClass?: string
+    labelClass?: string
   }>(),
   {
     as: 'button',
     openIcon: 'ic:round-expand-more',
-    closeIcon: 'ic:round-expand-less'
+    closeIcon: 'ic:round-expand-less',
+    iconClass: 'size-4',
+    labelClass: 'select-none leading-none'
   }
 )
 
@@ -25,21 +29,21 @@ defineSlots<{
 <template>
   <Component :is="$props.as">
     <slot name="leading" />
-    <template v-if="hasChildren(item)">
-      <Icon v-if="item.open" :name="openIcon" class="size-4" />
-      <Icon v-else :name="closeIcon" class="size-4" />
+    <template v-if="hasChildren(item) && !exclude?.includes('toggle-icon')">
+      <Icon v-if="item.open" :class="$props.iconClass" :name="openIcon" />
+      <Icon v-else :class="$props.iconClass" :name="closeIcon" />
     </template>
-    <template v-if="!exclude?.includes('leading-icon') && item.leadingIcon">
-      <Icon :name="item.leadingIcon" class="size-4" />
+    <template v-if="item.leadingIcon && !exclude?.includes('leading-icon')">
+      <Icon :class="$props.iconClass" :name="item.leadingIcon" />
     </template>
-    <span class="label-text select-none leading-none">{{ item.label }}</span>
-    <template v-if="!exclude?.includes('trailing-icon') && item.trailingIcon">
-      <Icon :name="item.trailingIcon" class="size-4" />
+    <span :class="$props.labelClass" class="label-text">{{ item.label }}</span>
+    <template v-if="item.trailingIcon && !exclude?.includes('trailing-icon')">
+      <Icon :class="$props.iconClass" :name="item.trailingIcon" />
     </template>
-    <template v-if="!exclude?.includes('trailing-text') && item.trailingText">
+    <template v-if="item.trailingText && !exclude?.includes('trailing-text')">
       <span>{{ item.trailingText }}</span>
     </template>
-    <template v-if="!exclude?.includes('shortcuts') && item.shortcuts?.length">
+    <template v-if="item.shortcuts?.length && !exclude?.includes('shortcuts')">
       <TreeItemShortcuts :shortcuts="item.shortcuts" />
     </template>
     <slot name="trailing" />

@@ -2,11 +2,11 @@
 import { Hct, hexFromArgb, TonalPalette } from '@material/material-color-utilities'
 import chroma from 'chroma-js'
 
-const { $schemeContent } = useNuxtApp()
+const { $dynamicScheme } = useNuxtApp()
 const { sourceColor, contrastLevel } = useThemeConfig()
 
 const primaryKeyColor = computed(() => {
-  const primaryPalette = $schemeContent.value.primaryPalette
+  const primaryPalette = $dynamicScheme.value.primaryPalette
   return primaryPalette.keyColor
 })
 
