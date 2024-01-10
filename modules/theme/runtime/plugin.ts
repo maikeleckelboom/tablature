@@ -1,14 +1,14 @@
 import {
   colorsFromDynamicScheme,
   makeDynamicScheme,
-  propertiesFromSchemeColors
+  propertiesFromColors
 } from '~/modules/theme/runtime/utils/color'
 
 export default defineNuxtPlugin((nuxt) => {
-  const { sourceColor, isDark, contrastLevel, schemeVariant } = useThemeConfig()
+  const { sourceColor, isDark, contrastLevel, variant } = useThemeConfig()
 
   const dynamicSchemes = computed(() =>
-    makeDynamicScheme(sourceColor.value, isDark.value, contrastLevel.value, schemeVariant.value, {
+    makeDynamicScheme(sourceColor.value, isDark.value, contrastLevel.value, variant.value, {
       brightnessSuffix: true
     })
   )
@@ -25,7 +25,7 @@ export default defineNuxtPlugin((nuxt) => {
 
   const schemeColorProperties = computed(() => {
     if (!dynamicSchemes.value) return
-    return propertiesFromSchemeColors(dynamicSchemesColors.value)
+    return propertiesFromColors(dynamicSchemesColors.value)
   })
 
   const schemeColorsText = computed(() =>

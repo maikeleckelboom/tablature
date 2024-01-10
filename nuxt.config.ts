@@ -31,9 +31,9 @@ export default defineNuxtConfig({
   },
   appConfig: {
     theme: {
-      isDark: false,
-      variant: 'vibrant',
-      contrastLevel: 0.4,
+      isDark: true,
+      variant: 'expressive',
+      contrastLevel: 0.3,
       sourceColor: '#0c6885'
     },
     nuxtIcon: {

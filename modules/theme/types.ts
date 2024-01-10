@@ -1,3 +1,25 @@
+import {
+  SchemeContent,
+  SchemeExpressive,
+  SchemeFidelity,
+  SchemeMonochrome,
+  SchemeNeutral,
+  SchemeVibrant
+} from '@material/material-color-utilities'
+
+const SCHEME_VARIANTS = {
+  content: SchemeContent,
+  expressive: SchemeExpressive,
+  fidelity: SchemeFidelity,
+  monochrome: SchemeMonochrome,
+  neutral: SchemeNeutral,
+  vibrant: SchemeVibrant
+  // fruit_salad: SchemeFruitSalad,
+  // rainbow: SchemeRainbow,
+} as const
+
+type Variant = keyof typeof SCHEME_VARIANTS
+
 type StaticColor = {
   name: string
   value: string
@@ -8,7 +30,7 @@ interface ThemeModuleOptions {
   isDark?: boolean
   sourceColor?: string
   contrastLevel?: number
-  variant?: string
+  variant?: Variant
   staticColors?: StaticColor[]
 }
 
@@ -18,4 +40,5 @@ type ColorModeOption = {
   selected: boolean
 }
 
-export type { StaticColor, ThemeModuleOptions, ColorModeOption }
+export type { Variant, StaticColor, ThemeModuleOptions, ColorModeOption }
+export { SCHEME_VARIANTS }

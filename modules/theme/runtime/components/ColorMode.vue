@@ -26,26 +26,21 @@ const isActiveBoxStyles = (mode: ColorModeOption) => ({
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <div class="mb-4">
-      <label class="text-label-lg">Color Mode</label>
-    </div>
-    <div class="flex flex-row gap-4">
-      <div v-for="mode in modes" :key="mode.value" @click="onClick(mode)">
-        <div
-          :class="isActiveBoxStyles(mode)"
-          class="relative aspect-video min-h-14 overflow-hidden rounded-lg border-2"
-        >
-          <SystemBoxSheet v-if="mode.value === 'system'" :modes="modes" />
-          <ColorModeSheet v-else :mode="mode" />
-        </div>
-        <div
-          :class="mode.selected ? 'text-primary' : 'text-on-surface'"
-          class="flex items-center justify-start px-2 py-2"
-        >
-          <Icon v-if="mode.selected" class="mr-1 h-3.5 w-3.5 md:h-4 md:w-4" name="ic:round-check" />
-          <span class="text-label-md font-semibold">{{ mode.label }}</span>
-        </div>
+  <div class="flex flex-row gap-4">
+    <div v-for="mode in modes" :key="mode.value" @click="onClick(mode)">
+      <div
+        :class="isActiveBoxStyles(mode)"
+        class="relative aspect-video min-h-14 overflow-hidden rounded-lg border-2"
+      >
+        <SystemBoxSheet v-if="mode.value === 'system'" :modes="modes" />
+        <ColorModeSheet v-else :mode="mode" />
+      </div>
+      <div
+        :class="mode.selected ? 'text-primary' : 'text-on-surface'"
+        class="flex items-center justify-start px-2 py-2"
+      >
+        <Icon v-if="mode.selected" class="mr-1 h-3.5 w-3.5 md:h-4 md:w-4" name="ic:round-check" />
+        <span class="text-label-md font-semibold">{{ mode.label }}</span>
       </div>
     </div>
   </div>

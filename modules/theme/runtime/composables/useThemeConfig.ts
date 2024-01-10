@@ -12,7 +12,7 @@ export const useThemeConfig = () => {
     get: () => appConfig.theme.sourceColor,
     set: (v) => (appConfig.theme.sourceColor = v)
   })
-  const schemeVariant = computed({
+  const variant = computed({
     get: () => appConfig.theme.variant,
     set: (v) => (appConfig.theme.variant = v)
   })
@@ -24,7 +24,7 @@ export const useThemeConfig = () => {
     contrastLevel,
     isDark,
     sourceColor,
-    schemeVariant,
+    variant,
     staticColors
   }
 }

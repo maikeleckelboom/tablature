@@ -27,16 +27,16 @@ const schemeVariantsMap = {
   content: SchemeContent,
   expressive: SchemeExpressive,
   fidelity: SchemeFidelity,
-  fruit_salad: SchemeFidelity,
   monochrome: SchemeMonochrome,
   neutral: SchemeNeutral,
-  rainbow: SchemeExpressive,
   vibrant: SchemeVibrant
+  // fruit_salad: SchemeFruitSalad,
+  // rainbow: SchemeRainbow,
 } as const
 
-const schemeVariants = Object.keys(schemeVariantsMap)
+const schemeVariants = Object.keys(schemeVariantsMap) as (keyof typeof schemeVariantsMap)[]
 
-export function makeDynamicScheme(
+function makeDynamicScheme(
   sourceColor: Hct | string | number,
   isDark: boolean,
   contrastLevel: number,
@@ -46,12 +46,12 @@ export function makeDynamicScheme(
   }
 ) {
   const { brightnessSuffix = false } = options ?? {}
-  const sourceColorHct = getColorAsHct(sourceColor)
-  const schemes = new Map<'system' | 'light' | 'dark', DynamicScheme>()
   const Scheme = schemeVariantsMap[variant]
   if (!Scheme) {
     throw new Error(`Invalid scheme variant ${variant}`)
   }
+  const sourceColorHct = getColorAsHct(sourceColor)
+  const schemes = new Map<'system' | 'light' | 'dark', DynamicScheme>()
   schemes.set('system', new Scheme(sourceColorHct, isDark, contrastLevel))
   if (brightnessSuffix) {
     schemes.set('light', new Scheme(sourceColorHct, false, contrastLevel))
@@ -61,11 +61,11 @@ export function makeDynamicScheme(
 }
 
 function colorsFromDynamicScheme(
-  schemeContent: Map<'system' | 'light' | 'dark', DynamicScheme> | DynamicScheme,
+  dynamicScheme: Map<'system' | 'light' | 'dark', DynamicScheme> | DynamicScheme,
   suffix?: string
 ): Record<string, number> {
-  if (schemeContent instanceof Map) {
-    return Array.from(schemeContent.entries()).reduce(
+  if (dynamicScheme instanceof Map) {
+    return Array.from(dynamicScheme.entries()).reduce(
       (acc, [key, value]) => ({
         ...acc,
         ...colorsFromDynamicScheme(value, key !== 'system' ? `${capitalize(key)}` : '')
@@ -78,13 +78,13 @@ function colorsFromDynamicScheme(
     const color = MaterialDynamicColors[colorName as keyof typeof MaterialDynamicColors]
     if (color instanceof DynamicColor) {
       const colorKey = suffix ? `${colorName}${suffix && suffix}` : colorName
-      schemeContentColors[colorKey] = color.getArgb(schemeContent)
+      schemeContentColors[colorKey] = color.getArgb(dynamicScheme)
     }
   }
   return schemeContentColors
 }
 
-function propertiesFromSchemeColors(schemeColors: Record<string, number>, options: {} = {}) {
+function propertiesFromColors(schemeColors: Record<string, number>, options: {} = {}) {
   return Object.keys(schemeColors).reduce(
     (acc, key) => {
       const { r, g, b } = rgbaFromArgb(schemeColors[key])
@@ -124,9 +124,10 @@ const repeatingLinearGradient = (() => {
 
 export {
   getColorAsHct,
+  makeDynamicScheme,
   colorsFromDynamicScheme,
+  propertiesFromColors,
   textFromProperties,
-  propertiesFromSchemeColors,
   repeatingLinearGradient,
   schemeVariants
 }

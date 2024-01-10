@@ -20,12 +20,12 @@ type FormModelBounds = {
   [K in keyof FormModel]: {
     min: number
     max: number
-    default?: number
+    default: number
   }
 }
 
 const formModelBounds = readonly<FormModelBounds>({
-  hue: { min: 0, max: 360 },
+  hue: { min: 0, max: 360, default: 0 },
   chroma: { min: 0, max: 150, default: 130 },
   tone: { min: 0, max: 100, default: 60 }
 })
@@ -46,34 +46,34 @@ const hueSpectra = computed(() => ({
   background: `linear-gradient(to right, ${chroma
     .scale([
       hexFromArgb(
-        Hct.from(0, formModelBounds.chroma.default!, formModelBounds.tone.default!).toInt()
+        Hct.from(0, formModelBounds.chroma.default, formModelBounds.tone.default).toInt()
       ),
       hexFromArgb(
         Hct.from(
           formModelBounds.hue.max / 4,
-          formModelBounds.chroma.default!,
-          formModelBounds.tone.default!
+          formModelBounds.chroma.default,
+          formModelBounds.tone.default
         ).toInt()
       ),
       hexFromArgb(
         Hct.from(
           formModelBounds.hue.max / 2,
-          formModelBounds.chroma.default!,
-          formModelBounds.tone.default!
+          formModelBounds.chroma.default,
+          formModelBounds.tone.default
         ).toInt()
       ),
       hexFromArgb(
         Hct.from(
           (formModelBounds.hue.max / 4) * 3,
           formModel.chroma,
-          formModelBounds.tone.default!
+          formModelBounds.tone.default
         ).toInt()
       ),
       hexFromArgb(
         Hct.from(
           formModelBounds.hue.max,
-          formModelBounds.chroma.default!,
-          formModelBounds.tone.default!
+          formModelBounds.chroma.default,
+          formModelBounds.tone.default
         ).toInt()
       )
     ])
@@ -86,34 +86,34 @@ const hueConicGradientSpectra = computed(() => ({
   background: `conic-gradient(from 0deg, ${chroma
     .scale([
       hexFromArgb(
-        Hct.from(0, formModelBounds.chroma.default!, formModelBounds.tone.default!).toInt()
+        Hct.from(0, formModelBounds.chroma.default, formModelBounds.tone.default).toInt()
       ),
       hexFromArgb(
         Hct.from(
           formModelBounds.hue.max / 4,
-          formModelBounds.chroma.default!,
-          formModelBounds.tone.default!
+          formModelBounds.chroma.default,
+          formModelBounds.tone.default
         ).toInt()
       ),
       hexFromArgb(
         Hct.from(
           formModelBounds.hue.max / 2,
-          formModelBounds.chroma.default!,
-          formModelBounds.tone.default!
+          formModelBounds.chroma.default,
+          formModelBounds.tone.default
         ).toInt()
       ),
       hexFromArgb(
         Hct.from(
           (formModelBounds.hue.max / 4) * 3,
           formModel.chroma,
-          formModelBounds.tone.default!
+          formModelBounds.tone.default
         ).toInt()
       ),
       hexFromArgb(
         Hct.from(
           formModelBounds.hue.max,
-          formModelBounds.chroma.default!,
-          formModelBounds.tone.default!
+          formModelBounds.chroma.default,
+          formModelBounds.tone.default
         ).toInt()
       )
     ])
@@ -125,30 +125,30 @@ const hueConicGradientSpectra = computed(() => ({
 const chromaSpectra = computed(() => ({
   background: `linear-gradient(to right, ${chroma
     .scale([
-      hexFromArgb(Hct.from(formModel.hue, 0, formModelBounds.tone.default!).toInt()),
+      hexFromArgb(Hct.from(formModel.hue, 0, formModelBounds.tone.default).toInt()),
       hexFromArgb(
         Hct.from(
           formModel.hue,
           formModelBounds.chroma.max / 4,
-          formModelBounds.tone.default!
+          formModelBounds.tone.default
         ).toInt()
       ),
       hexFromArgb(
         Hct.from(
           formModel.hue,
           formModelBounds.chroma.max / 2,
-          formModelBounds.tone.default!
+          formModelBounds.tone.default
         ).toInt()
       ),
       hexFromArgb(
         Hct.from(
           formModel.hue,
           (formModelBounds.chroma.max / 4) * 3,
-          formModelBounds.tone.default!
+          formModelBounds.tone.default
         ).toInt()
       ),
       hexFromArgb(
-        Hct.from(formModel.hue, formModelBounds.chroma.max, formModelBounds.tone.default!).toInt()
+        Hct.from(formModel.hue, formModelBounds.chroma.max, formModelBounds.tone.default).toInt()
       )
     ])
     .mode('lab')
@@ -261,7 +261,7 @@ const onInput = (ev: Event, key: keyof FormModel) => {
         <template #label="{ label, labelText }">
           <div class="grid grid-cols-[1fr,auto] items-start justify-center">
             <div class="flex flex-col">
-              <label class="text-title-sm">
+              <label class="text-label-lg">
                 {{ label }}
               </label>
               <span class="text-body-xs hidden text-on-surface-variant">
@@ -278,25 +278,6 @@ const onInput = (ev: Event, key: keyof FormModel) => {
         </template>
       </InputSlider>
       <div class="mb-4 mt-2.5 h-2.5 w-full rounded-lg" :style="tonalSpectra" />
-    </fieldset>
-    <fieldset>
-      <InputSlider
-        v-model="contrastLevel"
-        max="1"
-        label="Contrast level"
-        min="0"
-        step="0.1"
-        :tick-marks="[
-          {
-            value: 0,
-            label: 'Low'
-          },
-          {
-            value: 1,
-            label: 'High'
-          }
-        ]"
-      />
     </fieldset>
   </div>
 </template>

@@ -12,7 +12,7 @@ const isColorMenuOpen = ref<boolean>(false)
       <slot name="top-left-corner">
         <div class="flex items-center gap-4 pt-2 md:p-0">
           <Logo class="size-8" />
-          <p class="text-title-sm font-bold">AetherArtistry</p>
+          <p class="text-title-sm font-bold">Artistry</p>
         </div>
       </slot>
     </div>
@@ -29,17 +29,6 @@ const isColorMenuOpen = ref<boolean>(false)
           :list="store.list"
           class="scrollbar h-full overflow-y-auto p-4 [scrollbar-gutter:stable]"
         />
-
-        <div class="flex w-full max-w-full flex-col gap-4 p-4 pt-8">
-          <Button size="sm" @click="isColorMenuOpen = !isColorMenuOpen">
-            <Icon name="ic:round-color-lens" class="mr-2" />
-            <span>Appearance</span>
-          </Button>
-          <template v-if="isColorMenuOpen">
-            <ColorMode />
-            <KeyColorPickers />
-          </template>
-        </div>
       </slot>
     </aside>
     <main
