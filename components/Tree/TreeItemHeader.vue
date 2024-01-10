@@ -23,6 +23,7 @@ withDefaults(
 defineSlots<{
   leading: () => any
   trailing: () => any
+  default: ({ item }: { item: MenuItem }) => any
 }>()
 </script>
 
@@ -36,7 +37,9 @@ defineSlots<{
     <template v-if="item.leadingIcon && !exclude?.includes('leading-icon')">
       <Icon :class="$props.iconClass" :name="item.leadingIcon" />
     </template>
-    <span :class="$props.labelClass" class="label-text">{{ item.label }}</span>
+    <slot :item="item">
+      <span :class="$props.labelClass" class="label-text">{{ item.label }}</span>
+    </slot>
     <template v-if="item.trailingIcon && !exclude?.includes('trailing-icon')">
       <Icon :class="$props.iconClass" :name="item.trailingIcon" />
     </template>

@@ -5,6 +5,7 @@ import type { ThemeModuleOptions } from '~/modules/theme/types'
 declare module '#app' {
   interface NuxtApp {
     $dynamicScheme: Ref<DynamicScheme>
+    $dynamicSchemes: Ref<Map<'system' | 'light' | 'dark', DynamicScheme>>
   }
 
   interface RuntimeConfig {
@@ -21,6 +22,7 @@ declare module '#app' {
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $dynamicScheme: Ref<DynamicScheme>
+    $dynamicSchemes: Ref<Map<'system' | 'light' | 'dark', DynamicScheme>>
   }
 }
 

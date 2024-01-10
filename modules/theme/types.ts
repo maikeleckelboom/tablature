@@ -18,7 +18,7 @@ const SCHEME_VARIANTS = {
   // rainbow: SchemeRainbow,
 } as const
 
-type Variant = keyof typeof SCHEME_VARIANTS
+type TVariant = keyof typeof SCHEME_VARIANTS
 
 type StaticColor = {
   name: string
@@ -30,7 +30,7 @@ interface ThemeModuleOptions {
   isDark?: boolean
   sourceColor?: string
   contrastLevel?: number
-  variant?: Variant
+  variant?: TVariant
   staticColors?: StaticColor[]
 }
 
@@ -40,5 +40,5 @@ type ColorModeOption = {
   selected: boolean
 }
 
-export type { Variant, StaticColor, ThemeModuleOptions, ColorModeOption }
+export type { TVariant, StaticColor, ThemeModuleOptions, ColorModeOption }
 export { SCHEME_VARIANTS }

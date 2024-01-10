@@ -13,6 +13,7 @@ import {
   SchemeVibrant
 } from '@material/material-color-utilities'
 import { capitalize } from 'vue'
+import type { TVariant } from '~/modules/theme/types'
 
 function getColorAsHct(color: Hct | string | number): Hct {
   if (typeof color === 'number') {
@@ -23,7 +24,7 @@ function getColorAsHct(color: Hct | string | number): Hct {
   return color
 }
 
-const schemeVariantsMap = {
+const SCHEME_VARIANTS = {
   content: SchemeContent,
   expressive: SchemeExpressive,
   fidelity: SchemeFidelity,
@@ -34,24 +35,22 @@ const schemeVariantsMap = {
   // rainbow: SchemeRainbow,
 } as const
 
-const schemeVariants = Object.keys(schemeVariantsMap) as (keyof typeof schemeVariantsMap)[]
+const variantKeys = Object.keys(SCHEME_VARIANTS) as (keyof typeof SCHEME_VARIANTS)[]
 
 function makeDynamicScheme(
   sourceColor: Hct | string | number,
   isDark: boolean,
   contrastLevel: number,
-  variant: string,
+  variant: TVariant,
   options?: {
     brightnessSuffix?: boolean
   }
 ) {
   const { brightnessSuffix = false } = options ?? {}
-  const Scheme = schemeVariantsMap[variant]
-  if (!Scheme) {
-    throw new Error(`Invalid scheme variant ${variant}`)
-  }
-  const sourceColorHct = getColorAsHct(sourceColor)
+  const Scheme = SCHEME_VARIANTS[variant]
+  if (!Scheme) throw new Error(`Invalid scheme variant ${variant}`)
   const schemes = new Map<'system' | 'light' | 'dark', DynamicScheme>()
+  const sourceColorHct = getColorAsHct(sourceColor)
   schemes.set('system', new Scheme(sourceColorHct, isDark, contrastLevel))
   if (brightnessSuffix) {
     schemes.set('light', new Scheme(sourceColorHct, false, contrastLevel))
@@ -89,8 +88,7 @@ function propertiesFromColors(schemeColors: Record<string, number>, options: {} 
     (acc, key) => {
       const { r, g, b } = rgbaFromArgb(schemeColors[key])
       const kebabKey = key.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase()
-      const normalizedKey = kebabKey.replace(/-palette-[a-z]+-color/, '')
-      acc[`--${normalizedKey}-rgb`] = `${r} ${g} ${b}`
+      acc[`--${kebabKey}-rgb`] = `${r} ${g} ${b}`
       return acc
     },
     {} as Record<string, string>
@@ -129,5 +127,5 @@ export {
   propertiesFromColors,
   textFromProperties,
   repeatingLinearGradient,
-  schemeVariants
+  variantKeys
 }

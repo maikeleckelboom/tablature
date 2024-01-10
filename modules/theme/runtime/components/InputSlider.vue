@@ -201,7 +201,7 @@ const onPointerdown = (ev: PointerEvent) => {
     target.releasePointerCapture(ev.pointerId)
     cleanupPointermove()
     cleanupPointerup()
-    // cleanupPointercancel()
+    cleanupPointercancel()
     isDragging.value = false
     if (!isTrackFill && tickMarks) {
       // make sure user does not intent to scroll page
@@ -213,7 +213,7 @@ const onPointerdown = (ev: PointerEvent) => {
     }
   }
 
-  // const cleanupPointercancel = useEventListener('pointercancel', onPointerup, { passive: true })
+  const cleanupPointercancel = useEventListener('pointercancel', onPointerup, { passive: true })
   const cleanupPointermove = useEventListener('pointermove', onPointermove, { passive: false })
   const cleanupPointerup = useEventListener('pointerup', onPointerup, { passive: true })
 }

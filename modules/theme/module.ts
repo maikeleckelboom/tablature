@@ -16,7 +16,7 @@ export default defineNuxtModule<ThemeModuleOptions>({
   defaults: {
     isDark: false,
     contrastLevel: 0.3,
-    variant: 'expressive',
+    variant: 'content',
     sourceColor: '#0092fa',
     staticColors: []
   },

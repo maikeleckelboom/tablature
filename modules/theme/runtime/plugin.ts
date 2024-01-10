@@ -3,14 +3,21 @@ import {
   makeDynamicScheme,
   propertiesFromColors
 } from '~/modules/theme/runtime/utils/color'
+import type { TVariant } from '~/modules/theme/types'
 
 export default defineNuxtPlugin((nuxt) => {
   const { sourceColor, isDark, contrastLevel, variant } = useThemeConfig()
 
   const dynamicSchemes = computed(() =>
-    makeDynamicScheme(sourceColor.value, isDark.value, contrastLevel.value, variant.value, {
-      brightnessSuffix: true
-    })
+    makeDynamicScheme(
+      sourceColor.value,
+      isDark.value,
+      contrastLevel.value,
+      <TVariant>variant.value,
+      {
+        brightnessSuffix: true
+      }
+    )
   )
 
   const dynamicScheme = computed(() => {
@@ -40,10 +47,11 @@ export default defineNuxtPlugin((nuxt) => {
     },
     style: [
       {
-        textContent: computed(() => `:root { ${schemeColorsText.value} }`)
+        textContent: computed(() => `:root {\n${schemeColorsText.value}\n}`)
       }
     ]
   })
 
+  nuxt.provide('dynamicSchemes', dynamicSchemes)
   nuxt.provide('dynamicScheme', dynamicScheme)
 })

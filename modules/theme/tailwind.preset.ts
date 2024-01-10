@@ -20,6 +20,16 @@ export const materialThemePreset = {
         '900': '900ms'
       },
       colors: {
+        // primary-palette-key-color-rgb
+        // secondary-palette-key-color-rgb
+        // tertiary-palette-key-color-rgb
+        // neutral-palette-key-color-rgb
+        // neutral-variant-palette-key-color-rgb
+        'primary-palette-key-color': {
+          DEFAULT: 'rgb(var(--primary-palette-key-color-rgb) / <alpha-value>)',
+          light: 'rgb(var(--primary-palette-key-color-light-rgb) / <alpha-value>)',
+          dark: 'rgb(var(--primary-palette-key-color-dark-rgb) / <alpha-value>)'
+        },
         primary: {
           DEFAULT: 'rgb(var(--primary-rgb) / <alpha-value>)',
           light: 'rgb(var(--primary-light-rgb) / <alpha-value>)',

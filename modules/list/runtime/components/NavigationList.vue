@@ -15,7 +15,7 @@ const {
   type = 'multiple'
 } = defineProps<Props>()
 
-const transitionDelay = computed<number>(() => scaleValue(transitionDuration))
+const transitionDelay = computed<number>(() => interpolate(transitionDuration))
 const transitionTotalDuration = computed<number>(() => transitionDuration + transitionDelay.value)
 
 function openItemCloseOthers(item: TItem) {

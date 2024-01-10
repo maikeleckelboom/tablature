@@ -24,8 +24,8 @@ const selectedItems = computed(() => {
 const toolbarStore = useToolbarMenuStore()
 const documentStore = useDocumentStore()
 
-function getHeaderClass(classes: string, type: 'button' | 'label') {
-  return classes + ' hover:bg-surface-level-2 active:bg-surface-level-3 px-2 py-2 rounded'
+function getHeaderClass(base: string, type: 'button' | 'label') {
+  return base + ' hover:bg-surface-level-2 active:bg-surface-level-3 px-2 py-2 rounded'
 }
 </script>
 
@@ -39,7 +39,7 @@ function getHeaderClass(classes: string, type: 'button' | 'label') {
         <TreeList
           :list="toolbarStore.state"
           :indent="8"
-          :get-header-class="getHeaderClass"
+          :header-class="getHeaderClass"
           :exclude="['shortcuts']"
         />
       </div>

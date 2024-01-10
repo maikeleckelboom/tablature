@@ -1,9 +1,9 @@
 <script generic="T extends MenuItem" lang="ts" setup>
 import { type ExcludeKeys, hasChildren, isSelectable, type MenuItem } from '~/modules/menu/types'
-import { scaleValue } from '~/utils/math'
 
 defineSlots<{
   default({ item }: { item: T }): any
+  item({ item }: { item: T }): any
 }>()
 
 const baseHeaderClass = 'size-full text-start flex items-center gap-x-2 p-1.5 select-none'
@@ -15,7 +15,7 @@ const props = withDefaults(
     indent?: number | false
     static?: boolean
     exclude?: ExcludeKeys[]
-    getHeaderClass?(classes: string, type: 'button' | 'label'): string
+    headerClass?(base: string, type: 'button' | 'label'): string
     transitionName?: string
     transitionDuration?: number
   }>(),
@@ -24,7 +24,7 @@ const props = withDefaults(
     level: 1,
     indent: 12,
     static: false,
-    getHeaderClass: () => baseHeaderClass,
+    headerClass: () => baseHeaderClass,
     transitionName: 'tree-list',
     transitionDuration: 320
   }
@@ -75,7 +75,8 @@ function getRadioOrCheckbox(item: T) {
   if (item.multiple) {
     return 'checkbox'
   }
-  return 'radio'
+  return 'checkbox'
+  // return 'radio'
 }
 
 function getIndent() {
@@ -112,7 +113,7 @@ function getListItemClass(item: T): string {
   return 'tree-list-item'
 }
 
-const transitionDelay = computed<number>(() => scaleValue(props.transitionDuration))
+const transitionDelay = computed<number>(() => interpolate(props.transitionDuration))
 const transitionTotalDuration = computed<number>(
   () => props.transitionDuration + transitionDelay.value
 )
@@ -141,13 +142,15 @@ const transitionStyles = computed<Record<string, string>>(() => ({
     >
       <slot :item="item">
         <TreeItemHeader
-          :class="getHeaderClass(baseHeaderClass, 'button')"
+          :class="headerClass(baseHeaderClass, 'button')"
           :disabled="getDisabled(item)"
           :exclude="exclude"
           :item="item"
           as="button"
           @click="onClick(item)"
-        />
+        >
+          <slot name="item" :item="item" />
+        </TreeItemHeader>
         <template v-if="hasChildren(item)">
           <template v-if="isSelectable(item)">
             <Transition :duration="transitionTotalDuration" :name="transitionName">
@@ -161,7 +164,7 @@ const transitionStyles = computed<Record<string, string>>(() => ({
                 :style="indentStyles"
               >
                 <TreeItemHeader
-                  :class="getHeaderClass(baseHeaderClass, 'label')"
+                  :class="headerClass(baseHeaderClass, 'label')"
                   :exclude="exclude"
                   :for="getName(option)"
                   :item="option"
@@ -179,6 +182,7 @@ const transitionStyles = computed<Record<string, string>>(() => ({
                       @click="onSelect(item, option)"
                     />
                   </template>
+                  <slot name="item" :item="option" />
                 </TreeItemHeader>
               </TreeList>
             </Transition>
@@ -188,12 +192,15 @@ const transitionStyles = computed<Record<string, string>>(() => ({
               <TreeList
                 v-show="isAlwaysOpen || item.open"
                 :exclude="exclude"
-                :get-header-class="getHeaderClass"
+                :header-class="headerClass"
                 :indent="indent"
                 :list="<T[]>item.children"
                 :level="level + 1"
                 :style="indentStyles"
-              />
+                v-slot="{ item }"
+              >
+                <slot name="item" :item="item" />
+              </TreeList>
             </Transition>
           </template>
         </template>
@@ -210,7 +217,6 @@ const transitionStyles = computed<Record<string, string>>(() => ({
     transition-property: grid-template-rows;
     transition-duration: var(--transition-duration);
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    /* transform: translateY(0); */
 
     display: grid;
     grid-template-rows: auto 0fr;
@@ -247,7 +253,7 @@ const transitionStyles = computed<Record<string, string>>(() => ({
   .tree-list-leave-to * {
     opacity: 0;
     transform: translateY(-8px);
-    transform-origin: top left;
+    transform-origin: top;
   }
 
   .tree-list-enter-active * {

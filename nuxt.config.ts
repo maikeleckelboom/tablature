@@ -32,7 +32,7 @@ export default defineNuxtConfig({
   appConfig: {
     theme: {
       isDark: true,
-      variant: 'expressive',
+      variant: 'content',
       contrastLevel: 0.3,
       sourceColor: '#0c6885'
     },
